@@ -1,0 +1,33 @@
+<div class="container">
+    <div class="col-md-12">
+  <div class="" style="margin: 200px auto 0;">
+      <input type="text" [(ngModel)]="serach"><button (click)="getviewmeal(1,serach)">Search</button>
+      <h4>You have selected {{ plan }} meal per week</h4><br>
+     
+    <div class="input-group  col-md-6" style="cursor:pointer"  *ngFor="let item of meals; let idx = index">
+        <input type="checkbox" [checked]="(facility && (-1 !== facility.indexOf(idx)) ? 'checked' : '')" />
+      {{ item.meal_name}}
+      <img src="http://localhost:4300/uploads/{{ item.image }}" width="120" height="60" alt=""/><br>
+      <button (click)="mealadd(idx)">+</button>
+      <div *ngIf="item.counter; then thenBlock else elseBlock"></div>
+    
+     <ng-template #thenBlock> {{ item.counter}}</ng-template>
+     <ng-template #elseBlock> 0 </ng-template>
+        <button (click)="mealdown(idx)">-</button>
+      </div>
+      <app-pagination
+      [totalItems]="totalRecords" 
+      [pageSize]="pageSize" 
+      (pageChanged)="pageChanged($event)" [search]="search"></app-pagination>
+  
+  </div>
+  
+ </div>
+ <button class="btn btn-primary btn-lg" style="margin: 47px 37px 26px 190px;" (click)="saveplan()" type="submit">Save</button>
+</div>
+<style>
+  .ty{
+    color:green;
+  }
+
+</style>

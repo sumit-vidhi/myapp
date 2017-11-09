@@ -1,0 +1,44 @@
+<div class="container-fluid">
+ <div class="col-md-6">
+   <div class="login-wrap login-form">
+      <p style="color:red">{{error}}</p> 
+     <p class="login-img">Login</p>
+     <div class="input-group">
+       <span class="input-group-addon"><i class="icon_profile"></i></span>
+      <input type="text"  [(ngModel)]="user.username" class="form-control required email" placeholder="Email" value="" maxlength="100" autofocus>
+         <br>
+     </div>
+     <div class="input-group">
+         <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+         <input type="password"  [(ngModel)]="user.password" class="form-control required" placeholder="Password" maxlength="20" />
+     </div>
+     <label class="checkbox">
+        <span class="pull-right"> <a href="forgotpassword"> Forgot Password?</a></span>
+     </label>
+     <button class="btn btn-primary btn-lg btn-block" (click)="home(user)" type="submit">Sign In</button>
+     <button class="btn btn-primary btn-lg btn-block" (click)="home()" type="submit">Facebook Login</button>
+ </div>
+</div>	
+<div class="col-md-6">
+ <div class="login-wrap login-form">
+        <p class="login-img">Register</p>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon_profile"></i></span>
+         <input type="text" name="username" class="form-control required email" placeholder="Email" value="" maxlength="100" autofocus>
+            <br>
+        </div>
+        <div class="input-group">
+            <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+            <input type="password" name="password" class="form-control required" placeholder="Password" maxlength="20" />
+        </div>
+        <div class="input-group">
+                <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+                <input type="password" name="password" class="form-control required" placeholder="Verification ode" maxlength="20" />
+            </div>
+        
+        <button class="btn btn-primary btn-lg btn-block" (click)="register()" type="submit">Sign Up</button>
+        <button class="btn btn-primary btn-lg btn-block" (click)="home()" type="submit">Facebook SignUp</button>
+  
+</div>
+ </div>
+

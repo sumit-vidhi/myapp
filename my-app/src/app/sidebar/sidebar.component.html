@@ -1,0 +1,46 @@
+<aside>
+  <div id="sidebar"  class="nav-collapse ">
+      <!-- sidebar menu start-->
+      <ul class="sidebar-menu" id="nav-accordion">
+          
+            
+          <li class="mt">
+              <a class="dashboard active" href="#">
+                  <i class="fa fa-dashboard"></i>
+                  <span>Dashboard</span>
+              </a>
+          </li>
+         <li>
+              <a class="site_zipcode" [routerLink]="['/zipcode']">
+                  <i class="fa fa-dashboard"></i>
+                  <span>Manage Zipcode</span>
+              </a>
+          </li>
+     <li>
+              <a class="site_meals" href="#">
+                  <i class="fa fa-dashboard"></i>
+                  <span>Manage Meals</span>
+              </a>
+          </li>
+           <li>
+              <a class="site_users" href="#">
+                  <i class="fa fa-dashboard"></i>
+                  <span>Manage Users</span>
+              </a>
+          </li>
+          <li>
+              <a class="constructs" href="#">
+                  <i class="fa fa-dashboard"></i>
+                  <span>Logout</span>
+              </a>
+          </li>
+      </ul>
+      <!-- sidebar menu end-->
+  </div>
+</aside>
+
+<style>
+  ul.sidebar-menu li a.active{
+      background:#1a2732;
+  }
+</style>

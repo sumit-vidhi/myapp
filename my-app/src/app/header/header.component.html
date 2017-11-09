@@ -1,0 +1,19 @@
+ <section id="container" class="">
+   <header class="header dark-bg">
+          <a href="#" class="logo">FreashBy <span class="lite">Transform</span></a>
+           <div class="top-nav notification-row">                
+                <ul class="nav nav-tabs">
+                    <li><a [routerLink]="['/mealplan']"  class="tabs">Purchase Meals And Plans</a></li>
+                    <li  *ngIf="!(isLoggedIn | async)"><a  [routerLink]="['']" class="tabs">Sign In</a></li>
+                    <li  *ngIf="!(isLoggedIn | async)"><a  [routerLink]="['/register']" class="tabs" >Sign Up</a></li>
+                    <li *ngIf="(isLoggedIn | async)" (click)="logout()">
+                        <a class="tabs">Logout</a>
+                      </li>
+                  
+                  </ul>
+                  <p> Your have selected plan {{ meals }} meal per week</p>
+                  <br>
+                  <p> Pending meals: {{ pendingmeals }}</p>
+            </div>
+      </header> 
+	 
