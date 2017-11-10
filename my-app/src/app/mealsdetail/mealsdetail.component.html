@@ -1,0 +1,75 @@
+<div class="container">
+  <div class="col-md-12">
+<div class="" style="margin: 200px auto 0;">
+                  <ul class="nav nav-tabs">
+                          <li [class.active]="details==true" id="header-tab1"><a href="javascript:void(0)" (click)="changetab('tab1')" id="tab1" class="tabs">Details</a></li>
+                          <li [class.active]="ingredients==true" id="header-tab2">
+                            <a href="javascript:void(0)" id="tab2 " (click)="changetab('tab2')" class="tabs">Ingredients</a></li>
+                          <li [class.active]="nutrition==true" id="header-tab3">
+                            <a href="javascript:void(0)"id="tab3" (click)="changetab('tab3')" class="tabs">Nutrition</a></li>
+                  </ul>
+      <div class="wrapper tab1 row content" *ngIf="details==true">
+      	<div class="preview col-md-6">
+
+<div class="tab-pane" id="pic-"   *ngFor="let item of mealdetails let idx = index" >
+    <div *ngIf="(image.indexOf(idx)>-1)">
+      <img style="width:260px;height:140px;" 
+   src="http://localhost:4300/uploads/{{ item.image }}" />
+  </div>
+  </div>
+  
+    
+<ul class="preview-thumbnail nav nav-tabs">
+     
+               
+             
+
+<li *ngFor="let item of mealdetails let idx=index">
+  <a class="view" (click)="changeimage(idx)">
+    <img style="width:60px;height:40px;" src="http://localhost:4300/uploads/{{ item.image }}" />
+  </a></li>
+    
+</ul>
+ 
+</div>
+<div class="details col-md-6">
+<h3 class="product-title">{{mealdetails[0].meal_name}}</h3>
+
+<p class="product-description">.</p>
+<h4 class="price">Current price: <span>${{mealdetails[0].price}}</span></h4>
+<h4 class="price">Description:</h4>
+  <p class="product-description">{{mealdetails[0].description}}
+  </p>
+
+
+</div>
+</div>
+<div class="wrapper tab2 row content"  *ngIf="ingredients==true">
+   
+           
+      <div class="details col-md-6">
+          <h4 class="price">Ingredients:</h4>
+          <p class="product-description">{{mealdetails[0].ingredients}}
+          </p>
+        
+      
+      </div>
+  </div>
+
+  <div class="wrapper tab3 row content"   *ngIf="nutrition==true">
+         
+                  <div class="details col-md-6">
+                      <h4 class="price">Nutrition:</h4>
+                          <p class="product-description">{{mealdetails[0].nutrition}}</p>
+                        
+                      
+                      </div>
+          
+          </div>
+    
+
+                    
+    </div>
+  </div>
+</div>
+ 

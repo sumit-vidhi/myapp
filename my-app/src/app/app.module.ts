@@ -15,6 +15,7 @@ import { HttpModule } from '@angular/http';
 import { MealserviceService } from './mealservice.service';
 import { LoginserviceService } from './loginservice.service';
 import { PaginationComponent } from './pagination/pagination.component';
+import { MealsdetailComponent } from './mealsdetail/mealsdetail.component';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { PaginationComponent } from './pagination/pagination.component';
     MealplanComponent,
     MealsComponent,
     PaginationComponent,
+    MealsdetailComponent,
  ],
   imports: [
     BrowserModule,

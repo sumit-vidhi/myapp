@@ -6,7 +6,6 @@ import { BehaviorSubject, Observable } from "rxjs";
 @Component({
   selector: 'app-meals',
   templateUrl: './meals.component.html',
- // directives: [PaginationComponent],
   styleUrls: ['./meals.component.css'],
   
 })
@@ -21,28 +20,29 @@ export class MealsComponent implements OnInit {
   error:any="";
   totalRecords: number = 0;
   pageSize: number = 2;
- // serach: number = 2;
+  objectKeys = Object.keys;
   meals: Observable<Array<any>>;
 
   search:string="all";
   constructor(private router:Router,private mealservice:MealserviceService) { }
 
   ngOnInit() {
-    let sercah=this.search;
-    this.getviewmeal(1,sercah);
+   // let sercah=this.search;
+    this.getviewmeal(1,this.search);
   
   }
   pageChanged(objse) {
-   // console.log(objse);
+   
     this.getviewmeal(objse.page,objse.search);
   }
 
   mealadd(i:any){
+   // alert(i);
     let total=this.mealservice.addmeal(i);
     if(this.facility.indexOf(parseInt(i))==-1 &&  this.plan>total){
        this.facility.push(parseInt(i));
     }
-   
+   console.log(this.facility);
 
   }
 

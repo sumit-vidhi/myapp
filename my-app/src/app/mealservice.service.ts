@@ -11,14 +11,16 @@ export class MealserviceService  {
   plan:any= window.localStorage.getItem("mealplan");
   private dataStore: {
     meals:Array<any>;
+    mealsdata:Array<any>;
     total:Array<any>;
+
   };
   
   constructor (
     private http: Http
   ) {
     this.mealsdata.next(this.plan);
-    this.dataStore = { meals:[],total:[]};
+    this.dataStore = { meals:[],mealsdata:[[]],total:[]};
     this._meals =new BehaviorSubject([]);
     this.meals = this._meals.asObservable();
  
@@ -39,22 +41,34 @@ export class MealserviceService  {
     .map(response => response.json()).subscribe(data => {
       this.dataStore.meals[0] = data.res;
       this.dataStore.meals[1] = data.total;
-     //console.log(this.dataStore.meals);
-      this._meals.next(this.dataStore.meals);
+   
+    // this.dataStore.meals[0]={};
      
+      for(let vals of data.res){
+        this.dataStore.mealsdata[0][vals.id]=vals;
+      }
+      this._meals.next(this.dataStore.meals);
+     //s console.log(this.dataStore.meals[0]);
     }, error => console.log('Could not load Meals.'));;
+  }
+
+  getdetails(page) {
+    return this.http.get(`http://localhost:4300/meal/`+page)
+    .map(response => response.json());
   }
 
 
   addmeal(i:any){
+    console.log(this.dataStore.mealsdata);
    let totalcounter=this.getaddmeals();
    totalcounter=(totalcounter)?totalcounter+1:1;
+   //console.log(totalcounter);
    if(this.plan>=totalcounter){
     this._meals.value[0][i].counter=(this._meals.value[0][i].counter)?this._meals.value[0][i].counter+1:1;
     let pendingmeal=this.plan-Number(totalcounter);
     this.mealspendigdata.next(pendingmeal);
    }
-   console.log(this._meals.value[0]);
+  
    window.localStorage.setItem("meals", this._meals.value[0][i]);
   // console.log(window.localStorage.getItem("meals"));
     return totalcounter;

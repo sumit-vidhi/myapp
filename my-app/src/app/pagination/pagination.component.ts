@@ -25,7 +25,7 @@ export class PaginationComponent implements OnInit {
 
   set search(size:string) {
     this.keys = size;
-    console.log(this.keys);
+  //  console.log(this.keys);
     this.update();
   }
   @Input() get pageSize():number {
@@ -59,11 +59,9 @@ export class PaginationComponent implements OnInit {
     if (this.pagerTotalItems && this.pagerPageSize) {
       this.totalPages = Math.ceil(this.pagerTotalItems/this.pageSize);
       this.isVisible = true;
-      //console.log(this.totalPages);
       if (this.totalItems >= this.pageSize) {
         for (let i = 1;i < this.totalPages + 1;i++) {
           this.pages.push(i);
-          console.log(this.pages);
         }
       }
       return;

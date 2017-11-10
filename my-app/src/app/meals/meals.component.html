@@ -7,7 +7,7 @@
     <div class="input-group  col-md-6" style="cursor:pointer"  *ngFor="let item of meals; let idx = index">
         <input type="checkbox" [checked]="(facility && (-1 !== facility.indexOf(idx)) ? 'checked' : '')" />
       {{ item.meal_name}}
-      <img src="http://localhost:4300/uploads/{{ item.image }}" width="120" height="60" alt=""/><br>
+      <a routerLink="/mealsdetail/{{item.id}}"><img src="http://localhost:4300/uploads/{{ item.image }}" width="120" height="60" alt=""/></a><br>
       <button (click)="mealadd(idx)">+</button>
       <div *ngIf="item.counter; then thenBlock else elseBlock"></div>
     
