@@ -1,0 +1,37 @@
+<nav class="navbar">
+	<div class="container">
+		<div class="navbar-header">
+		<a class="navbar-brand" routerLink="/"><strong>{{ appName }}</strong></a>
+		</div>
+
+
+		<ul *ngIf="!auth.isLoggedIn" class="nav navbar-nav navbar-right">
+			<li class="active">
+				<a routerLink="/tlist">Trainers</a>
+			</li>
+			<li>
+				<a routerLink="/tdtl">How to book a trainer</a>
+			</li>
+
+			<li  class="menu-login">
+				<span><a routerLink="/register">Sign Up</a></span> 
+				<span><a routerLink="/login">Login</a></span>
+			</li>
+		</ul>
+
+		<ul *ngIf="auth.isLoggedIn" class="nav navbar-nav navbar-right">
+			<li class="active">
+				<a routerLink="/tlist">Trainers</a>
+			</li>
+			<li>
+				<a routerLink="/tdtl">How to book a trainer</a>
+			</li>
+			<li class="menu-login">
+				<span><a routerLink="/account">My Account</a></span> 
+				<span><a routerLink="" (click)="auth.logout()">Log out</a></span>
+			</li>
+		</ul>
+
+		
+	</div>
+</nav> 	

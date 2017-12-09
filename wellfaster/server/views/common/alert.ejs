@@ -1,0 +1,45 @@
+<% 
+ 	function renderAlert(msgType, msg){
+ 		var clsBtn = '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>';
+ 		var output = '<div class="alert ';
+ 		switch(msgType){
+ 			case 'error' : 
+ 				output += 'alert-danger alert-dismissable">';
+ 				output += clsBtn;
+ 				output += '<h4><i class="icon fa fa-ban"></i> Error!</h4>';
+ 				
+
+ 				break;
+ 			case 'success' : 
+ 				output += 'alert-success alert-dismissable">';
+ 				output += clsBtn;
+ 				output += '<h4><i class="icon fa fa-check"></i> Success!</h4>';
+
+ 				break;
+ 			case 'info' : 
+ 				output += 'alert-info alert-dismissable">';
+ 				output += clsBtn;
+ 				output += '<h4><i class="icon fa fa-info"></i> Info!</h4>';
+ 				break;			
+ 		}
+ 		output += '<strong>' + msg + '</strong>';
+ 		output += '</div>';
+ 		return output;
+ 	}
+
+%>	
+<div class="row">
+	<div class="col-sm-12">
+		<% if (typeof messages.error !== 'undefined' && messages.error.length > 0) { %>
+		    <%- renderAlert('error', messages.error); %>
+		<% } %>
+		<% if (typeof messages.info !== 'undefined' && messages.info.length > 0) { %>
+		   <%- renderAlert('info', messages.info); %>
+		<% } %>
+		<% if (typeof messages.success !== 'undefined' && messages.success.length > 0) { %>
+		    <%- renderAlert('success', messages.success); %>
+		<% } %>
+	</div>	
+</div>
+
+

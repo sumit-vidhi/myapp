@@ -1,0 +1,180 @@
+<%
+  if(typeof result === "undefined"){
+    var result = {
+      status : 1
+    };
+  }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../common/header %>
+  <link rel="stylesheet" href="/bower_components/bootstrap-fileinput/css/fileinput.min.css">
+  <link rel="stylesheet" href="/node_modules/cropper/dist/cropper.min.css">
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="wrapper">
+
+  <% include ../common/nav %>
+
+  <% include ../common/left %>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+
+    <section class="content-header">
+      <h1>
+        Dashboard
+        <small>Admin Panel</small>
+      </h1>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Dashboard</li>
+      </ol>
+    </section>
+
+        <!-- Main content -->
+    <section class="content">
+      <div class="row">
+      	<div class="col-md-12">
+          <!-- Horizontal Form -->
+          <div class="box box-info">
+            <div class="box-header with-border">
+              <h3 class="box-title"><%=  (result.id) ? 'Edit' : 'Add New' %> Banner Form</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form class="form-horizontal" role="form" method="post" name="frm" id="frm" enctype="multipart/form-data">
+              <div class="box-body">
+                <div class="form-group">
+                  <label for="title" class="col-sm-2 control-label">Title</label>
+                  <div class="col-sm-6">
+                    <input name="title" value="<%= (result.title ? result.title : '' ) %>" id="title"
+                      class="form-control required" />
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="title" class="col-sm-2 control-label">Content</label>
+                  <div class="col-sm-6">
+                    <textarea name="content" id="content" class="form-control" rows="2"><%- ( result.content ? result.content : '' ) %></textarea>
+                  </div>
+                </div>  
+
+                <div class="form-group">
+                  <label for="title" class="col-sm-2 control-label">Upload Image</label>
+                  <div class="col-sm-6">
+                    <input name="photo" id="file" type="file" class="form-control <%= (! result.photo) ? 'required':'' %>" />
+                  </div>
+                </div>      
+
+                <% if(result.id) { %>
+                  <input type="hidden" name="id" value="<%= result.id %>" />
+                <% } %>
+                <% if(result.photo) { %>
+                  <input type="hidden" name="old_photo" value="<%= result.photo %>" />
+                <% } %>
+
+                <input type="hidden" name="image_data" value="" />
+
+
+              </div>
+              <!-- /.box-body -->
+              <div class="box-footer">
+              	<div class="col-sm-offset-2 col-sm-6">
+                	<button type="submit" class="btn btn-default">Cancel</button>
+                	<button type="submit" class="btn btn-success pull-right">Create</button>
+                </div>
+               </div> 
+              <!-- /.box-footer -->
+            </form>
+          </div>
+          <!-- /.box -->
+
+        </div>
+      </div>
+    </section>   
+
+  </div>
+  <!-- /.content-wrapper -->
+
+</div>
+	<% include ../common/footer %>
+  <script src="/bower_components/bootstrap-fileinput/js/fileinput.min.js"></script>
+  <script src="/node_modules/cropper/dist/cropper.min.js"></script>
+	<script type="text/javascript">
+		$(function () {
+      var fileinputOptions = {
+            showUpload:false,
+            maxFilesNum: 1,
+            allowedFileExtensions: ["jpg","png", "gif"],
+            previewTemplates: {
+                    image:  '<div class="file-preview-frame" id="{previewId}" data-fileindex="{fileindex}" data-template="{template}" style="margin:10px;">' +
+                            '<div class="kv-file-content">' +
+                            '<img src="{data}" class="kv-preview-data file-preview-image" title="{caption}" alt="{caption}" {style}>' + 
+                            '</div>'+
+                            '<div class="text-right" style="padding:10px;">' + 
+                            '<button type="button" class="btn btn-default btn-crop">' +
+                            '<i class="fa fa-crop"></i> Crop</button></div>'+
+                            '</div>'
+                },
+            previewSettings: {
+                image: { width: "300px", height: "auto" }
+            },
+            layoutTemplates : {
+                footer :'',
+            },    
+        };
+
+        <% if(result.photo) { %>
+            fileinputOptions.initialPreviewFileType =  'image';
+            fileinputOptions.initialPreview = [
+                    '<img src="/storage/banners/<%= result.photo %>" class="kv-preview-data file-preview-image" >'
+            ],
+            fileinputOptions.initialPreviewConfig = [
+                {
+                    frameAttr: {
+                        style: 'margin:10px;',
+                        class: 'file-preview-frame'
+                    },
+                },  
+            ];
+
+        <% } %>
+                
+        $('input[name="photo"]').fileinput(fileinputOptions).on('fileimageloaded', function(event, previewId) {
+            var $image = $('#'+previewId).find('img.file-preview-image');
+            
+            $image.cropper({
+                viewMode: 1,
+                aspectRatio : 3 / 1,
+                highlight: false,
+                crop: function (e) {
+                var json = [
+                          '{"x":' + e.x,
+                          '"y":' + e.y,
+                          '"height":' + e.height,
+                          '"width":' + e.width,
+                          '"rotate":' + e.rotate + '}'
+                        ].join();
+                        $('input[name="image_data"]').val(json);
+                }
+            });
+
+            $('#frm').on('click', '.btn-crop', function(){
+                $('img.kv-preview-data').attr( 'src',
+                    $image.cropper('getCroppedCanvas').toDataURL('image/jpeg')
+                );   
+                $image.cropper('stopCropper');
+                $image.cropper('destroy');
+                $(this).parent().remove();
+            });
+        })
+        
+        $.validator.setDefaults({ ignore: [] });
+        $('#frm').validate();
+		});
+	</script>
+</body>
+</html>

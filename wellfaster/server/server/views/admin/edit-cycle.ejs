@@ -1,0 +1,156 @@
+<% include html/header %>
+<% include html/leftbar %>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<section id="main-content">
+	<section class="wrapper">         	
+          	<div class="row mt">
+				
+          		<div class="col-lg-12">
+				      <% if (message.length > 0) { %>
+                 <div class="row" style="margin:10px;"><div class="col-sm-12 alert alert-danger"><%= message %></div></div>
+                <% } %>
+                <%  
+                if (errors && errors.length>0) { 
+                %>
+                <div class="row" style="margin:10px;">
+                <div class="col-sm-6 col-md-offset-3 alert alert-danger"> 
+                <%
+                  for(var i = 0; i < errors.length; i++) {
+                    %>
+                    <%= errors[i].msg %><br />
+                    <%
+                  }
+                %>
+                </div></div>
+                <%
+                }                
+                %>	
+                  <div class="form-panel">	
+
+    					   <form action="" method="post" name="frm" id="frm" class="form-horizontal style-form">
+                      <div class=" add-task-row">
+                        <h4 class="pull-left">Edit Test Cycle</h4>						
+                      </div>    
+                        <div class="form-group"></div>                  	   
+                       <div class="form-group">
+                            <label class="col-sm-2 col-sm-2 control-label">Test Cycle: <span class="error">*</span> </label>
+                            <div class="col-sm-6">                                
+                              <select name="cycle" id="cycle" class="form-control required">
+                               <option value="">Select Test Cycle</option>
+                                <option value="24" <%= (result.cycle=='24')?'selected':'' %>>Once a Day</option>
+                                <option value="48" <%= (result.cycle=='48')?'selected':'' %>>Once in Two Day</option>
+                                <option value="72" <%= (result.cycle=='72')?'selected':'' %>>Once in Three Day</option>
+                                <option value="168" <%= (result.cycle=='168')?'selected':'' %>>Once a Week</option>
+                                <option value="336" <%= (result.cycle=='336')?'selected':'' %>>Once In Two Weeks</option>
+                              </select>                                
+                            </div>
+                        </div>
+                        <%
+                         var arrTimeZones = {
+      			                "-12:00":"[UTC - 12] Baker Island Time",
+      			                "-11:00":"[UTC - 11] Niue Time, Samoa Standard Time",
+      			                "-10:00":"[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time",
+      			                "-9:30":"[UTC - 9:30] Marquesas Islands Time",
+      			                "-9:00":"[UTC - 9] Alaska Standard Time, Gambier Island Time",
+      			                "-8:00":"[UTC - 8] Pacific Standard Time",
+      			                "-7:00":"[UTC - 7] Mountain Standard Time",
+      			                "-6:00":"[UTC - 6] Central Standard Time",
+      			                "-5:00":"[UTC - 5] Eastern Standard Time",
+      			                "-4:00":"[UTC - 4] Atlantic Standard Time",
+      			                "-3:30":"[UTC - 3:30] Newfoundland Standard Time",
+      			                "-3:00":"[UTC - 3] Amazon Standard Time, Central Greenland Time",
+      			                "-2:00":"[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time",
+      			                "-1:00":"[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time",
+      			                "+0:00":"[UTC] Western European Time, Greenwich Mean Time",
+      			                "+1:00":"[UTC + 1] Central European Time, West African Time",
+      			                "+2:00":"[UTC + 2] Eastern European Time, Central African Time",
+      			                "+3:00":"[UTC + 3] Moscow Standard Time, Eastern African Time",
+      			                "+3:30":"[UTC + 3:30] Iran Standard Time",
+      			                "+4:00":"[UTC + 4] Gulf Standard Time, Samara Standard Time",
+      			                "+4:30":"[UTC + 4:30] Afghanistan Time",
+      			                "+5:00":"[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time",
+      			                "+5:30":"[UTC + 5:30] Indian Standard Time, Sri Lanka Time",
+      			                "+5:45":"[UTC + 5:45] Nepal Time",
+      			                "+6:00":"[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time",
+      			                "+6:30":"[UTC + 6:30] Cocos Islands Time, Myanmar Time",
+      			                "+7:00":"[UTC + 7] Indochina Time, Krasnoyarsk Standard Time",
+      			                "+8:00":"[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time",
+      			                "+8:45":"[UTC + 8:45] Southeastern Western Australia Standard Time",
+      			                "+9:00":"[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time",
+      			                "+9:30":"[UTC + 9:30] Australian Central Standard Time",
+      			                "+10:00":"[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time",
+      			                "+10:30":"[UTC + 10:30] Lord Howe Standard Time",
+      			                "+11:00":"[UTC + 11] Solomon Island Time, Magadan Standard Time",
+      			                "+11:30":"[UTC + 11:30] Norfolk Island Time",
+      			                "+12:00":"[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time",
+      			                "+12:45":"[UTC + 12:45] Chatham Islands Time",
+      			                "+13:00":"[UTC + 13] Tonga Time, Phoenix Islands Time",
+      			                "+14:00":"[UTC + 14] Line Island Time"
+      			            }
+                         %>
+                         <div class="form-group">
+                              <label class="col-sm-2 col-sm-2 control-label">Time Zone: <span class="error">*</span></label>
+                              <div class="col-sm-6">                             
+                                <select name="time_zone" id="time_zone" class="form-control required">
+                                 <option value="">Select Time Zone</option>
+                                 <%
+                                 for (var i in arrTimeZones) {
+                                 %>
+                                  <option value="<%= i %>" <%= (result.time_zone && typeof(result.time_zone)!=='undefined' && result.time_zone==i)?'selected':'' %>><%= arrTimeZones[i] %></option> 
+                                  <%
+                                  }
+                                  %>                                
+                                </select>
+                              </div>                              
+                          </div> 
+                           <div class="form-group">                         
+                              <label class="col-sm-2 col-sm-2 control-label">Session Start Day/Time: <span class="error">*</span></label>
+                              <div class="col-sm-6">                             
+                                <input type="text" class="form-control round-form datepicker required" id="start_time" name="start_time" value="" /><br />
+                                 <%= (result.db_session_date && typeof(result.db_session_date)!=='undefined')?'Next Session Date: '+result.db_session_date:'' %>
+                              </div>                              
+                          </div>
+                                                    
+                          <div class="form-group">
+                              <label class="col-lg-2 col-sm-2 control-label"></label>
+                              <div class="col-lg-10">
+              							  <input type="hidden" name="userid" value="<%= result.id %>" />
+              							  <input type="submit" class="btn btn-theme" name="submit" value="Submit" />&nbsp;
+              							  <input type="button" class="btn btn-theme02" value="Cancel" onclick="javascript: return goBack();"/>
+                              </div>
+                          </div>
+						  
+                      </form>
+                  </div>
+          		</div><!-- col-lg-12-->      	
+          	</div><!-- /row -->          	
+		</section>
+<script type="text/javascript">
+function goBack() {
+	location.href="/admin/users";
+	return false;
+}
+$(document).ready(function(){	
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth()+1; //January is 0!
+  var yyyy = today.getFullYear();
+  <%
+  if(result.start_time && typeof(result.start_time)!=='undefined' && result.start_time!=='') {
+  %>
+    $('.datepicker').datetimepicker({format: 'YYYY-MM-DD hh:mm A',minDate: new Date(yyyy, mm - 1, dd), sideBySide: true,stepping:30}); 
+  <%
+  }
+  else {
+  %>
+    $('.datepicker').datetimepicker({format: 'YYYY-MM-DD hh:mm A',minDate: new Date(yyyy, mm - 1, dd), sideBySide: true,stepping:30}); 
+  <%
+  }
+  %>
+	$("#frm").validate();
+});
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/2.13.0/moment.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+<script type="text/javascript" src="/js/jquery.validate.js"></script>
+<% include html/footer %>

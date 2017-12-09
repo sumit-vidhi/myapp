@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <% include ../common/header %>
+    </head>
+  <body>
+      <div id="wrapper">
+        <% include ../common/nav %>
+
+        <% include ../common/functions %>
+       
+
+          <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Banners</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+
+            <% include ../common/alert %>
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                       <div class="panel-body">
+                            <table width="100%" class="table table-hover" id="banner-table"></table>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>title : 'Photo',  
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+        <% include ../common/footer %>
+      </div>
+      <!-- /#wrapper -->
+    <% include ../common/script %>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#banner-table").DataTable({
+                ajax: {
+                    url: '/admin/table/banners',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { title : 'Photo',  data : 'photo', render: function ( data, type, row ) {
+                        return '<a href="/storage/banners/'+ data + '" target="_blank"><img src="/storage/banners/'+ data + '" height="50" ></a>';
+                    }},
+                    { title: 'Title', data : 'title' },
+                    { title: 'Content', data : 'content' },
+                    { title: 'Controls', data : 'id', render: function(data, type, row){
+                        return  '<a href="/admin/banner/'+data+'" role="button" title="View"><i class="btn btn-info btn-xs fa fa-eye"></i></a> ' +
+                                '<a href="/admin/banner/'+data+'" role="button" title="Edit"><i class="btn btn-success btn-xs fa fa-pencil"></i></a> ' +
+                                '<a href="/admin/banners/delete/'+data+'" role="button" title="Delete" data-method="post" data-content="Are you sure to delete this banner?"><i class="btn btn-danger btn-xs fa fa-trash"></i></a>';
+                    }}
+                    
+                ]
+            });
+        });
+
+    </script>
+
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<% 
+    let menus = [
+        { label : '<i class="fa fa-dashboard fa-fw"></i> <span>Dashboard</span>',  url :  '/admin/dashboard'},
+        { label : '<strong>Manage</strong>'},
+        { label : '<i class="fa fa-user fa-fw"></i> <span>Admins</span>', url : '#', subMenus : [
+            { label : '<i class="fa fa-eye fa-fw"></i> View Admins',  url :  '/admin/admin-users'},
+            { label : '<i class="fa fa-edit fa-fw"></i> Create Admin',  url :  '/admin/edit-admin'}
+        ]},/*
+        { label : '<i class="fa fa-user fa-fw"></i> <span>Users</span>', url : '#', subMenus : [
+            { label : '<i class="fa fa-eye fa-fw"></i> View  Users',  url :  '/admin/users'},
+            { label : '<i class="fa fa-edit fa-fw"></i> Create User',  url :  '/admin//edit-user'}
+        ]},
+        { label : '<i class="fa fa-user fa-fw"></i> <span>Trainers</span>', url : '#', subMenus : [ 
+            { label : '<i class="fa fa-eye fa-fw"></i> View  Trainers',  url :  '/admin/trainers'},
+            { label : '<i class="fa fa-edit fa-fw"></i> Create Trainer',  url :  '/admin//edit-trainer'}
+        ]},*/
+        { label : '<i class="fa fa-wrench fa-fw"></i> <span>Pages</span>', url : '#', subMenus : [
+            { label : '<i class="fa fa-eye fa-fw"></i> View  Pages',  url :  '/admin/pages'},
+            { label : '<i class="fa fa-edit fa-fw"></i> Create Page',  url :  '/admin/edit-page'}
+        ]},
+        { label : '<i class="fa fa-wrench fa-fw"></i> <span>Banners</span>', url : '#', subMenus : [
+            { label : '<i class="fa fa-eye fa-fw"></i> View  Banners',  url :  '/admin/banners'},
+            { label : '<i class="fa fa-edit fa-fw"></i> Create Banner',  url :  '/admin/banner'}
+        ]},
+        { label : '<i class="fa fa-cog fa-fw"></i> <span>Settings</span>', url :  '/admin/setting'},
+        { label : '<strong>Activity</strong>'},
+        { label : '<i class="fa fa-sign-out fa-fw"></i> <span>Logout</span>', url :  '/admin/logout'}
+    ];
+%>
+
+<% if(menus.length > 0) { %>
+    <ul class="sidebar-menu" data-widget="tree">
+        <% for(let i=0;i<menus.length;i++) { %>
+                <% if(menus[i].subMenus && menus[i].subMenus.length > 0) { %>
+                    <li class="treeview">
+                        <a href="#">
+                            <%- menus[i].label %>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                        <% let submenus = menus[i].subMenus; %>
+                        <% for(let j=0;j<submenus.length;j++) { %>
+                            <li><a href="<%= submenus[j].url %>"><%- submenus[j].label %></a></li>
+                        <% } %>
+                        </ul>
+                    </li>
+                <% } else if(menus[i].url){ %>
+                    <li><a href="<%= menus[i].url %>"><%- menus[i].label %></a></li>
+                <% } else { %>
+                    <li class="header"><%- menus[i].label %></a></li>
+                <% } %>
+        <% } %>
+    </ul>
+<% } %>

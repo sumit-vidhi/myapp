@@ -1,0 +1,137 @@
+<header class="top-header bank-form">
+    <app-navbar></app-navbar>
+    
+    <!-- banner -->
+  
+    <div class="container top-banner">
+        <div class="row">
+            <div class="col-md-5 banner-heading">
+                <h2>Do you want to <br> <strong>improve </strong>your Body?</h2>
+                <div class="input-group stylish-input-group">
+                        <input type="text" class="form-control"  placeholder="Search" >
+                        <span class="input-group-addon">
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>  
+                        </span>
+                </div>
+            </div>
+        
+        </div>
+      
+    </div>
+  
+    <!-- banner -->
+    
+  </header>
+  <div class="container-fluid bg-section">
+    <div class="row">
+      <div class="container">
+        <div class="row">
+        <div class="col-md-12">
+        <div class="row">
+          <span class="trusted">Trusted bythe world,s best</span>
+          <div class="col-sm-2 ">
+            <div class="row circle-btn">
+              <div class="dp-circle"><img class="img-responsive" src="assets/images/1.png"></div>
+              <button class="btn">Service</button>
+              <button class="btn btn-default">Bio</button>
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="row">
+            
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-3 trusted-title">
+                    <h3>Peter Rodriquez</h3>
+                    <span>Life Changer</span>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="row">
+                      <div class="pull-right">
+                        <a href="#" class="btn plan-btn trust"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>
+                        
+                        <a href="#" class="btn plan-btn trust">Request for a free consultation on!</a>
+                        <a href="#" class="btn plan-btn trust"><i class="fa fa-podcast" aria-hidden="true"></i></a>
+                        <a href="#" class="btn plan-btn trust">Hair</a>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <hr>
+              </div>
+              
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 dkr">
+                    
+                    <span>area Copenhagen, Denmark</span>
+                    <h3>dkr.130<sub>uge</sub></h3>
+                    <span>4/8/12 week programs</span>
+                    
+                  </div>
+                  <div class="col-md-6 star-rating" style="margin-top:15px">
+                  <div class="row">
+                    
+                    <div class="pull-right lg-star">
+                      <rating [(ngModel)]="rate" [max]="max" [readonly]="isReadonly"></rating>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+          </div>
+          <hr>
+          </div>
+          
+          <div class="col-md-12 trainer-info">
+          
+              <h3>Specialies</h3>
+              <span>fat loss, weight loss, Core strenth</span>
+              <div class="col-sm-3">
+                <div class="row">
+                  <h3>Education</h3>
+                  <span>[n/a]</span>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="row">
+                  <h3>Certifications</h3>
+                  <span>[n/a]</span>
+                </div>
+                
+              </div>
+            
+          </div>
+          
+        </div>
+        <hr>
+      </div>
+      <div class="container client-review">
+        <div class="row">
+          <span>Client Reviews<sub>[2]</sub></span><a href="#" class="btn plan-btn trust pull-right">Post a Review!</a>
+          <ul>
+            <li>
+              <h3>ELi Andersen</h3> 
+              <div class="star-rating">
+                <rating [(ngModel)]="rate" [max]="max" [readonly]="isReadonly"></rating>
+              </div>
+              <label>June 3, 2016 AT 10:30</label>
+              <p>Well woth the money. I have been working with Joanne ever since my docter brought to me en on I was borderline diabetes. A er weeks of working with Joanne</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    
+  
+      <app-site-footer></app-site-footer>
+    </div>
+  </div>
+  
