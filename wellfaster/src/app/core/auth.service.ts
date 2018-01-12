@@ -10,23 +10,27 @@ import 'rxjs/add/operator/delay';
 import { ApiService }       from './api.service';
 import { UtilService }      from './util.service';
 import { StorageService }   from './storage.service';
+import { ChatService } from './chat.service';
+
 
 @Injectable()
 
 
 export class AuthService {
-
+  
+  isLoggedIn:boolean = false;
+  user:any;
+  redirectUrl='/';
+  isHired=false;
+  
   constructor( 
     private router : Router,
     private api : ApiService,
     private storage : StorageService,
+    private chatService:ChatService,
     private util : UtilService
 
   ) {}
-
-
-  isLoggedIn:boolean = false;
-  user:any;
   
   // store the URL so we can redirect after logging in
   
@@ -36,27 +40,61 @@ export class AuthService {
     .then((res)=>{
       if(res.code == 200){
         self.setLoggedUser(res.data);
+        self.chatService.setuser(res.data.id);
+        self.chatService.getalluser(res.data.id);	
         self.setLoggedIn();
         self.goHome();
       }
     });
   } 
 
+  updateProfile(){
+    let self = this;
+    this.api.myProfile()
+    .then((res)=>{
+      if(res.code == 200){
+        self.setLoggedUser(res.data);
+        self.setLoggedIn();
+        this.user = this.getLoggedUser();
+      }
+    });
+  }
+
+
   logout(){
-    this.clearLoggedUser();
-    this.clearToken();
-    this.resetLoggedIn();
-    this.goHome();
+    let self = this;
+    let _user = this.storage.get('app_user');
+    var userId=  JSON.parse(_user).id;
+    self.api.logout().then(function(res){
+      if(res.code === 200){
+        self.chatService.unsetuser(userId);
+        self.clearLoggedUser();
+        self.clearToken();
+        self.resetLoggedIn();
+        self.goHome();
+      }
+    })
   }
 
   handleAuth(){
     if(this.isTokenValid()){  
       this.user = this.getLoggedUser();
       this.setLoggedIn();
+      this.getTrainers();
     }else{
       this.clearLoggedUser();
       this.resetLoggedIn();
     }
+  }
+
+  getTrainers(){
+    let self = this;
+    this.api.getHiredTrainers()
+    .then(function(res){
+      self.isHired = res.data.length>0;
+    })
+    .catch(function(err){
+    });
   }
 
   setLoggedIn(){
@@ -69,11 +107,12 @@ export class AuthService {
 
   setLoggedUser(user:any){
     this.user = user;
-    this.storage.save('app_user', user);
+    this.storage.save('app_user', JSON.stringify(user));
   }
 
   getLoggedUser(){
-    return this.storage.get('app_user');
+    let _user = this.storage.get('app_user');
+    if(_user) return JSON.parse(_user);
   }
 
   clearLoggedUser(){
@@ -90,6 +129,7 @@ export class AuthService {
     this.storage.save('expires', expireAt);
   }
   clearToken(){
+    this.storage.clear('access_token');
     this.storage.clear('expires');
     this.storage.clear('app_user');
   }

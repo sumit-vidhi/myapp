@@ -68,6 +68,29 @@ export class UtilService {
 	  	return date;
 	}
 
+	toDate(date:Date){
+		var date = new Date(date);
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		date.setMilliseconds(0);
+		return date;
+	}
+
+	format(format:string, date:Date){
+		var date = new Date(date);
+		let d = date.getDate();
+		let D = date.getDay();
+		let Y = date.getFullYear();
+		let h = date.getHours();
+		let m = date.getMinutes();
+		let M = date.getMonth();
+		let s = date.getSeconds();
+
+		if(format === 'M/d/Y'){
+			return M+'/'+d+'/'+Y;
+		}
+	}
 
 
 

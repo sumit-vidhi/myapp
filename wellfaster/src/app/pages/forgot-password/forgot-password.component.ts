@@ -13,7 +13,6 @@ import {
 
 
 import { ApiService }		from '../../core/api.service';
-import { AlertService }		from '../../core/alert.service';
 import { MessageService }		from '../../core/message.service';
 
 
@@ -29,7 +28,6 @@ export class ForgotPasswordComponent implements OnInit {
   constructor(
     private fb : FormBuilder,
     private api : ApiService,
-    private alert:AlertService,
     private router : Router,
     private message:MessageService
   ) { }
@@ -39,22 +37,22 @@ export class ForgotPasswordComponent implements OnInit {
 	dismissible = true;
 
   onSubmit(){
-    // let self = this;
-    // let formModel = this.forgotForm.value;
-    // this.api.request(formModel)
-    // .then(function(res){
-    //   if(res.code === 200){
-    //     self.serverErrorMessages
-    //       .push('Reset password instructions has been sent to your email address'); 
-    //   }    
-    //   else{
-    //     self.serverErrorMessages
-    //       .push('We have no account for this email, Please try again with other email.');
-    //   } 
-    // })
-    this.alert.success('Sorry your email');
-		this.router.navigate(['/login']);
-
+    let self = this;
+    let formModel = this.forgotForm.value;
+    this.api.request(formModel)
+    .then(function(res){
+      if(res.code === 200){
+        self.message.success('Reset password instructions has been sent to your email address. Please check your email'); 
+      }    
+      else{
+        self.message.error('We have no account for this email, Please try again with other email.');
+      } 
+      self.router.navigate(['/login']);
+    })
+    .catch(function(err){
+      self.message.error('Received error response from server. Please try again');
+      self.router.navigate(['/login']);
+    })
   }
 
   ngOnInit() {
@@ -63,9 +61,6 @@ export class ForgotPasswordComponent implements OnInit {
         Validators.required,
         Validators.email
       ]]
-    });  
-
-    this.message.getMessage()
-    .subscribe(x => console.log('message in forgot' + x ));
+    });    
   }
 }

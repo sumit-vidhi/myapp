@@ -9,6 +9,13 @@ import { LoaderService } from './loader.service';
 import { StorageService } from './storage.service';
 import { MessageService } from './message.service';
 
+import { UserService } from './user.service';
+import { TrainerService } from './trainer.service';
+import { ChatService } from './chat.service';
+
+import { AuthGuard } 	  from './auth-guard.service';
+import { PreventLoggedinAccess } from './prevent-loggedin-access.service';
+
 
 @NgModule()
 
@@ -24,7 +31,12 @@ export class CoreModule {
 				StorageService,
 				AlertService,
 				LoaderService,
-				MessageService  
+				MessageService,
+				UserService,
+				TrainerService,
+				ChatService,
+				AuthGuard,
+				PreventLoggedinAccess 
       		]
     	}
     }	

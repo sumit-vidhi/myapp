@@ -1,0 +1,349 @@
+<div class="col-md-offset-1 col-md-10  way-form">
+    <form [formGroup]="userForm" (ngSubmit)="onSave()">
+        
+        <div class="row">
+            <div class="col-md-offset-4 col-md-4 text-center image-div">   
+                    <span *ngIf="showImageLoader">
+                        <img class="image-uploader" src="assets/images/loading.gif">
+                    </span>
+                    <img [src]="
+                            (userForm.get('photo').value !== '')?
+                            userForm.get('photo').value:
+                            'assets/images/user2.png'" 
+                        onerror="this.src='assets/images/user2.png'"    
+                        class="img-circle" style="width:120px;">
+                    <div class="form-group marginT20">    
+                        <label for="photo" class="pointer">{{ (userForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
+                        <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);">
+                    </div>
+                </div>
+        </div>
+        
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('first_name')}">
+                    <label for="first-name">*Name</label>
+                    <input class="form-control" type="text" id="first-name" formControlName="first_name" autofocus>
+                    <span *ngIf="isFieldValid('first_name')" class="help-block">
+                        Please enter your name
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('last_name')}">
+                    <label for="last-name">*Surname</label>
+                    <input class="form-control" type="text" id="last-name" formControlName="last_name">
+                    <span *ngIf="isFieldValid('last_name')" class="help-block">
+                        Please enter your surname
+                    </span>
+                </div>
+            </div>
+        </div>   
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('nickname')}">
+                    <label for="nickname">*Nickname</label>
+                    <input class="form-control" type="text" id="nickname" formControlName="nickname">
+                    <span *ngIf="isFieldValid('last_name')" class="help-block">
+                        Please enter your nickname
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('birth_date')}">
+                    <label for="birth-date">*BirthDate</label>
+                    <input class="form-control" type="text" id="birth-date" formControlName="birth_date" [bsConfig]="bsBirthDateConfig" triggers="''" (focus)="dp.show()" (change)="dp.hide()" #dp="bsDatepicker" bsDatepicker>
+                    <span *ngIf="isFieldValid('birth_date')" class="help-block">
+                        Please enter valid birth date ( MM/DD/YYYY)
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('phone_number')}">
+                    <label for="phone-number">Phone Number</label>
+                    <input class="form-control" type="text" id="phone-number" formControlName="phone_number">
+                    <span *ngIf="isFieldValid('birth_date')" class="help-block">
+                        Please enter your valid phone date like 81XXXXXX10
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('email')}">
+                    <label for="email">*Email</label>
+                    <input class="form-control" type="email" id="email" formControlName="email" readonly>
+                    <span *ngIf="isFieldValid('email')" class="help-block">
+                        Please enter your valid email like abc@example.com
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('street')}">
+                    <label for="address">Address</label>
+                    <input class="form-control" type="text" id="address" formControlName="street">
+                    <span *ngIf="isFieldValid('email')" class="help-block">
+                        Please enter address
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="address-2">Address 2</label>
+                    <input class="form-control" type="text" id="address-2" formControlName="street1">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>   
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('country')}">
+                    <label for="country">*Country</label>
+                    <select id="country" formControlName="country" class="form-control" (change)="refreshStates($event)">
+                        <option>Please choose country </option>
+                        <option *ngFor="let i of allCountries" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('country')" class="help-block">
+                        Please select country
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('state')}">
+                    <label for="state">*State</label>
+                    <select id="state" formControlName="state" class="form-control">
+                        <option>Please choose state </option>
+                        <option *ngFor="let i of states" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('state')" class="help-block">
+                        Please select state
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('city')}">
+                    <label for="city">*City</label>
+                    <input class="form-control" type="text" id="city" formControlName="city">
+                    <span *ngIf="isFieldValid('city')" class="help-block">
+                        Please enter city name
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('zip')}">
+                    <label for="zip">*Zip</label>
+                    <input class="form-control" type="text" id="zip" formControlName="zip">
+                    <span *ngIf="isFieldValid('zip')" class="help-block">
+                        Please enter valid zip
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('timezone')}">
+                    <label for="timezone">*Timezone</label>
+                    <select id="timezone" formControlName="timezone" class="form-control">
+                        <option value="" disabled selected>Please choose timezone </option>
+                        <option *ngFor="let i of allTimezones" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('timezone')" class="help-block">
+                        Please select timezone
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('clock_display')}">
+                    <label for="clock-display">*Display Time (24)</label>
+                    <select id="clock-display" formControlName="clock_display" class="form-control">
+                        <option value="" disabled selected>Please choose Display Time </option>
+                        <option *ngFor="let i of [24,12]" [value]="i">{{ i}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('timezone')" class="help-block">
+                        Please select clock time format
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('preferred_language')}">
+                    <label for="preferred-language">*Preferred Language</label>
+                    <select id="preferred-language" formControlName="preferred_language" class="form-control">
+                        <option value="" disabled selected>Please choose language</option>
+                        <option *ngFor="let i of allLanguages" [value]="i.id">{{ i.nativeName}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('preferred_language')" class="help-block">
+                        Please select a language
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="second-language">Second Language</label>
+                    <select id="second-language" formControlName="second_language" class="form-control">
+                        <option value="" disabled selected>Please choose second language (optional) </option>
+                        <option *ngFor="let i of allLanguages" [value]="i.id">{{ i.nativeName}}</option>
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('height')}">
+                    <label for="height">*Height (cm)</label>
+                    <input class="form-control" type="number" id="height" formControlName="height">
+                    <span *ngIf="isFieldValid('height')" class="help-block">
+                        Please enter valid height ie 170
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('weight')}">
+                    <label for="weight">*Weight (kg)</label>
+                    <input class="form-control" type="number" id="weight" formControlName="weight">
+                    <span *ngIf="isFieldValid('weight')" class="help-block">
+                        Please enter valid weight ie 75
+                    </span>
+                </div>
+            </div>
+        </div> 
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('unit')}">
+                    <label for="unit">*Unit (cm,ml,kg)</label>
+                    <input class="form-control" type="text" id="unit" formControlName="unit">
+                    <span *ngIf="isFieldValid('unit')" class="help-block">
+                        Please enter valid unit
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">*Sleep Senstivity</label>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="sleep_senstivity">
+                    <span *ngIf="isFieldValid('sleep_senstivity')" class="help-block">
+                        Please enter valid sleep sentivity
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                    <label for="stride-length">*Stride Length (cm)</label>
+                    <input class="form-control" type="number" id="stride-length" formControlName="stride_length">
+                    <span *ngIf="isFieldValid('stride_length')" class="help-block">
+                        Please enter valid stride length
+                    </span>
+                </div>
+            </div>
+        </div> 
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('heart_rate_zones')}">
+                    <label for="heart-rate-zones">*Heart rate zone</label>
+                    <input class="form-control" type="text" id="heart-rate-zones" formControlName="heart_rate_zones">
+                    <span *ngIf="isFieldValid('heart_rate_zones')" class="help-block">
+                        Please enter valid heart rate zones
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('start_week')}">
+                    <label for="start-week">Start Week</label>
+                    <input class="form-control" type="text" id="start-week" bsDatepicker formControlName="start_week" [bsConfig]="bsConfig" triggers="''"
+                    (focus)="startWeekDp.show()"
+                    (change)="startWeekDp.hide()"
+                    bsDatepicker #startWeekDp="bsDatepicker">
+                    <span *ngIf="isFieldValid('start_week')" class="help-block">
+                        Please enter valid sleep sentivity
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">  
+            <div class="col-md-12">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('description')}">
+                    <label for="description">*Additional description</label>
+                    <textarea class="form-control" rows="5" id="description" formControlName="description"></textarea>
+                    <span *ngIf="isFieldValid('description')" class="help-block">
+                        Please enter valid stride length
+                    </span>
+                </div>
+            </div>
+        </div> 
+
+        <hr>
+       
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <a routerLink="/" class="btn blue-btn1 pull-right  mtb-30">Back</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn white-btn1 mtb-30" [disabled]="!userForm.valid">Save   </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form> 
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Upload your image</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6 text-right">
+                <button *ngIf="!isImageCropped" class="btn btn-primary" (click)="cropImage()">
+                    <i class="fa fa-crop"></i>
+                </button>
+            </div> 
+        </div>  
+        <hr>             
+        <div class="row" *ngIf="!isImageCropped">
+            <div class="col-md-12 img-crop">    
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="1"
+                    [resizeToWidth]="120"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+            </div> 
+        </div>        
+    </div>
+</ng-template>

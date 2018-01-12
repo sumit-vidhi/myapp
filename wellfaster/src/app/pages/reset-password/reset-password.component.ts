@@ -15,6 +15,8 @@ import {
 
 
 import { ApiService }		from '../../core/api.service';
+import { MessageService }		from '../../core/message.service';
+import { LoaderService } from '../../core/loader.service';
 
 function passwordMatchValidator(g: FormGroup) {
   return g.get('password').value === g.get('confirm_password').value
@@ -32,11 +34,14 @@ export class ResetPasswordComponent implements OnInit {
     private fb : FormBuilder,
     private api : ApiService,
     private router : Router,
+    private message:MessageService,
+    private loader:LoaderService,
     private route  : ActivatedRoute,
   ) { }
 
     isValidReset: boolean;
     resetForm: FormGroup;
+    dismissible = true;
     
     createForm(){
       this.resetForm = this.fb.group({	 
@@ -51,13 +56,21 @@ export class ResetPasswordComponent implements OnInit {
     onSubmit(){
       let self = this;
       let formModel = this.resetForm.value;
+      self.loader.show();
       this.api.reset(formModel)
       .then(function(res){
-        if(res.code === 200) self.router.navigate(['login']);
+        if(res.code === 200) {
+          self.loader.hide();
+          self.message.success('Your password has reset successfully'); 
+          self.router.navigate(['login']);
+        }else{
+          self.message.error('Internal Server Error. Please try again'); 
+        }  
       })
     }
     
     ngOnInit() {
+    
       this.isValidReset = false;
       this.createForm();
 

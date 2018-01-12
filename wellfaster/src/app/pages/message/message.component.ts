@@ -1,41 +1,60 @@
 import { 
   Component, 
   Directive, 
+  Input,
   AfterViewInit, 
-  OnInit, 
+  OnChanges, 
+  OnInit,
+  OnDestroy,
   ViewChild,
-  EventEmitter  
+  EventEmitter,
+  ElementRef  
 }                           from '@angular/core';
 
-import { Observable }       from 'rxjs/Observable';
+import { 
+	FormBuilder, 
+	FormGroup,
+	FormArray,
+	Validators
+} 	            from '@angular/forms';
 
-import { DataService }       from '../../core/data.service'; 
+import { Subject } from 'rxjs/Subject';
 
-export function sortByName(a, b) {
-  var nameA = a.first_name.toUpperCase(); // ignore upper and lowercase
-  var nameB = b.first_name.toUpperCase(); // ignore upper and lowercase
-  if (nameA < nameB) {
-    return -1;
+import { ApiService } from '../../core/api.service';
+import { ChatService } from '../../core/chat.service';
+import { AuthService } from '../../core/auth.service';
+import { LoaderService } from '../../core/loader.service';
+import { StorageService } from '../../core/storage.service';
+import { setInterval, setTimeout } from 'timers';
+
+class Message {
+  user_id : string;
+  trainer_id : string;
+  message:string;
+  constructor(uId, tId){
+    this.user_id = uId;
+    this.trainer_id=tId;
+    this.message = '';
   }
-  if (nameA > nameB) {
-    return 1;
-  }
-  // names must be equal
-  return 0;
-}
-export function filterByName(a, b) {
-  var nameA = a.first_name.toUpperCase(); // ignore upper and lowercase
-  var nameB = b.first_name.toUpperCase(); // ignore upper and lowercase
-  if (nameA < nameB) {
-    return -1;
-  }
-  if (nameA > nameB) {
-    return 1;
-  }
-  // names must be equal
-  return 0;
 }
 
+export function sortByDate(a, b) {
+  var pDate = new Date(a.created_at);
+  var pTime = (pDate.getTime() / 1000).toFixed();
+
+  var cDate = new Date(b.created_at);
+  var cTime = (cDate.getTime() / 1000).toFixed();
+
+
+    if (pTime < cTime) {
+      return -1;
+    }
+    if (pTime > cTime) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  }
 
 @Component({
   selector: 'app-message',
@@ -46,38 +65,157 @@ export function filterByName(a, b) {
 
 
 export class MessageComponent implements AfterViewInit{
-
-  constructor(public data : DataService) { }
-
-  allTrainers :any[];
-  trainers :any[];
-
-  search(event){
-    let term = event.target.value;
-    if(term.trim() !== ''){
-      let patt = new RegExp('^'+term, 'i');
-      console.log(patt)
-      this.trainers = this.allTrainers.filter(x => patt.test(x.first_name)).slice(0,5);
-      this.trainers.sort(sortByName);
-    }  
-  }
-
-  setTrainers(t:number, o?:number){
-    if(!o) o = 0;
-    this.trainers = this.allTrainers.slice(o,t);
-  }
   
-  ngOnInit() {
-    let self = this;
-    this.data.getTrainers().subscribe(x => {
-      self.allTrainers = x;
-      self.setTrainers(5);
+  @Input('activeTrainer') trainer : any;
+  user:any;
+  connection;
+  onChanges = new Subject<any>();
+  
+  messages:Array<any>;
+
+  msgForm:FormGroup;
+
+  constructor(
+    private fb : FormBuilder,
+    private api : ApiService,
+    private auth : AuthService,
+  	private storage : StorageService,
+    private chatService:ChatService,
+		private loader : LoaderService
+  ) { this.user = auth.user
+   
+  }
+  setTrainers(t:number, o?:number){}
+  
+  createForm(){
+    this.msgForm =  this.fb.group({
+      message : ['', Validators.required],
+      attachments:this.fb.array([
+      ])
     });
+  }  
+
+  sendMessage(){
+    let self = this;
+    if(this.msgForm.valid){
+      let formModel = this.msgForm.value;
+      
+      let model = new Message(this.user.id,this.trainer.id);
+      model.message = formModel.message;
+      var messagedata={};
+     
+      messagedata= {"message": model.message,"user":this.trainer.token,"recipient_id":this.trainer.id,"sender_id":this.user.id,"messagefrom":this.trainer.name,"messageto":this.user.first_name+" "+this.user.last_name}
+
+      self.messages.push(messagedata);
+      self.moveToBottom();
+      this.chatService.sendMessagesocket(messagedata);
     
+      this.api.sendMessage(model)
+      .then(function(res){
+        self.msgForm.reset();
+       // self.moveToBottom
+      })
+      .catch(function(err){
+
+      })
+    }
+  }
+
+  prepareMessages(){
+    let messages = [];
+    if(this.messages.length > 0){
+      this.messages.forEach(function(msg, index, msgs){
+        if(messages.length>0){
+          // let prevMsg = messages[messages.length-1];
+
+          // var pDate = new Date(prevMsg.created_at);
+          // var pTime = (pDate.getTime() / 60000).toFixed();
+
+          // var cDate = new Date(msg.created_at);
+          // var cTime = (cDate.getTime() / 60000).toFixed();
+
+          // if(prevMsg.sender_id === msg.sender_id && cTime === pTime){
+          //   messages[messages.length-1].messages.push(msg.message);
+          //   //console.log('inside if');
+          // }else{
+            msg.messages = msg.message.split();
+            messages.push(msg);
+          //   console.log('inside else');
+          // }
+        }else{
+          msg.messages = msg.message.split();
+          messages.push(msg)
+          //console.log('outside else');
+        }  
+        
+      });
+    }
+
+    this.messages = messages;
+    this.moveToBottom();
+      
+  }
+
+  getMessage(){
+    let self = this;
+    let data = {
+      user_id : self.user.id,
+      trainer_id : self.trainer.id
+    }
+    this.loader.show();
+    this.api.getMessages(data)
+    .then(function(res){
+        self.messages = res.data;
+        self.prepareMessages();
+      	self.loader.hide();
+      
+      
+    })
+    .catch(function(err){
+      self.loader.hide();
+    })
+  
+}
+
+  ngOnInit(){
+    let self = this;
+    self.onChanges.subscribe(()=>{
+     
+      self.getMessage();
+    });
+    self.createForm();
+  
+    this.connection ==this.chatService.getMessages().subscribe(data=>{ if (data) { 
+      var userId= data.sender_id
+      console.log(this.trainer)
+      console.log(data);
+      if(this.trainer.id==data.sender_id){
+       data.messagefrom=data.messageto;
+        self.messages.push(data);
+      }
+        self.prepareMessages();
+         
+         };
+        })
+  }
+  // ngOnDestroy() {
+  //   this.connection.unsubscribe();
+  // }
+
+  ngOnChanges(){
+    this.onChanges.next();
+  }
+
+  moveToBottom(){
+   (<any>$(".content")).mCustomScrollbar('scrollTo',100000);
   }
 
   ngAfterViewInit() {
     (<any>$(".content")).mCustomScrollbar();
+    setTimeout(() => {
+      this.moveToBottom();
+    }, 100)
+    
   }
 
 }

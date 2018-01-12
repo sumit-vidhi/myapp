@@ -14,21 +14,10 @@ export interface LoaderState {
     styleUrls: ['./loader.component.css']
 })
 
-export class LoaderComponent implements OnInit {
-  show = false;
-  private subscription: Subscription;
-  
+export class LoaderComponent{
   constructor(
-    private loaderService: LoaderService
+    public loader: LoaderService
   ) { }
+
   
-  ngOnInit() { 
-    this.subscription = this.loaderService.loaderState
-    .subscribe((state: LoaderState) => {
-      this.show = state.show;
-    });
-  }
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-  }
 }

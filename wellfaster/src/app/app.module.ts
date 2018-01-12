@@ -9,6 +9,13 @@ import { TabsModule } 						from 'ngx-bootstrap';
 import { TooltipModule } 					from 'ngx-bootstrap';
 import { BsDatepickerModule } 				from 'ngx-bootstrap';
 import { RatingModule } 					from 'ngx-bootstrap';
+import { ModalModule } 						from 'ngx-bootstrap';
+import { SelectModule} 						from 'angular2-select';
+import { TextMaskModule } 					from 'angular2-text-mask';
+import { Ng2PageScrollModule } 				from 'ng2-page-scroll';
+
+
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 import { 
 	SocialLoginModule, 
@@ -26,7 +33,8 @@ import * as _ 								from 'underscore';
  | IMPORING MODULES
  ***********************************/
 
- 	import { AppRoutingModule } 			from './app-routing.module';
+	import { AppRoutingModule } 			from './app-routing.module';
+	import { AdminRoutingModule } 			from './admin-routing.module';
 	import { CoreModule } 					from './core/core.module';
 	import { CNF } 							from './core/config';
 
@@ -65,6 +73,14 @@ import { EmailVarificationComponent } from './pages/email-varification/email-var
 import { LoaderComponent } from './pages/loader/loader.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AccountComponent } from './pages/account/account.component';
+import { UserFormComponent } from './pages/user-form/user-form.component';
+import { TrainerFormComponent } from './pages/trainer-form/trainer-form.component';
+import { PageComponent } from './pages/page/page.component';
+
+import { DialogComponent } from './pages/dialog/dialog.component';
+import { RequestComponent } from './pages/request/request.component';
+import { LogoFooterComponent } from './pages/logo-footer/logo-footer.component';
+import { HeaderSearchComponent } from './pages/header-search/header-search.component';
 
 @Pipe({ name: 'safeHtml'})
 
@@ -102,9 +118,15 @@ export function provideConfig() {
 		BsDatepickerModule.forRoot(),
 		TooltipModule.forRoot(),
 		RatingModule.forRoot(),
+		ModalModule.forRoot(),
+		AdminRoutingModule,
 		AppRoutingModule,
 		CoreModule.forRoot(),
-		SocialLoginModule
+		SocialLoginModule,
+		ImageCropperModule,
+		SelectModule,
+		TextMaskModule,
+		Ng2PageScrollModule
 	],
 	declarations : [ 
 		SafeHtmlPipe,
@@ -131,7 +153,14 @@ export function provideConfig() {
 		EmailVarificationComponent,
 		LoaderComponent,
 		HomeComponent,
-		AccountComponent
+		AccountComponent,
+		UserFormComponent,
+		TrainerFormComponent,
+		PageComponent,
+		DialogComponent,
+		RequestComponent,
+		LogoFooterComponent,
+		HeaderSearchComponent
 	],
 	providers: [
 		{ provide: AuthServiceConfig, useFactory: provideConfig}

@@ -18,8 +18,10 @@ export class NavbarComponent implements OnInit {
   constructor(public auth : AuthService) { }
 
   appName = CNF.appName;
+  showLogoutDp:boolean;
 
   ngOnInit() {
+    this.showLogoutDp=false;
   }
 
 }

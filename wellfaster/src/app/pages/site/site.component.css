@@ -2,3 +2,8 @@
     font-size: 18px;
     color: #ED8A19;
 }
+div#search {
+    display: table;
+    padding-top:50px;
+}
+.top-header { margin-bottom: 0px !important; }

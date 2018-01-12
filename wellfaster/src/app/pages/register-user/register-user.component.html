@@ -1,25 +1,8 @@
 <header class="top-header bank-form">
-  <app-navbar></app-navbar>
-  
-  <!-- banner -->
-
-  <div class="container top-banner">
-      <div class="row">
-          <div class="col-md-5 banner-heading">
-              <h2>Do you want to <br> <strong>improve </strong>your Body?</h2>
-              <div class="input-group stylish-input-group">
-                      <input type="text" class="form-control"  placeholder="Search" >
-                      <span class="input-group-addon">
-                          <button type="submit">
-                              <span class="glyphicon glyphicon-search"></span>
-                          </button>  
-                      </span>
-              </div>
-          </div>
-      </div>
-  </div>
-
-  <!-- banner -->
+    <app-navbar></app-navbar>
+    <!-- banner -->
+    <app-header-search></app-header-search>
+    <!-- banner -->
   
 </header>
 <!-- category-bar -->
@@ -77,29 +60,25 @@
                                         </li>
                                     </ul>
                                 </div>
+
+                                <div *ngFor="let m of messages" style="margin-top:15px">
+                                    <alert [type]="m.type" [dismissible]="dismissible">{{ m.msg }}</alert>
+                                </div>
+
                                 <div class="tab-content">
                                     <div class="tab-pane" role="tabpanel" [ngClass]="{'active':isTabActive(1)}">
                                         <!-- REGISTRATION FORM1 -->
                                         <form [formGroup]="regForm1" (ngSubmit)="onNext(regForm1)">
-                                            <h2 class="text-center">Basic Info and Login Info</h2><br>
-                                            
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error': 
-                                                        regForm1.get('first_name').invalid && ( 
-                                                        regForm1.get('first_name').dirty || 
-                                                        regForm1.get('first_name').touched)}"
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','first_name')}"
                                                         class="form-group">
                                                         
                                                         <label>*Name</label>
                                                         <input formControlName="first_name" type="text" class="form-control"
                                                         placeholder="Enter Name" autofocus>
                                                         
-                                                        <div *ngIf="
-                                                            regForm1.get('first_name').invalid && ( 
-                                                            regForm1.get('first_name').dirty || 
-                                                            regForm1.get('first_name').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','first_name')">
                                                             <span *ngIf="regForm1.get('first_name').errors.required"
                                                             class="help-block">
                                                                 Name is required.
@@ -108,20 +87,13 @@
                                                     </div>
                                                 </div>    
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error': 
-                                                        regForm1.get('last_name').invalid && ( 
-                                                        regForm1.get('last_name').dirty || 
-                                                        regForm1.get('last_name').touched)}"
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','last_name')}"
                                                         class="form-group">
                                                         <label>*Surname</label>
                                                         <input formControlName="last_name" type="text" class="form-control"
                                                         placeholder="Enter surname">
                                                         
-                                                        <div *ngIf="
-                                                            regForm1.get('last_name').invalid && ( 
-                                                            regForm1.get('last_name').dirty || 
-                                                            regForm1.get('last_name').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','last_name')">
                                                             <span *ngIf="regForm1.get('last_name').errors.required"
                                                             class="help-block">
                                                                 *Surname is required.
@@ -133,20 +105,12 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm1.get('nickname').invalid && ( 
-                                                            regForm1.get('nickname').dirty || 
-                                                            regForm1.get('nickname').touched)
-                                                        }" class="form-group">
-                                                        <label>Nickname</label>
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','nickname')}" class="form-group">
+                                                        <label>*Nickname</label>
                                                         <input type="text" class="form-control"
-                                                        formControlName="nickname" placeholder=" Enter Nickname">
+                                                        formControlName="nickname" placeholder="Enter Nickname">
 
-                                                        <div *ngIf="
-                                                            regForm1.get('nickname').invalid && ( 
-                                                            regForm1.get('nickname').dirty || 
-                                                            regForm1.get('nickname').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','nickname')">
                                                             <span *ngIf="regForm1.get('nickname').errors.required"
                                                             class="help-block">
                                                                 *Nickname is required.
@@ -156,39 +120,36 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm1.get('birth_date').invalid && ( 
-                                                            regForm1.get('birth_date').dirty || 
-                                                            regForm1.get('birth_date').touched)
-                                                        }" class="form-group">
-                                                        <label>Birthday</label>
+
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','birth_date')}" class="form-group">
+                                                        <label>*Birthday</label>
                                                         <input type="text" class="form-control"
                                                         formControlName="birth_date" 
                                                         placeholder="Enter Birthday eg. 11/21/1999"
                                                         [minDate]="util.date(1910,1,1)"
                                                         [maxDate]="util.date()"
-                                                        bsDatepicker>
-                                                        <div *ngIf="
-                                                            regForm1.get('birth_date').invalid && ( 
-                                                            regForm1.get('birth_date').dirty || 
-                                                            regForm1.get('birth_date').touched)"
-                                                        >
+                                                        [bsConfig]="bsConfig"
+                                                        triggers="''"
+                                                        (focus)="dp.toggle()"
+                                                        (change)="dp.toggle()"
+                                                        #dp="bsDatepicker" 
+                                                        bsDatepicker
+                                                        #bdp>
+                                                        <div *ngIf="isFieldValid('regForm1','birth_date')">
                                                             <span *ngIf="regForm1.get('birth_date').errors.required"
                                                             class="help-block">
                                                                 *Birthday is required.
                                                             </span>
                                                         </div>
                                                     </div>
+
+                                                    
                                                 </div>
                                             </div> 
                                             
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm1.get('phone_number').invalid && ( 
-                                                            regForm1.get('phone_number').dirty || 
-                                                            regForm1.get('phone_number').touched) 
-                                                        }" class="form-group">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','phone_number') }" class="form-group">
                                                         
                                                         <label>Phone Number</label>
                                                         <input 
@@ -197,11 +158,7 @@
                                                             formControlName="phone_number" 
                                                             placeholder="Enter phone number">
                                                         
-                                                        <div *ngIf="
-                                                            regForm1.get('phone_number').invalid && ( 
-                                                            regForm1.get('phone_number').dirty || 
-                                                            regForm1.get('phone_number').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','phone_number')">
                                                         
                                                             <span *ngIf="
                                                                 regForm1.get('phone_number').errors.required"
@@ -219,20 +176,13 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error': 
-                                                        regForm1.get('email').invalid && ( 
-                                                        regForm1.get('email').dirty || 
-                                                        regForm1.get('email').touched)}"
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','email')}"
                                                         class="form-group">
-                                                        <label>Email</label>
+                                                        <label>*Email</label>
                                                         <input formControlName="email" type="text" class="form-control"
                                                         placeholder="Enter email eg. abc@example.com">
                                                         
-                                                        <div *ngIf="
-                                                            regForm1.get('email').invalid && ( 
-                                                            regForm1.get('email').dirty || 
-                                                            regForm1.get('email').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','email')">
                                                             <span *ngIf="regForm1.get('email').errors.required"
                                                             class="help-block">
                                                                 *Email is required.
@@ -240,9 +190,16 @@
                                                             <span *ngIf="
                                                                 !regForm1.get('email').errors.required && 
                                                                 regForm1.get('email').errors.email"
-                                                            class="help-block">
+                                                                class="help-block">
                                                                 *Email must be valid.
                                                             </span>
+                                                            <span *ngIf="
+                                                            !regForm1.get('email').errors.required && 
+                                                            !regForm1.get('email').errors.email && 
+                                                            regForm1.get('email').errors.emailTaken"
+                                                            class="help-block">
+                                                            *Email already exist.
+                                                        </span>
                                                         </div>
                                                     </div>
                                                 </div>    
@@ -250,20 +207,13 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error': 
-                                                        regForm1.get('password').invalid && ( 
-                                                        regForm1.get('password').dirty || 
-                                                        regForm1.get('password').touched)}"
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','password')}"
                                                         class="form-group">
-                                                        <label>Password</label>
+                                                        <label>*Password</label>
                                                         <input formControlName="password" type="password" class="form-control"
                                                         placeholder="Enter password" >
                                                         
-                                                        <div *ngIf="
-                                                            regForm1.get('password').invalid && ( 
-                                                            regForm1.get('password').dirty || 
-                                                            regForm1.get('password').touched)"
-                                                        >
+                                                        <div *ngIf="isFieldValid('regForm1','password')">
                                                             <span *ngIf="regForm1.get('password').errors.required"
                                                             class="help-block">
                                                                 *Password is required.
@@ -286,7 +236,7 @@
                                                         regForm1.get('password').value && 
                                                         regForm1.get('confirm_password').touched}"
                                                         class="form-group">
-                                                        <label>Confirm Paasword</label>
+                                                        <label>*Confirm Paasword</label>
                                                         <input formControlName="confirm_password" type="password" class="form-control"
                                                         placeholder="confirm password">
                                                         
@@ -315,31 +265,22 @@
                                     </div>
                                     <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(2)}">
                                         <!-- REGISTRATION FORM2 -->
-                                        <h2 class="text-center">Address, Location and Language Info</h2><br>
+                                        
                                         <form [formGroup]="regForm2" (ngSubmit)="onNext(regForm2)">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('country').invalid && 
-                                                            regForm2.get('country').dirty && 
-                                                            regForm2.get('country').touched
-                                                        }" class="form-group">
-                                                        <label>Country</label>
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm2','country')}" class="form-group">
+                                                        <label>*Country</label>
                                                         <select formControlName="country" 
                                                             class="form-control"
-                                                            (change)="refreshStates($event)"
-                                                            autofocus>
+                                                            (change)="refreshStates($event)">
                                                             <option value="" disabled>Choose a country</option>
                                                             <option *ngFor="let cont of countries" [value]="cont.id">
                                                                 {{ cont.name }}
                                                                 </option>
                                                         </select>
 
-                                                        <div *ngIf="
-                                                            regForm2.get('country').invalid && 
-                                                            regForm2.get('country').dirty && 
-                                                            regForm2.get('country').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm2','country')">
                                                             <span *ngIf="regForm2.get('country').errors.required"
                                                                 class="help-block">
                                                                 Country can not be blank.
@@ -349,12 +290,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('state').invalid && 
-                                                            regForm2.get('state').dirty && 
-                                                            regForm2.get('state').touched
-                                                        }" class="form-group">
-                                                        <label>State</label>
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm2','state')}" class="form-group">
+                                                        <label>*State</label>
                                                         <select 
                                                             formControlName="state" 
                                                             class="form-control">
@@ -364,10 +301,7 @@
                                                             </option>
                                                         </select> 
 
-                                                        <div *ngIf="
-                                                            regForm2.get('state').invalid && 
-                                                            regForm2.get('state').dirty && 
-                                                            regForm2.get('state').touched" 
+                                                        <div *ngIf="isFieldValid('regForm2','state')" 
                                                             >
                                                             <span *ngIf="regForm2.get('state').errors.required"
                                                                 class="help-block">
@@ -381,19 +315,11 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('street').invalid && 
-                                                            regForm2.get('street').dirty && 
-                                                            regForm2.get('street').touched
-                                                        }" class="form-group">
-                                                        <label>*Street</label>
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm2','street')}" class="form-group">
+                                                        <label>*Address </label>
                                                         <input formControlName="street" type="text" class="form-control"
                                                             placeholder="Locality, area or Street"> 
-                                                        <div *ngIf="
-                                                            regForm2.get('street').invalid && 
-                                                            regForm2.get('street').dirty && 
-                                                            regForm2.get('street').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm2','street')">
                                                             <span *ngIf="regForm2.get('street').errors.required"
                                                                 class="help-block">
                                                                 Street can not be blank.
@@ -403,7 +329,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>*Street</label>
+                                                        <label>*Address 2</label>
                                                         <input formControlName="street1" type="text" class="form-control">
                                                     </div>
                                                 </div>                                                  
@@ -463,25 +389,17 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('timezone').invalid && 
-                                                            regForm2.get('timezone').dirty && 
-                                                            regForm2.get('timezone').touched
-                                                        }" class="form-group">
-                                                        <label>Timezone</label>
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm2','timezone')}" class="form-group">
+                                                        <label>*Timezone</label>
                                                         <select 
                                                             formControlName="timezone" 
                                                             class="form-control">
                                                             <option value="" disabled>Choose a timezone</option>
-                                                            <option *ngFor="let tz of timezones" [value]="tz.code">
+                                                            <option *ngFor="let tz of timezones" [value]="tz.id">
                                                                 {{ tz.name }}
                                                             </option>
                                                         </select> 
-                                                        <div *ngIf="
-                                                            regForm2.get('timezone').invalid && 
-                                                            regForm2.get('timezone').dirty && 
-                                                            regForm2.get('timezone').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm2','timezone')" >
                                                             <span *ngIf="regForm.get('timezone').errors.required"
                                                                 class="help-block">
                                                                 Timezone can not be blank.
@@ -490,11 +408,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('clock_display').invalid && 
-                                                            regForm2.get('clock_display').dirty && 
-                                                            regForm2.get('clock_display').touched
-                                                        }" class="form-group">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm2','clock_display')}" class="form-group">
                                                         <label>Clock Display</label>
                                                         <select 
                                                             formControlName="clock_display" 
@@ -511,26 +425,18 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm2.get('preferred_language').invalid && 
-                                                            regForm2.get('preferred_language').dirty && 
-                                                            regForm2.get('preferred_language').touched
-                                                        }" class="form-group">
-                                                        <label>Preferred Language</label>
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm2','preferred_language')}" class="form-group">
+                                                        <label>*Preferred Language</label>
                                                         <select 
                                                             formControlName="preferred_language" 
                                                             class="form-control"
                                                             >
                                                             <option value="" disabled>Choose a language</option>
-                                                            <option *ngFor="let l of languages" [value]="l.code">
+                                                            <option *ngFor="let l of languages" [value]="l.id">
                                                                 {{ l.nativeName }}
                                                             </option>  
                                                         </select>
-                                                        <div *ngIf="
-                                                            regForm2.get('preferred_language').invalid && 
-                                                            regForm2.get('preferred_language').dirty && 
-                                                            regForm2.get('preferred_language').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm2','preferred_language')">
                                                             <span *ngIf="regForm2.get('preferred_language').errors.required"
                                                                 class="help-block">
                                                                 Preferred language can not be blank.
@@ -546,7 +452,7 @@
                                                             class="form-control"
                                                             >
                                                             <option value="" disabled>Choose a language</option>
-                                                            <option *ngFor="let l of languages" [value]="l.code">
+                                                            <option *ngFor="let l of languages" [value]="l.id">
                                                                 {{ l.nativeName }}
                                                             </option>  
                                                         </select> 
@@ -570,20 +476,12 @@
                                         <form [formGroup]="regForm3" (ngSubmit)="onNext(regForm3)">
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm3.get('height').invalid && 
-                                                            regForm3.get('height').dirty && 
-                                                            regForm3.get('height').touched
-                                                        }" class="form-group">
-                                                        <label>Height (cm)</label>
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm3','height')}" class="form-group">
+                                                        <label>*Height (cm)</label>
                                                         <input type="number" formControlName="height" class="form-control" min="40" max="200" placeholder="please enter your height(cm)">
 
-                                                        <div *ngIf="
-                                                            regForm3.get('height').invalid && 
-                                                            regForm3.get('height').dirty && 
-                                                            regForm3.get('height').touched" 
-                                                            >
-                                                            <span *ngIf="regForm2.get('height').errors.required"
+                                                        <div *ngIf="isFieldValid('regForm3','height')">
+                                                            <span *ngIf="regForm3.get('height').errors.required"
                                                                 class="help-block">
                                                                 height can not be blank.
                                                             </span>
@@ -591,20 +489,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div [ngClass]="{'has-error':
-                                                            regForm3.get('weight').invalid && 
-                                                            regForm3.get('weight').dirty && 
-                                                            regForm3.get('weight').touched
-                                                        }" class="form-group">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm3','weight')}" class="form-group">
                                                         
-                                                        <label>Weight (kg)</label>
+                                                        <label>*Weight (kg)</label>
                                                         <input type="number" formControlName="weight" class="form-control" min="40" max="200" placeholder="please enter your weight(kg)">
 
-                                                        <div *ngIf="
-                                                            regForm3.get('weight').invalid && 
-                                                            regForm3.get('weight').dirty && 
-                                                            regForm3.get('weight').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm3','weight')">
                                                             <span *ngIf="regForm3.get('weight').errors.required"
                                                                 class="help-block">
                                                                 Weight can not be blank.
@@ -618,7 +508,7 @@
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>Unit (cm,kg,ml)</label>
+                                                        <label>*Unit (cm,kg,ml)</label>
                                                         <input formControlName="unit" 
                                                             type="text" 
                                                             class="form-control"
@@ -630,18 +520,14 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Sleep Senstivity
+                                                    <div class="form-group" [ngClass]="{'has-error':isFieldValid('regForm3','sleep_senstivity')}">
+                                                        <label>*Sleep Sensitivity
                                                         <a tooltip="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." placement="top"><i class="fa fa-info-circle"></i></a>
                                                         </label>
                                                         <input formControlName="sleep_senstivity" 
                                                             type="text" class="form-control"
                                                             placeholder="Sleep Senstivity">
-                                                        <div *ngIf="
-                                                            regForm3.get('sleep_senstivity').invalid && 
-                                                            regForm3.get('sleep_senstivity').dirty && 
-                                                            regForm3.get('sleep_senstivity').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm3','sleep_senstivity')">
                                                             <span *ngIf="
                                                                 regForm3.get('sleep_senstivity').errors.required || 
                                                                 regForm3.get('sleep_senstivity').errors.pattern"
@@ -653,8 +539,8 @@
                                                     </div> 
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label>Stride Length (cm)
+                                                    <div class="form-group" [ngClass]="{'has-error':isFieldValid('regForm3','stride_length')}">
+                                                        <label>*Stride Length (cm)
                                                             <a tooltip="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." placement="top"><i class="fa fa-info-circle"></i></a>
                                                         </label>
                                                         <input 
@@ -664,11 +550,7 @@
                                                             min="0"
                                                             max="200"
                                                             placeholder="Your average step length">   
-                                                        <div *ngIf="
-                                                            regForm3.get('stride_length').invalid && 
-                                                            regForm3.get('stride_length').dirty && 
-                                                            regForm3.get('stride_length').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm3','stride_length')">
                                                             <span *ngIf="
                                                                 regForm3.get('stride_length').errors.required || 
                                                                 regForm3.get('stride_length').errors.pattern"
@@ -682,18 +564,14 @@
 
                                             <div class="row">
                                                 <div class="col-md-6">
-                                                    <div  class="form-group"> 
-                                                        <label>Heart Rate zones 
+                                                    <div  class="form-group" [ngClass]="{'has-error':isFieldValid('regForm3','heart_rate_zones')}"> 
+                                                        <label>*Heart Rate zones 
                                                             <a tooltip="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." placement="top"><i class="fa fa-info-circle"></i></a>
                                                         </label>
                                                         <input formControlName="heart_rate_zones" type="text" class="form-control"
                                                             placeholder="Enter your heart rate zones">
 
-                                                        <div *ngIf="
-                                                            regForm3.get('heart_rate_zones').invalid && 
-                                                            regForm3.get('heart_rate_zones').dirty && 
-                                                            regForm3.get('heart_rate_zones').touched" 
-                                                            >
+                                                        <div *ngIf="isFieldValid('regForm3','heart_rate_zones')">
                                                             <span *ngIf="
                                                                 regForm3.get('heart_rate_zones').errors.required || 
                                                                 regForm3.get('heart_rate_zones').errors.pattern"
@@ -729,6 +607,11 @@
                                                             placeholder="Start Week"
                                                             [minDate]="util.date()"
                                                             [maxDate]="util.addToDate('MONTH',2)"
+                                                            [bsConfig]="{ containerClass: 'theme-dark-blue'}"
+                                                            triggers="''"
+                                                            (focus)="dp1.show()"
+                                                            (change)="dp1.hide()"
+                                                            #dp1="bsDatepicker" 
                                                             bsDatepicker
                                                             >   
                                                     </div>
@@ -751,7 +634,13 @@
                                                         <label>
                                                         <input value="" type="checkbox" formControlName="accept">
                                                         <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-                                                            I accept terms of policy <small>Download form here</small>
+                                                            I accept terms of policy 
+                                                            <small>
+                                                                <a 
+                                                                    href=""
+                                                                    target="_blank" 
+                                                                >Download form here</a>
+                                                            </small>
                                                         </label>
                                                     </div>
                                                     <div *ngIf="
@@ -772,7 +661,7 @@
                                                     <a class="btn blue-btn1 pull-right  mtb-30" (click)="onBack()">Back</a>
                                                 </div>
                                                 <div class="col-sm-6">
-                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm4.valid">Save   </button>
+                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm4.valid">Save</button>
                                                 </div>
                                             </div>    
                                         </form>

@@ -1,236 +1,72 @@
-<header class="top-header plan">
-  <app-navbar></app-navbar>
-  <!-- banner -->
-  <div class="container top-banner">
-    <div class="row">
-      <div class="col-md-5 banner-heading">
-        <h2>Do you want to <br> <strong>improve </strong>your Body?</h2>
-        <div class="input-group stylish-input-group">
-          <input type="text" class="form-control"  placeholder="Search" >
-          <span class="input-group-addon">
-            <button type="submit">
-              <span class="glyphicon glyphicon-search"></span>
-            </button>  
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- banner -->
-</header>
 
-<!-- category-bar -->
-<div class="container category-bar">
-  <div class="row"></div><hr>
-</div>
+<div class="vertical-divider"></div>
 
-<!-- trusted by -->
-<div class="container trusted-by">
-  <div class="row">
-    <h3 class="text-center"></h3>
-  </div>
-</div>	
+<!-- center messages list  -->
+<div class="col-md-6 sms-content">
 
-
-<div class="container-fluid bg-section">
-  <div class="row">
     
-    <!-- main content -->
-    <div class="container">
-      <div class="row row-divided">
-
-        <!-- left side messages list  -->
-        <div class="col-md-3 sms-msg ">
-          <div class="banner-heading ">
-            <div class="input-group stylish-input-group sms-search">
-              
-              <input 
-                class="form-control" 
-                placeholder="Search" 
-                type="text"
-                (keyup)="search($event)"
-              >
-              <span class="input-group-addon">
-                <button type="submit">
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>  
-              </span>
-
-
-            </div>
-          </div>
-          <div class="footer-select pull-right">
-            <select>
-              <option>All Recent</option>
-              <option>English</option>
-              <option>English</option>
-            </select>
-            <i class="fa fa-caret-down" aria-hidden="true"></i>
-
-
-          </div>
-          <ul *ngFor="let trainer of trainers">
-            <li>
-              <div class="col-sm-3">
-                <div class="row">
-                  <img class="img-responsive" [src]="trainer.photo">
-                </div>
+  <!-- <h2>Micheal Faluhah<span>10:11 am CET</span></h2>
+  <h3>subject : need to lose some weight</h3> -->
+  <div class="msg-box">
+    <div id="demo">
+      <div class="content mCustomScrollbar">
+      <div class="media" >
+        
+        <ul class="media-body message-thread">
+          <li *ngFor="let m of messages;index as i" class="user-chat">
+              <div [ngClass]="{'pic-active' : (trainer.isOnline && trainer.isOnline == 1), 'no-image': (user.id === m.sender_id)}">
+                  <img [src]="m.photofrom" class="media-object" (error)="avatar.src='assets/images/user2.png'" style="width:60px" #avatar>
               </div>
-              <div class="col-sm-9 sms-msg-in">
-                <div class="row">
-                  <span class="pull-left">{{ trainer.first_name + ' ' + trainer.last_name}}</span>
-                  <label class="pull-right">Yesterday</label>
-                  <h4>need to lose some weight...<span>You : Hi Micheal</span></h4>
-                </div>
+              <div class="user-chat-in">
+                  <h4 class="media-heading">
+                    {{ (m.sender_id !== user.id)?m.messagefrom:'You' }}
+                    <span class="pull-right">{{ m.created_at | date : "d, MMM hh:mm a" }}</span>
+                  </h4>
+                  
+                  <p  class="text-left">{{ m.message }}</p>
+                  <hr>
               </div>
             </li>
-          </ul>
-        </div>
-        <div class="vertical-divider"></div>
-        
-        <!-- center messages list  -->
-
-        <div class="col-md-6 sms-content">
-
-          <h2>Micheal Faluhah<span>10:11 am CET</span></h2>
-          <h3>subject : need to lose some weight</h3>
-          <div class="msg-box">
-            <div id="demo">
-              <div class="content mCustomScrollbar">
-                <div class="media">
-                  <div class="media-left pic-active">
-                    <img src="assets/images/bh.jpg" class="media-object" style="width:60px">
-                  </div>
-                  <div class="media-body">
-                    <h4 class="media-heading">Micheal Faluhah<span class="pull-right">8:44 pm</span></h4>
-                    <p>Hi there,</p>
-                    <p class="text-left">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </p>
-                    <hr>
-                    <h4 class="media-heading">8:44 pm<span class="pull-right">You</span></h4>
-                    <p class="text-right">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </p>
-                    <hr>
-                    <h4 class="media-heading">Micheal Faluhah<span class="pull-right">8:44 pm</span></h4>
-                    <p>Hi there,</p>
-                    <p class="text-left">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </p>
-                    <hr>
-                    <h4 class="media-heading">8:44 pm<span class="pull-right">You</span></h4>
-                    <p class="text-right">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                    </p>
-                  </div>
-                </div>
-                <div class="msg-settings">
-                  <span></span><span></span><span></span>
-                </div>
-              </div>
-            </div>
-
-          </div>
-          <div class="sms-message">
-            <textarea placeholder="Message"></textarea>
-          </div>
-          <button class="pull-right btn send-btn">Send</button>
-        </div>
-
-        <div class="vertical-divider-1"></div>
-
-        <!-- right side  messages list  -->
-        <div class="col-md-3 sms-content sms-save">
-          <h2>Settings</h2>
-          <h3>message settings</h3>
-          <span>send an email with unread message for:</span>
-
-          <label class="setting-label btn btn-primary">All Activity</label>
-          <label class="setting-label btn btn-primary">Every 15 Minute</label>
-
-          <div class="checkbox">
-            <label>
-              <input value="" type="checkbox">
-              <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
-              Only send when offline or idle
-            </label>
-          </div>
-
-          <button class="pull-right btn send-btn">Send</button>
-        </div>
-
-
+        </ul>    
       </div>
+        <div class="msg-settings">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <angular-loader></angular-loader>
+    
     </div>
-    <!-- end main content -->
-
-    <!-- footer -->
-    <footer>
-      <div class="container build-your">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="row">
-              <span>Build your own future</span>
-            </div>
-          </div>
-          <div class="col-md-6 pull-right">
-            <div class="row">
-              <button class="pull-right btn news-l">Get Newsletter</button>
-              <button class="pull-right btn get-early">Get Early Access</button>
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="container footer-bar">
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="footer-select">
-              <select >
-                <option>English</option>
-                <option>English</option>
-                <option>English</option>
-              </select>
-              <i class="fa fa-angle-down" aria-hidden="true"></i>
-
-            </div>
-            <div class="footer-menu pull-right">
-              <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">About us</a></li>
-                <li><a href="#">Advantages</a></li>
-                <li><a href="#">Preview</a></li>
-              </ul>
-            </div>
-          </div>
-          <div class="col-sm-8">
-            <div class="terms">
-              <ul>
-                <li><a href="#">Terms & Conditions</a></li>
-                <li><a href="#">Privacy Policy</a></li>
-                <li><a href="#">Support</a></li>
-              </ul>
-            </div>
-            <span class="pull-right address" >142 Schneider Hills Suite 579 <i class="fa fa-map-marker" aria-hidden="true"></i>
-            </span>
-            <div class="footer-social">
-              <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-              <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-              <a href="#"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- copyright -->
-      <div class="container-fluid copyright">
-        <div class="row">
-          <div class="container">
-            <div class="row">
-              <span class="footer-logo">Logo</span>
-              <label class="pull-right">&copy; 2017 Copyrights by wellfaster</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-    <!-- end footer -->
   </div>
+
+
+  <form [formGroup]="msgForm" (ngSubmit)="sendMessage()">
+    <div class="sms-message">
+      <textarea formControlName="message" placeholder="Please type your message here"></textarea>
+    </div>
+    <button class="pull-right btn send-btn" [disabled]="!msgForm.valid">Send</button>
+  </form>  
+
+
 </div>
+
+<div class="vertical-divider-1"></div>
+
+<!-- right side  messages list  -->
+<!-- <div class="col-md-3 sms-content sms-save">
+  <h2>Settings</h2>
+  <h3>message settings</h3>
+  <span>send an email with unread message for:</span>
+  <label class="setting-label btn btn-primary">All Activity</label>
+  <label class="setting-label btn btn-primary">Every 15 Minute</label>
+  
+  <div class="checkbox">
+    <label>
+      <input value="" type="checkbox">
+      <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+        Only send when offline or idle
+    </label>
+  </div>
+  <button class="pull-right btn send-btn">Send</button>
+</div> -->
+

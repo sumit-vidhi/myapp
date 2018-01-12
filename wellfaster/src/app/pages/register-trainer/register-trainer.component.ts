@@ -1,24 +1,30 @@
 import { 
 	Component, 
-	OnInit
+  OnInit,
+  ViewChild,
+  ViewEncapsulation 
 } 							              from '@angular/core';
 
 import { 
 	FormBuilder, 
   FormGroup,
   FormArray,
-	Validators
+  Validators,
+  AbstractControl
 } 							              from '@angular/forms';
 
 import { 
 	Router 
 }                             from '@angular/router';
 
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 import * as _ 								from 'underscore';
 
 import { ApiService }		  from '../../core/api.service';
 import { UtilService }		from '../../core/util.service';
 import { DataService }		from '../../core/data.service';
+import { LoaderService }  from '../../core/loader.service';
 
 import { Country }			from '../../models/country';
 import { TrainerRegisterForm }	from '../../models/trainer-register-form';
@@ -28,6 +34,17 @@ import { FormControl } from '@angular/forms/src/model';
 function passwordMatchValidator(g: FormGroup) {
    return g.get('password').value === g.get('confirm_password').value
       ? null : {'mismatch': true};
+}
+
+export class ValidateEmailNotTaken {
+  static createValidator(api: ApiService) {
+    return (control: AbstractControl) => {
+      return api.checkEmailToken({
+        email : control.value }).then(function(res){
+        return res.code===200 ? null : { emailTaken: true };
+      });
+    };
+  }
 }
 
 function minLengthArrValidator(g: FormGroup) {
@@ -46,28 +63,71 @@ function minLengthArrValidator(g: FormGroup) {
 @Component({
   selector: 'app-register-trainer',
   templateUrl: './register-trainer.component.html',
-  styleUrls: ['./register-trainer.component.css']
+  styleUrls: ['./register-trainer.component.css'],
+  encapsulation: ViewEncapsulation.None
+  
 })
 
 export class RegisterTrainerComponent implements OnInit {
 
-  constructor(
-    private fb  : FormBuilder,
-    private api			: ApiService,
-    public 	util : UtilService,
-    private router      : Router,
-		private dataService : DataService
-	){}
-
-  /**
-	 *  BOOTSTRAP TAB VARIABLES & FUNCTIONS
-	 */
-
     minTab = 1;
     maxTab = 4 
 
+    showCertLoader=false;
+
     activeTab= this.minTab;
     disabledTabs:any=[2,3,4];
+    dismissible = true;
+    @ViewChild('addFile') addFileInput : any;
+
+    messages:any=[];
+
+    model = new  TrainerRegisterForm()
+    regForm1 : FormGroup;
+    regForm2 : FormGroup;
+    regForm3 : FormGroup;
+    regForm4 : FormGroup;
+
+    certArr:any=[];
+
+    spArr:any=[
+      {value:'general_fitness', name:'general fitness'},
+      {value:'strenght_training', name:'strenght training'},
+      {value:'weight_loss', name:'weight loss'},
+      {value:'endurence', name:'endurence'},
+      {value:'diet_and_nutritions', name:'diet and nutritions'},
+      {value:'plyometrics', name:'plyometrics'},
+      {value:'speed_and_agility', name:'speed and gility'},
+      {value:'functional_training', name:'functional training'},
+      {value:'high_intensity_interval', name:'high intensity interval'},
+      {value:'other', name:'other'},
+    ];
+
+    countries:any;
+    allStates:any;
+    states:any;
+    allCities:any;
+    cities:any;
+    timezones:any;
+    languages:any;
+
+    colorTheme = 'theme-dark-blue';
+    
+    bsConfig: Partial<BsDatepickerConfig>;
+
+    //phone_mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+    //calander_mask = ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+
+    
+
+    constructor(
+      private fb  : FormBuilder,
+      private api			: ApiService,
+      public 	util : UtilService,
+      private router      : Router,
+      private loader : LoaderService,
+      private dataService : DataService
+    ){}
 
     showTab(tabId:number){
       if(!this.isTabDisabled(tabId))
@@ -110,26 +170,7 @@ export class RegisterTrainerComponent implements OnInit {
    *  USER REGISRATION FORMS
    */
 
-    model = new  TrainerRegisterForm()
-    regForm1 : FormGroup;
-    regForm2 : FormGroup;
-    regForm3 : FormGroup;
-    regForm4 : FormGroup;
 
-    certArr:any=[];
-
-    spArr:any=[
-      {value:'general_fitness', name:'general fitness'},
-      {value:'strenght_training', name:'strenght training'},
-      {value:'weight_loss', name:'weight loss'},
-      {value:'endurence', name:'endurence'},
-      {value:'diet_and_nutritions', name:'diet and nutritions'},
-      {value:'plyometrics', name:'plyometrics'},
-      {value:'speed_and_agility', name:'speed and gility'},
-      {value:'functional_training', name:'functional training'},
-      {value:'high_intensity_interval', name:'high intensity interval'},
-      {value:'other', name:'other'},
-    ];
 
 
     createRegForms(){
@@ -145,7 +186,10 @@ export class RegisterTrainerComponent implements OnInit {
           Validators.maxLength(10),
           Validators.pattern("[0-9]*")
         ]],
-        email 		: ['', [ Validators.required,Validators.email ]],
+        email 		: ['', 
+          [ Validators.required,Validators.email ],
+          [ValidateEmailNotTaken.createValidator(this.api)]
+        ],
         password 	: ['', [
           Validators.required,
           Validators.minLength(6),
@@ -171,8 +215,8 @@ export class RegisterTrainerComponent implements OnInit {
           Validators.pattern("[0-9]*"),
         ]],
         timezone : ['', Validators.required],
-        clock_display : ['24', Validators.required],
-        preferred_language : ['en', Validators.required],
+        clock_display : ['', Validators.required],
+        preferred_language : ['', Validators.required],
         second_language : [''],
         step:2
       });
@@ -209,6 +253,25 @@ export class RegisterTrainerComponent implements OnInit {
 
     }	
 
+    isFieldValid(form:string, field:string){
+      switch(form){
+        case 'regForm1' : {
+          return this.regForm1.get(field).invalid && ( 
+            this.regForm1.get(field).dirty || 
+            this.regForm1.get(field).touched);	
+        }
+        case 'regForm2' : {
+          break;	
+        }
+        case 'regForm3' : {
+          break;	
+        }
+        case 'regForm4' : {
+          break;	
+        }
+      }
+    }
+
     onBack(){
 			if(this.activeTab > 1) this.activeTab--;
     }
@@ -227,11 +290,15 @@ export class RegisterTrainerComponent implements OnInit {
     saveUser(){
 			let self = this;
       this.prepareSave();
+      self.loader.show();
       this.api.register(this.model)
 			.then(function(res){
 				if(res.code === 200){
+          self.loader.hide();
 					self.router.navigate(['register/finish']);
-				}
+				}else{
+          self.addError('Your Email already exist');
+        }
 			});
 		}
 
@@ -271,7 +338,7 @@ export class RegisterTrainerComponent implements OnInit {
       });
 
       this.model.educations = formModal.educations.map(arr => arr.text);;
-      this.model.certifications = formModal.certifications.map(arr => arr.text);
+      this.model.certifications = formModal.certifications.map(arr => arr.file);
       this.model.short_description = formModal.short_description;
 
       formModal = this.regForm4.value;
@@ -284,66 +351,38 @@ export class RegisterTrainerComponent implements OnInit {
   /**
    *  FUCNTIONS FOR GET JSON
    */
-    countries:any;
-    states:any;
-    cities:any;
-    timezones:any;
-    languages:any;
+
 
     refreshStates(event:any){
       let countryId = event.target.value;
-      this.getStates(countryId);
+      this.states = this.allStates.filter(x => x.country_id == countryId)
     }
 
     refreshCities(event:any){
-      // this.getCities(event.target.value);
+      let stateId = event.target.value;;
+      this.cities = this.allStates.filter(x => x.country_id == stateId)
     }
 
     getCountries(): void {
-      this.dataService.getCountries() 
-        .subscribe(x => this.countries = x);
+      this.dataService.getCountries().subscribe(x => this.countries = x);
     }
     
     getCities(sId?:number): void {
-      this.dataService.getCities() 
-        .subscribe(x => {
-        for(let i in x){
-          if(sId && x[i].state_id == sId){
-              x[i].text = x[i].name; 
-              delete x[i].state_id;
-              delete x[i].name;
-          }else{
-            x.splice(i,1);
-          }
-        }
-        this.cities = x;
-      });
+      this.dataService.getCities().subscribe(x => this.allCities = x); 
     }
 
     getStates(cId?:number): void {
-      this.dataService.getStates() 
-        .subscribe(x => {
-        this.states = (cId) ? _.where(x,{ country_id : cId}) : x;
-      });
+      this.dataService.getStates().subscribe(x => this.allStates = x);
     }
 
     getLanguages(): void {
-      this.dataService.getLanguages() 
-        .subscribe(x => {
-        this.languages = x;
-      });
+      this.dataService.getLanguages().subscribe(x => this.languages = x);
     }
 
     getTimezones(): void {
-      this.dataService.getTimezones() 
-        .subscribe(x => {
-        let arr = [];  
-        for(let i in x){
-          arr.push(x[i]);
-        }
-        this.timezones = arr;
-      });
+      this.dataService.getTimezones().subscribe(x => this.timezones = x);
     }
+
     initSpecialities(){
       let arr = [];
       for(let i of this.spArr){
@@ -355,12 +394,49 @@ export class RegisterTrainerComponent implements OnInit {
       this.regForm3.setControl('specialities', spFormArray);
     }
 
-    addCertificate(){
-      (this.regForm3.get('certifications') as FormArray).push(this.fb.group({
-        text:''
-      }));
-    }
+    addCertificate(event){
+      // let self = this;
+      // if (
+      //   self.addFileInput.nativeElement.files && 
+      //   self.addFileInput.nativeElement.files[0]
+      // ) {
+      //   const fileReader: FileReader = new FileReader();
+      //   fileReader.onload = (event: Event) => {
+      //     (self.regForm3.get('certifications') as FormArray).push(self.fb.group({
+      //       file : fileReader.result
+      //     }));
+      //   };
+      //   fileReader.readAsDataURL(self.addFileInput.nativeElement.files[0]);      
+      // }
 
+      let self = this;
+      var pattern = /image-*/;
+      var reader = new FileReader();
+      self.showCertLoader = !self.showCertLoader;
+     
+      if (
+        self.addFileInput.nativeElement.files && 
+        self.addFileInput.nativeElement.files[0]
+      ) {
+        
+        const fileReader: FileReader = new FileReader();
+        fileReader.onload = (event: Event) => {
+          self.api.uploadImage({
+            image : fileReader.result 
+          }).then(function(res){
+            (self.regForm3.get('certifications') as FormArray).push(self.fb.group({
+              file : res.imageurl
+            }));
+            self.showCertLoader = !self.showCertLoader;
+          })
+          .catch(function(){
+            self.showCertLoader = !self.showCertLoader;
+          })
+        };
+        fileReader.readAsDataURL(self.addFileInput.nativeElement.files[0]);      
+      }
+    }
+  
     deleteCertificate(i:number){
       (this.regForm3.get('certifications') as FormArray).removeAt(i);
     }
@@ -375,16 +451,25 @@ export class RegisterTrainerComponent implements OnInit {
       (this.regForm3.get('educations') as FormArray).removeAt(i);
     }
 
-    ngOnInit() {
-      this.createRegForms();
+    addError(msg:string){
+      this.messages = [];
+      this.messages.push({
+        type:'danger',
+        msg:msg
+      });
+    }
 
+
+    ngOnInit() {
+      this.bsConfig = Object.assign({}, { containerClass: this.colorTheme });
+      this.createRegForms();
       this.initSpecialities();
       this.getCountries();
-      if(this.regForm2.get('country').value != ''){
-        this.getStates(this.regForm2.get('country').value);
-      }
+      this.getStates();
+      this.getCities();
       this.getTimezones();
       this.getLanguages();
+      
     }
 
 }

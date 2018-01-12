@@ -2,47 +2,46 @@
 <div class="login">
 	
 	<!-- SESSION ALERTS -->
-	<app-alert></app-alert>
+
+	<div *ngFor="let message of messages" class="text-center" style="margin:15px;">
+		<alert [type]="message.type" [dismissible]="dismissible"><strong>{{ message.text }}</strong></alert>
+	</div>
+	
 	<!-- END OF SESSION ALERTS -->
 
 	<div class="login-in">
-		<!-- <img src=""> -->
+		<img src="assets/images/logo.png">
 		<label><strong>Sign in</strong></label>
-		<div *ngFor="let err of serverErrorMessages">
-			<alert type="danger" [dismissible]="dismissible">{{ err }}</alert>
-		</div>
 
 		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 			<div [ngClass]="{'has-error':
-				loginForm.get('username').invalid && (
-				loginForm.get('username').dirty ||
-				loginForm.get('username').touched)
+				loginForm.get('username').invalid && 
+				loginForm.get('username').touched
 				}" class="form-group">
-				<span>User Name</span>
+				<span>Email</span>
 				<input type="text" formControlName="username" autofocus>
 				<div *ngIf="
-					loginForm.get('username').invalid && (
-					loginForm.get('username').dirty ||
-					loginForm.get('username').touched)">
+					loginForm.get('username').invalid && 
+					loginForm.get('username').touched">
 
 					<span *ngIf="
-						loginForm.get('username').errors.required" class="help-block">
-							username is required
-					</span>		
+						loginForm.get('username').errors.required || 
+						loginForm.get('username').errors.email	
+						" class="help-block">
+							Email is required
+					</span>	
 				</div>
 			</div>
 
 			<div [ngClass]="{'has-error':
-				loginForm.get('password').invalid && (
-				loginForm.get('password').dirty ||
-				loginForm.get('password').touched)
+				loginForm.get('password').invalid &&
+				loginForm.get('password').touched
 				}" class="form-group">
 				<span>Password</span>
 				<input type="password" formControlName="password">
 				<div *ngIf="
-					loginForm.get('password').invalid && (
-					loginForm.get('password').dirty ||
-					loginForm.get('password').touched)">
+					loginForm.get('password').invalid && 
+					loginForm.get('password').touched">
 					<span *ngIf="
 						loginForm.get('password').errors.required" class="help-block">
 							password is required
@@ -58,10 +57,14 @@
 				</label>
 			</div>
 
-			<button class="btn sign-in-btn">Sign In!</button>
+			<angular-loader></angular-loader>
+			
+			<button class="btn sign-in-btn" [disabled]="!loginForm.valid">Sign In!</button>
 			<a routerLink="/" class="btn sign-in-btn">Cancel</a>
 		</form>
 		
+		
+
 		<div class="forgot">
 			<a routerLink="/forgot_password">
 				<span >Forgotten your password?</span>

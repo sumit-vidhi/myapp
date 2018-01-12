@@ -1,3 +1,145 @@
-<p>
-  trainer-list works!
-</p>
+<header class="top-header plan">
+  <app-navbar></app-navbar>
+  <!-- banner -->
+  <app-header-search></app-header-search>
+  <!-- banner -->
+</header>
+      
+<!-- category-bar -->
+<div class="container category-bar">
+  <div class="row"></div><hr>
+</div>
+      
+<!-- trusted by -->
+<div class="container trusted-by">
+  <div class="row"><h3 class="text-center"></h3></div>
+</div>	
+      
+      
+<div class="container-fluid bg-section">
+  <div class="row">
+
+    <!-- main content -->
+    <div class="container">
+      <div class="row row-divided">
+        <!-- left side messages list  -->
+        <div class="col-md-3 sms-msg ">
+          <div class="banner-heading ">
+            <div class="input-group stylish-input-group sms-search">
+              <input class="form-control" placeholder="Search" type="text" (keyup)="search($event)">
+              <span class="input-group-addon">
+                <button type="submit">
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>  
+              </span>
+            </div>
+          </div>
+          
+          <!-- <div class="footer-select pull-right">
+            <select>
+              <option>All Recent</option>
+              <option>Last week</option>
+              <option>Last Month</option>
+              <option>All</option>
+            </select><i class="fa fa-caret-down" aria-hidden="true"></i>
+          </div> -->
+
+          <ul *ngFor="let trainer of trainersdata; index as i">
+            <li (click) ="setActiveTrainer(i)" [ngClass]="{'us-chat': activeTrainer.id === trainer.id}">
+              <div class="col-sm-3" [ngClass]="{'dp-active' : (trainer.isOnline && trainer.isOnline == 1)}">
+                <div class="row">
+                  <img class="img-responsive" [src]="trainer.photo" (error)="avatar.src='assets/images/user2.png'"  #avatar>
+                </div>
+              </div>
+              <div class="col-sm-9 sms-msg-in">
+                <div class="row">
+                  <span class="pull-left">{{ trainer.name}}</span>
+                  <!-- <label class="pull-right">{{ trainer.created_at  |  date : "d, MMM hh:mm a" }}</label>  -->
+                  <!-- <h4>
+                  <span>You : {{ trainer.messag }}</span>
+                  </h4> -->
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <app-message [activeTrainer]="activeTrainer"></app-message>     
+
+      </div>
+    </div>
+    <!-- end main content -->
+
+    <!-- footer -->
+    <footer>
+      <div class="container build-your">
+      <div class="row">
+      <div class="col-md-6">
+      <div class="row">
+      <span>Build your own future</span>
+      </div>
+      </div>
+      <div class="col-md-6 pull-right">
+      <div class="row">
+      <button class="pull-right btn news-l">Get Newsletter</button>
+      <button class="pull-right btn get-early">Get Early Access</button>
+
+      </div>
+      </div>
+      </div>
+      </div>
+
+      <div class="container footer-bar">
+      <div class="row">
+      <div class="col-sm-4">
+      <div class="footer-select">
+      <select >
+      <option>English</option>
+      <option>English</option>
+      <option>English</option>
+      </select>
+      <i class="fa fa-angle-down" aria-hidden="true"></i>
+
+      </div>
+      <div class="footer-menu pull-right">
+      <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About us</a></li>
+      <li><a href="#">Advantages</a></li>
+      <li><a href="#">Preview</a></li>
+      </ul>
+      </div>
+      </div>
+      <div class="col-sm-8">
+      <div class="terms">
+      <ul>
+      <li><a href="#">Terms & Conditions</a></li>
+      <li><a href="#">Privacy Policy</a></li>
+      <li><a href="#">Support</a></li>
+      </ul>
+      </div>
+      <span class="pull-right address" >142 Schneider Hills Suite 579 <i class="fa fa-map-marker" aria-hidden="true"></i>
+      </span>
+      <div class="footer-social">
+      <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+      <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+      <a href="#"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
+      </div>
+      </div>
+      </div>
+      </div>
+      <!-- copyright -->
+      <div class="container-fluid copyright">
+      <div class="row">
+      <div class="container">
+      <div class="row">
+      <span class="footer-logo">Logo</span>
+      <label class="pull-right">&copy; 2017 Copyrights by wellfaster</label>
+      </div>
+      </div>
+      </div>
+      </div>
+    </footer>
+    <!-- end footer -->
+  </div>
+</div>

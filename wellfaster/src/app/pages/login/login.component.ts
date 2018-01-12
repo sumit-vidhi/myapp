@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit {
 		private fb  : FormBuilder,
 		private api : ApiService,
 		private auth : AuthService,
-		private socialAuth : SocialAuthService,
+		//private socialAuth : SocialAuthService,
 		private storage : StorageService,
 		private message:MessageService,
 		private router : Router,
@@ -48,69 +48,96 @@ export class LoginComponent implements OnInit {
 	){}
 
 	loginForm : FormGroup;
-	serverErrorMessages:Array<string>;
 	dismissible = true;
+	messages:any[];
 
-	signInWithGoogle(): void {
-		let self = this;
-    	this.socialAuth
-		.signIn(GoogleLoginProvider.PROVIDER_ID)
-		.then((user) => {
-			self.api.connect(user)
-			.then((resp) => {
-				if(resp.code == 200){
-					self.router.navigate(['/']);			
-				}
-			})
-		});
-  	}
+	// signInWithGoogle(): void {
+	// 	let self = this;
+    // 	this.socialAuth
+	// 	.signIn(GoogleLoginProvider.PROVIDER_ID)
+	// 	.then((user) => {
+	// 		self.api.connect(user)
+	// 		.then((resp) => {
+	// 			if(resp.code == 200){
+	// 				self.router.navigate(['/']);			
+	// 			}
+	// 		})
+	// 	});
+  	// }
 
-  	signInWithFB(): void {
-  		let self = this;
-    	this.socialAuth
-		.signIn(FacebookLoginProvider.PROVIDER_ID)
-		.then((user) => {
-			self.api.connect(user)
-			.then((res) => {
-				if(res.code == 200){
-					self.auth.setToken(res.data);	
-					self.auth.login();		
-				}else{
-					console.log('internal server error');
-				}
-			})
-		});
-  	}
+  	// signInWithFB(): void {
+  	// 	let self = this;
+    // 	this.socialAuth
+	// 	.signIn(FacebookLoginProvider.PROVIDER_ID)
+	// 	.then((user) => {
+	// 		self.api.connect(user)
+	// 		.then((res) => {
+	// 			if(res.code == 200){
+	// 				self.auth.setToken(res.token);	
+	// 				self.auth.login();		
+	// 			}else{
+	// 				console.log('internal server error');
+	// 			}
+	// 		})
+	// 	});
+	  // }
+	  
+	isFieldValid(field:string):boolean{
+		return this.loginForm.get(field).invalid && (
+			this.loginForm.get(field).dirty ||
+			this.loginForm.get(field).touched);
+	}  
 
 	onSubmit(){
-		this.loader.show();
-		setTimeout(() => this.loader.hide(), 3000);
-		// let self = this;
-		// let formModal = this.loginForm.value;
-		// this.api.login(formModal)
-		// .then(function(res){
-		// 	if(res.code === 200){
-		// 		self.auth.setToken(res.data);	
-		// 		self.auth.login();	
-		// 	}else{
-		// 		console.log('internal server error');
-		// 		//self.serverErrorMessages.push('Either email or password is wrong');
-		// 	}	
-		// })
-
-		
+		let self = this;
+		self.loader.show();
+		let formModal = self.loginForm.value;
+		self.api.login(formModal)
+		.then(function(res){
+			self.loader.hide();
+			if(res.code === 200){
+				self.auth.setToken(res.data);	
+				self.auth.login();	
+			}else{
+				if(res.message === 'account_confirmation_error'){
+					self.setMessage('You need to confirm your account. We have sent you an activation link, please check your email');
+				}else{
+					self.setMessage('Either email or password is wrong');
+				}
+				//self.loginForm.reset();
+			}						
+		})
+		.catch(function(err){
+			self.loader.hide();	
+			//self.loginForm.reset();
+			self.setMessage('Received error response from server. Please try again');
+		})
 	}
-	
+
+	setMessage(message:string){
+		this.resetMessage();
+		this.messages.push({
+			type : 'danger',
+			text: message
+		});
+	}
+
+	resetMessage(){
+		this.messages = [];
+	}
+
 	ngOnInit() {
-		this.serverErrorMessages = [];
-  		this.loginForm = this.fb.group({	
-  			username : ['', Validators.required],
+		this.resetMessage();
+		this.loginForm = this.fb.group({	
+  			username : ['', [
+				Validators.required,
+				Validators.email 
+			]],
 		 	password : ['', Validators.required],
 		 	rememberMe :['']
 		});
-		console.log('ng init start');
 		
-		this.message.getMessage()
-		.subscribe(x => console.log('message in login' + x ));
+		let _message = this.message.getMessage();
+		if(_message) this.messages.push(_message);
 	}
 }

@@ -26,24 +26,21 @@ export class EmailVarificationComponent implements OnInit {
   constructor (
     private route : ActivatedRoute,
     private api : ApiService
-  ){
-    console.log('fasdhfuashdfuihasudihfua');
-  }
+  ){}
 
   isEmailConfirmed:boolean;
   
   ngOnInit() {
-
-    // this.isEmailConfirmed = false;
-    // this.route.params.subscribe(params => {
-    //   this.api.confirm({ 
-    //     id : params.id, 
-    //     token : params.code 
-    //   })
-    //   .then(response => {
-    //     if(response.code == 200) this.isEmailConfirmed = true; 
-    //   })
-    // })	
+    this.isEmailConfirmed = false;
+    this.route.params.subscribe(params => {
+      this.api.confirm({ 
+        id : params.id, 
+        token : params.code 
+      })
+      .then(response => {
+        if(response.code == 200) this.isEmailConfirmed = true; 
+      })
+    })	
   }
 
 }
