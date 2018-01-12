@@ -1,0 +1,174 @@
+<!-- category-bar -->
+<div class="container category-bar" id="search">
+	<form [formGroup]="searchForm" (ngSubmit) ="onSearch()">
+		<div class="row">
+
+			<div class="col-md-3 col-sm-3 col-xs-6  mb-20">
+				<div class="banner-heading input-search">
+					<div class="stylish-input-group input-search p-0">
+						<input 
+							type="text" 
+							class="form-control" 
+							formControlName="location" 
+							placeholder="city">
+					</div>		
+				</div>		
+			</div>
+			
+			<div class="col-md-3 col-sm-3 col-xs-6 select-btn mb-20">
+				<ng-select
+					[options]="specialityOptions"
+					placeholder="Speciality"
+					[allowClear]="true"
+					formControlName="speciality">
+				</ng-select>
+			</div>
+	
+			<div class="col-md-3 col-sm-3 col-xs-6 select-btn mb-20">
+				<ng-select
+						[options]="ratingOptions"
+						placeholder="rating"
+						[allowClear]="true"
+						formControlName="rating">
+				</ng-select>
+			</div>
+	
+			<div class="col-md-3 col-sm-3 col-xs-6 mb-20 ">
+			
+				<div class="dropdown ">
+					<button class="btn pull-right category-bar-search m-0" type="submit" >Search</button>
+				</div>
+			
+			</div>
+		</div>
+	</form>
+</div>		
+<hr>
+
+	
+	<!-- trusted by -->
+<div class="container trusted-by">
+	<div class="row">
+		<h3 class="text-center"></h3>
+	</div>
+</div>	
+	
+	
+<div *ngIf="!trainers" class="container-fluid bg-section">
+	<div class="row">
+		<h4 class="text-center trusted-by">Trusted by the world's best</h4>
+		<!-- main content -->
+		
+		<div class="container-fluid our-expert-outer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 our-expert">
+						<h2>OUR EXPERT TRAINERS</h2>
+						<span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s when an known printer took a galley of type and scrambled it to make a type specimen book.</span>
+					</div>
+					<div class="col-md-12 center-block">
+						<div class="row">
+							<button (click) ="onSearch()" class="btn center-block plan-btn">View All Trainers</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- latest-tips -->
+		<div class="latest-tips container">
+			<div class="row">
+				<h2 class="text-center">LATEST TIPS</h2>
+				<span class="text-center">Video player like never before</span>
+				<img src="assets/images/video-slider.png">
+				<button class="early-access">Get early access</button>
+			</div>
+		</div>
+		
+		<!-- end main content -->
+	
+		<!-- footer -->
+		<app-site-footer></app-site-footer>
+		<!-- end footer -->
+	  </div>
+	</div>
+
+	<div class="row">
+		<div *ngFor="let alert of alertMessages" class="col-md-offset-2 col-md-8 text-center">
+			<alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+		</div>
+	</div>	
+
+	<angular-loader></angular-loader>
+
+	<div>
+		<div *ngIf="trainers" class="container-fluid bg-section">
+			<div class="row">
+				<div class="container">
+
+					<div class="row">
+						
+						<div class="col-md-2 col-md-offset-10">
+								<div class="footer-select">
+										<label>Sort By</label>
+										<select (change)="sort($event)">
+												<option value="">Select</option>
+											<option value="name">Name</option>
+											<option value="rating">Rating</option>
+										</select>
+										<i class="fa fa-angle-down" aria-hidden="true"></i>
+					
+									</div>
+						</div>	
+					</div>		
+					
+					<div class="row ">
+							
+						<div *ngFor="let t of trainers" class="col-md-4">
+							<div class="trusted-box">
+							<a routerLink="/trainers/{{ t.id }}">
+								<div class="col-md-5">
+									<img class="img-responsive" [src]="t.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+								</div>
+								<div class="col-md-7">
+									<h3>{{ t.first_name+' '+ t.last_name }}</h3>
+									<span>{{ (t.description.length>48)?t.description.substr(0,48)+'&hellip;': t.description}}</span>
+									<hr>
+									<span>{{ t.street }},{{ t.city }}</span>
+									<!-- <h3>dkr. 125<span>uge</span></h3>
+									<span>4/8/12 week programs</span> -->
+								</div>
+							</a>
+								<div class="col-md-12 star-rating" style="margin-top:15px">
+									<rating [(ngModel)]="t.rating" [max]="max" [readonly]="isReadonly"></rating>
+									<div class="pull-right">
+
+									<div *ngIf="auth.isLoggedIn && auth.user.role === 1">		
+										<a *ngIf="t.isHired" class="btn plan-btn pointer">Already hired</a>
+										
+										<a *ngIf="t.isPending" class="btn plan-btn pointer">Pending</a>
+										
+										<a *ngIf="!(t.isHired || t.isPending)" (click)="hireTrainer(t)" class="btn plan-btn pointer" #hired>Subscribe</a>
+									</div>	
+									<div *ngIf="!auth.isLoggedIn">
+										<a routerLink="/login" class="btn plan-btn">Subscribe</a>
+									</div>
+
+									</div>
+								</div>
+							</div>
+					
+						</div>
+						<div *ngIf="trainersnotexist==true" style="text-align:center;">Trainer not found in database</div>
+		
+						
+		
+						<br>
+						<button *ngIf="loadmore==true" class="btn btn-center btn-primary load-more" (click)="loadMore(page)">Load More</button>
+						<br>
+					</div>
+				</div>
+		
+				<app-site-footer></app-site-footer>
+			</div>
+		</div>
+	</div>		

@@ -1,0 +1,54 @@
+<nav class="navbar">
+	<div class="container">
+		<div class="navbar-header">
+		<a class="navbar-brand" routerLink="/">
+			<!-- <strong>{{ appName }}</strong> -->
+			<img src="assets/images/logo.png">
+		</a>
+		</div>
+
+
+		<ul *ngIf="!auth.isLoggedIn" class="nav navbar-nav navbar-right">
+			<li>
+				<a routerLink="/pages/how-to-book-trainer">How to book a trainer</a>
+			</li>
+
+			<li  class="menu-login">
+				<span><a routerLink="/register">Sign Up</a></span> 
+				<span><a routerLink="/login">Login</a></span>
+			</li>
+		</ul>
+
+		<ul *ngIf="auth.isLoggedIn" class="nav navbar-nav navbar-right">
+			<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active">
+				<a routerLink="/my-trainers">My Trainers</a>
+			</li>
+			<li *ngIf="auth.user.role === 2 && (auth.user.hiredata>0 || auth.isHired)" class="active">
+				<a routerLink="/my-trainees">My Trainees</a>
+			</li>
+
+			<li><a routerLink="/account">My Account</a></li> 
+			
+			<li class="menu-logout">
+				<img 
+					[src]="auth.user.photo ? auth.user.photo : 'assets/images/user2.png'"
+					onerror="this.src='assets/images/user2.png'"
+				>
+				<span>
+					<a (click)="showLogoutDp=!showLogoutDp" class="text-capitalize">
+						{{ auth.user.first_name + ' ' + auth.user.last_name}}
+						<i class="fa fa-caret-down"></i>
+					</a>
+				</span>
+
+				<div [ngClass]="{'active':showLogoutDp}" class="logout-dp">
+					<label><a (click)="auth.logout()">Logout</a></label>
+				</div>
+				
+			</li>
+			
+		</ul>
+
+		
+	</div>
+</nav> 	

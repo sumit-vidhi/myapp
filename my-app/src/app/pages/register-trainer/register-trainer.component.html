@@ -1,0 +1,728 @@
+<header class="top-header bank-form">
+    <app-navbar></app-navbar>
+    <!-- banner -->
+    <app-header-search></app-header-search>
+    <!-- banner -->
+  
+</header>
+<!-- category-bar -->
+<div class="container category-bar">
+  <div class="row">
+      
+  </div>
+  
+</div>
+<!-- trusted by -->
+<div class="container-fluid bg-section">
+    <div class="row">
+        <div class="container">
+            <div class="row ">
+                <!-- tab -->
+                <div class="container way-form">
+                    <div class="row">
+                        <section>
+                            <div class="wizard">
+                                <div class="wizard-inner">
+                                    <div class="connecting-line"></div> 
+                                    <ul class="nav nav-tabs" role="tablist">
+        
+                                        <li role="presentation" [ngClass]="{'active':isTabActive(1), 'disabled':isTabDisabled(1)}">
+                                            <a (click)="showTab(1)" role="tab" title="Step 1">
+                                                <span class="round-tab">
+                                                    <i class="glyphicon glyphicon-user"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+        
+                                        <li role="presentation" [ngClass]="{'active':isTabActive(2), 'disabled':isTabDisabled(2)}">
+                                            <a (click)="showTab(2)" role="tab" title="Step 2">
+                                                <span class="round-tab">
+                                                    <i class="glyphicon glyphicon-globe"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+
+                                        <li role="presentation" [ngClass]="{'active':isTabActive(3), 'disabled':isTabDisabled(3)}">
+                                            <a (click)="showTab(3)" role="tab" title="Step 3">
+                                                <span class="round-tab">
+                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+        
+                                        <li role="presentation" [ngClass]="{'active':isTabActive(4),'disabled':isTabDisabled(4)}">
+                                            <a (click)="showTab(4)" role="tab" title="Complete">
+                                                <span class="round-tab">
+                                                    <i class="glyphicon glyphicon-ok"></i>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div *ngFor="let m of messages" style="margin-top:15px">
+                                    <alert [type]="m.type" [dismissible]="dismissible">{{ m.msg }}</alert>
+                                </div> 
+
+                                <div class="tab-content">
+                                    <div class="tab-pane" role="tabpanel" [ngClass]="{'active':isTabActive(1)}">
+                                        <form [formGroup]="regForm1" (ngSubmit)="onNext(regForm1)">
+                                            <h2 class="text-center">Basic Info and Login Info</h2><br>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','first_name')}"
+                                                        class="form-group">
+                                                        
+                                                        <label>*Name</label>
+                                                        <input formControlName="first_name" type="text" class="form-control"
+                                                        placeholder="Enter Name" autofocus>
+                                                        
+                                                        <div *ngIf="isFieldValid('regForm1','first_name')">
+                                                            <span *ngIf="regForm1.get('first_name').errors.required"
+                                                            class="help-block">
+                                                                Name is required.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>    
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','last_name')}"
+                                                        class="form-group">
+                                                        <label>*Surname</label>
+                                                        <input formControlName="last_name" type="text" class="form-control"
+                                                        placeholder="Enter surname">
+                                                        
+                                                        <div *ngIf="isFieldValid('regForm1','last_name')">
+                                                            <span *ngIf="regForm1.get('last_name').errors.required"
+                                                            class="help-block">
+                                                                *Surname is required.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','nickname')}" class="form-group">
+                                                        <label>*Nickname</label>
+                                                        <input type="text" class="form-control"
+                                                        formControlName="nickname" placeholder="Enter Nickname">
+
+                                                        <div *ngIf="isFieldValid('regForm1','nickname')">
+                                                            <span *ngIf="regForm1.get('nickname').errors.required"
+                                                            class="help-block">
+                                                                *Nickname is required.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','birth_date')}" class="form-group">
+                                                        <label>*Birthday</label>
+                                                        <input type="text" class="form-control"
+                                                        formControlName="birth_date" 
+                                                        placeholder="Enter Birthday eg. 11/21/1999"
+                                                        [minDate]="util.date(1910,1,1)"
+                                                        [maxDate]="util.date()"
+                                                        [bsConfig]="bsConfig"
+                                                        triggers="''"
+                                                        (focus)="dp.show()"
+                                                        (change)="dp.hide()"
+                                                        #dp="bsDatepicker" 
+                                                        bsDatepicker>
+                                                        <div *ngIf="isFieldValid('regForm1','birth_date')">
+                                                            <span *ngIf="regForm1.get('birth_date').errors.required"
+                                                            class="help-block">
+                                                                *Birthday is required.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','phone_number') }" class="form-group">
+                                                        
+                                                        <label>Phone Number</label>
+                                                        <input 
+                                                            type="text" 
+                                                            class="form-control"
+                                                            formControlName="phone_number" 
+                                                            placeholder="Enter phone number">
+                                                        
+                                                        <div *ngIf="isFieldValid('regForm1','phone_number')">
+                                                        
+                                                            <span *ngIf="
+                                                                regForm1.get('phone_number').errors.required"
+                                                                class="help-block">*Phone number is required
+                                                            </span>
+
+                                                            <span *ngIf="
+                                                                regForm1.get('phone_number').errors.minlength ||
+                                                                regForm1.get('phone_number').errors.maxlength ||
+                                                                regForm1.get('phone_number').errors.pattern"
+                                                                class="help-block">
+                                                                *Enter valid phone
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':isFieldValid('regForm1','email')}"
+                                                        class="form-group">
+                                                        <label>*Email</label>
+                                                        <input formControlName="email" type="text" class="form-control"
+                                                        placeholder="Enter email eg. abc@example.com">
+                                                        
+                                                        <div *ngIf="isFieldValid('regForm1','email')">
+                                                            <span *ngIf="regForm1.get('email').errors.required"
+                                                            class="help-block">
+                                                                *Email is required.
+                                                            </span>
+                                                            <span *ngIf="
+                                                                !regForm1.get('email').errors.required && 
+                                                                regForm1.get('email').errors.email"
+                                                                class="help-block">
+                                                                *Email must be valid.
+                                                            </span>
+                                                            <span *ngIf="
+                                                            !regForm1.get('email').errors.required && 
+                                                            !regForm1.get('email').errors.email && 
+                                                            regForm1.get('email').errors.emailTaken"
+                                                            class="help-block">
+                                                            *Email already exist.
+                                                        </span>
+                                                        </div>
+                                                    </div>
+                                                </div>    
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error': isFieldValid('regForm1','password')}"
+                                                        class="form-group">
+                                                        <label>*Password</label>
+                                                        <input formControlName="password" type="password" class="form-control"
+                                                        placeholder="Enter password" >
+                                                        
+                                                        <div *ngIf="isFieldValid('regForm1','password')">
+                                                            <span *ngIf="regForm1.get('password').errors.required"
+                                                            class="help-block">
+                                                                *Password is required.
+                                                            </span>
+
+                                                            <span *ngIf="
+                                                                !regForm1.get('password').errors.required && (
+                                                                regForm1.get('password').errors.minlength ||
+                                                                regForm1.get('password').errors.maxlength )"
+                                                            class="help-block">
+                                                                *Password must be 6-20 characters long.
+                                                            </span>
+
+                                                        </div>
+                                                    </div>   
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error': 
+                                                        regForm1.get('confirm_password').value !== 
+                                                        regForm1.get('password').value && 
+                                                        regForm1.get('confirm_password').touched}"
+                                                        class="form-group">
+
+                                                        <label>*Confirm Paasword</label>
+                                                        <input formControlName="confirm_password" type="password" class="form-control"
+                                                        placeholder="Confirm password">
+                                                        
+                                                        <div *ngIf="
+                                                            regForm1.get('confirm_password').value !== 
+                                                            regForm1.get('password').value && 
+                                                            regForm1.get('confirm_password').touched" 
+                                                            >
+                                                            <span class="help-block">
+                                                                Confirm password must be same.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                        <div class="facbook-login" *ngIf="facebook==true">
+                                                                <i class="fa fa-facebook" aria-hidden="true"></i>
+                                                                <button (click)="signInWithFB()">Sign with Facebook</button>
+                                                            </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm1.valid">Next   </button>
+                                                </div>
+                                                
+                                            </div>    
+                                        </form> 
+                                       
+                                    </div>
+                                    <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(2)}">
+                                        <h2 class="text-center">Address, Location and Language Info</h2><br>
+                                        <form [formGroup]="regForm2" (ngSubmit)="onNext(regForm2)">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('country').invalid && 
+                                                            regForm2.get('country').dirty && 
+                                                            regForm2.get('country').touched
+                                                        }" class="form-group">
+                                                        <label>*Country</label>
+                                                        <select formControlName="country" 
+                                                            class="form-control"
+                                                            (change)="refreshStates($event)"
+                                                            autofocus>
+                                                            <option value="" disabled>Choose a country</option>
+                                                            <option *ngFor="let cont of countries" [value]="cont.id">
+                                                                {{ cont.name }}
+                                                                </option>
+                                                        </select>
+
+                                                        <div *ngIf="
+                                                            regForm2.get('country').invalid && 
+                                                            regForm2.get('country').dirty && 
+                                                            regForm2.get('country').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('country').errors.required"
+                                                                class="help-block">
+                                                                Country can not be blank.
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('state').invalid && 
+                                                            regForm2.get('state').dirty && 
+                                                            regForm2.get('state').touched
+                                                        }" class="form-group">
+                                                        <label>*State</label>
+                                                        <select 
+                                                            formControlName="state" 
+                                                            class="form-control"
+                                                            >
+                                                            <option value="" disabled>Choose a state</option>
+                                                            <option *ngFor="let st of states" [value]="st.id">
+                                                                {{ st.name }}
+                                                            </option>
+                                                        </select> 
+
+                                                        <div *ngIf="
+                                                            regForm2.get('state').invalid && 
+                                                            regForm2.get('state').dirty && 
+                                                            regForm2.get('state').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('state').errors.required"
+                                                                class="help-block">
+                                                                State can not be blank.
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('street').invalid && 
+                                                            regForm2.get('street').dirty && 
+                                                            regForm2.get('street').touched
+                                                        }" class="form-group">
+                                                        <label>*Address</label>
+                                                        <input formControlName="street" type="text" class="form-control"
+                                                            placeholder="Locality, area or Street"> 
+                                                        <div *ngIf="
+                                                            regForm2.get('street').invalid && 
+                                                            regForm2.get('street').dirty && 
+                                                            regForm2.get('street').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('street').errors.required"
+                                                                class="help-block">
+                                                                Street can not be blank.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Address 2</label>
+                                                        <input formControlName="street1" type="text" class="form-control">
+                                                    </div>
+                                                </div>                                                  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('city').invalid && 
+                                                            regForm2.get('city').dirty && 
+                                                            regForm2.get('city').touched
+                                                        }" class="form-group">
+                                                        <label>*City</label>
+                                                        <input formControlName="city" type="text" class="form-control"
+                                                        placeholder="Enter city">
+                                                        <div *ngIf="
+                                                            regForm2.get('city').invalid && 
+                                                            regForm2.get('city').dirty && 
+                                                            regForm2.get('city').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('city').errors.required"
+                                                                class="help-block">
+                                                                City can not be blank.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('zip').invalid && 
+                                                            regForm2.get('zip').dirty && 
+                                                            regForm2.get('zip').touched
+                                                        }" class="form-group">
+                                                        <label>*Zip</label>
+                                                        <input formControlName="zip" type="text" class="form-control"
+                                                        placeholder="Enter Zip">
+                                                        <div *ngIf="
+                                                            regForm2.get('zip').invalid && 
+                                                            regForm2.get('zip').dirty && 
+                                                            regForm2.get('zip').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('zip').errors.required"
+                                                                class="help-block">
+                                                                Zip can not be blank.
+                                                            </span>
+                                                            <span *ngIf="
+                                                                regForm2.get('zip').errors.minlength ||
+                                                                regForm2.get('zip').errors.maxlength ||
+                                                                regForm2.get('zip').errors.pattern
+                                                                " class="help-block">
+                                                                    Please enter valid zip
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>                                                  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('timezone').invalid && 
+                                                            regForm2.get('timezone').dirty && 
+                                                            regForm2.get('timezone').touched
+                                                        }" class="form-group">
+                                                        <label>*Timezone</label>
+                                                        <select 
+                                                            formControlName="timezone" 
+                                                            class="form-control">
+                                                            <option value="" disabled>Choose a timezone</option>
+                                                            <option *ngFor="let tz of timezones" [value]="tz.id">
+                                                                {{ tz.name }}
+                                                            </option>
+                                                        </select> 
+                                                        <div *ngIf="
+                                                            regForm2.get('timezone').invalid && 
+                                                            regForm2.get('timezone').dirty && 
+                                                            regForm2.get('timezone').touched" 
+                                                            >
+                                                            <span *ngIf="regForm.get('timezone').errors.required"
+                                                                class="help-block">
+                                                                Timezone can not be blank.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('clock_display').invalid && 
+                                                            regForm2.get('clock_display').dirty && 
+                                                            regForm2.get('clock_display').touched
+                                                        }" class="form-group">
+                                                        <label>*Clock Display</label>
+                                                        <select 
+                                                            formControlName="clock_display" 
+                                                            class="form-control"
+                                                            >
+                                                            <option value="" disabled>Choose a display time</option>
+                                                            <option *ngFor="let t of [24,12]" [value]="t">
+                                                                {{ t }}
+                                                            </option>
+                                                        </select> 
+                                                    </div>
+                                                </div>                                                  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div [ngClass]="{'has-error':
+                                                            regForm2.get('preferred_language').invalid && 
+                                                            regForm2.get('preferred_language').dirty && 
+                                                            regForm2.get('preferred_language').touched
+                                                        }" class="form-group">
+                                                        <label>*Preferred Language</label>
+                                                        <select 
+                                                            formControlName="preferred_language" 
+                                                            class="form-control"
+                                                            >
+                                                            <option value="" disabled>Choose a language</option>
+                                                            <option *ngFor="let l of languages" [value]="l.id">
+                                                                {{ l.nativeName }}
+                                                            </option>  
+                                                        </select>
+                                                        <div *ngIf="
+                                                            regForm2.get('preferred_language').invalid && 
+                                                            regForm2.get('preferred_language').dirty && 
+                                                            regForm2.get('preferred_language').touched" 
+                                                            >
+                                                            <span *ngIf="regForm2.get('preferred_language').errors.required"
+                                                                class="help-block">
+                                                                Preferred language can not be blank.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label>Second Language</label>
+                                                        <select 
+                                                            formControlName="second_language" 
+                                                            class="form-control"
+                                                            >
+                                                            <option value="" disabled>Choose a language</option>
+                                                            <option *ngFor="let l of languages" [value]="l.id">
+                                                                {{ l.nativeName }}
+                                                            </option>  
+                                                        </select> 
+                                                    </div>
+                                                </div>                                                  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <a class="btn blue-btn1 pull-right  mtb-30" (click)="onBack()">Back</a>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm2.valid">Next   </button>
+                                                </div>
+                                            </div>    
+                                        </form>
+                                    </div> 
+                                    <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(3)}">
+                                        <form [formGroup]="regForm3" (ngSubmit)="onNext(regForm3)">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label>Specialities</label>
+                                                    <div *ngIf="regForm3.invalid" class="form-group">
+                                                        <span *ngIf="regForm3.errors.minlengtharr == true" class="help-block">
+                                                            Please select minimum 1
+                                                        </span>    
+                                                    </div>
+                                                    
+                                                    <div formArrayName="specialities">
+                                                        <div *ngFor="let s of regForm3.get('specialities')['controls']; index as i" [formGroupName]="i" class="col-md-4 sms-save">
+                                                            <div class="checkbox text-capitalize">
+                                                                <label>
+                                                                    <input value="1" type="checkbox" 
+                                                                    [formControlName]="spArr[i].value">
+                                                                    <span class="cr">
+                                                                        <i class="cr-icon glyphicon glyphicon-ok"></i>
+                                                                    </span>{{ spArr[i].name }}
+                                                                </label>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                </div>                                         
+                                            </div>  
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6" style="margin-top:8px;">
+                                                    <label>Education as personal trainer*</label>
+                                                </div> 
+
+                                                <div class="col-md-3 sms-save">
+                                                    <div class="radio">
+                                                        <label>
+                                                        <input type="radio" value="1" formControlName="haveEducations">
+                                                        <span class="cr"><i class="cr-icon fa fa-circle"></i></span>
+                                                        yes
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 sms-save">
+                                                    <div class="radio">
+                                                        <label>
+                                                        <input type="radio" value="0" formControlName="haveEducations">
+                                                        <span class="cr">
+                                                            <i class="cr-icon fa fa-circle"></i>
+                                                        </span>
+                                                        No
+                                                        </label>
+                                                    </div>
+                                                </div>  
+                                                <div *ngIf="regForm3.get('haveEducations').value==1">
+                                                    <div formArrayName="educations">
+                                                        <div *ngFor="let c of regForm3.controls.educations.controls; index as i" [formGroupName]="i" class="col-md-7 sms-save">
+                                                            <div class="form-group has-close">
+                                                                <input type="text" formControlName="text">
+                                                                <a (click)="deleteEducation(i)"><span class="glyphicon glyphicon-remove"></span></a>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <a class="btn btn-default blue-btn1 add-btn" (click)="addEducation()">Add</a>
+                                                    </div>    
+                                                </div>    
+                                            </div> 
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6" style="margin-top:8px;">
+                                                    <label>Certifications</label>
+                                                    <span *ngIf="showCertLoader">
+                                                        <img src="assets/images/loading.gif" width="20">
+                                                    </span>
+                                                </div> 
+                                                <div class="col-md-3 sms-save">
+                                                    <div class="radio">
+                                                        <label>
+                                                        <input type="radio" value="1" formControlName="haveCertifications">
+                                                        <span class="cr"><i class="cr-icon fa fa-circle"></i></span>
+                                                        yes
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-3 sms-save">
+                                                    <div class="radio">
+                                                        <label>
+                                                        <input type="radio" value="0" formControlName="haveCertifications">
+                                                        <span class="cr">
+                                                            <i class="cr-icon fa fa-circle"></i>
+                                                        </span>
+                                                        No
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                    
+                                                <div *ngIf="regForm3.get('haveCertifications').value==1">
+                                                    
+                                                    <div formArrayName="certifications">
+                                                            <div *ngFor="let c of regForm3.controls.certifications.controls; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                                                                <div class="form-group has-close">
+                                                                    <img [src]="regForm3.get('certifications').value[i].file" style="width:120px">
+                                                                    <span (click)="deleteCertificate(i)">&times;</span>
+                                                                </div>
+                                                            </div>    
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile.click()" >add</a>
+                                                            <input type="file" id="add-file" name="files" (change)="addCertificate($event)" class="hidden" #addFile>
+                                                        </div>
+                                                </div>     
+                                            </div> 
+                                            
+                                            <div class="row marginT20">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Describe yourself in max 20 words*<br>
+                                                    <small><em>Catch potential customers attentions</em></small>
+                                                    </label>
+                                                    <textarea class="form-control" formControlName="short_description"></textarea>
+                                                </div>  
+                                            </div>                                                  
+                                            </div>
+
+                                                
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <a class="btn blue-btn1 pull-right  mtb-30" (click)="onBack()">Back</a>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm3.valid">Next   </button>
+                                                </div>
+                                            </div>   
+                                        </form>
+                                    </div> 
+                                    <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(4)}">
+
+                                        <form [formGroup]="regForm4" (ngSubmit)="onNext(regForm4)">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Price / week</label>
+                                                        <input formControlName="price_week" 
+                                                            type="number" 
+                                                            min="10"
+                                                            max="150"
+                                                            class="form-control"
+                                                            >   
+                                                    </div>
+                                                </div>  
+                                            </div>    
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Additional Description</label>
+                                                        <textarea formControlName="description" rows="5" class="form-control"
+                                                        placeholder="Enter decription"></textarea>   
+                                                    </div>
+                                                </div>  
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12 sms-save">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                        <input type="checkbox" formControlName="accept">
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                            I accept terms of policy 
+                                                            <small>
+                                                            <a 
+                                                                href=""
+                                                                target="_blank" 
+                                                            >Download form here</a>
+                                                            </small>
+                                                        </label>
+                                                    </div>  
+                                                    <div *ngIf="
+                                                        regForm4.get('accept').invalid && 
+                                                        regForm4.get('accept').dirty && 
+                                                        regForm4.get('accept').touched" 
+                                                        >
+                                                        <span *ngIf="regForm4.get('accept').errors.required"
+                                                            class="help-block">
+                                                            Please accept terms of policy
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-sm-6">
+                                                    <a class="btn blue-btn1 pull-right  mtb-30" (click)="onBack()">Back</a>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <button class="btn  white-btn1  mtb-30" [disabled]="!regForm4.valid">Save   </button>
+                                                </div>
+                                            </div>    
+                                        </form>
+                                    </div> 
+                                </div>                           
+                            </div>    
+                    </section>
+                    </div>
+                </div>
+                <!-- tab -->            
+            </div>
+        </div>
+        <app-site-footer></app-site-footer>
+    </div>
+</div>

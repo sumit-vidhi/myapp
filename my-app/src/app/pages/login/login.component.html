@@ -1,0 +1,83 @@
+
+<div class="login">
+	
+	<!-- SESSION ALERTS -->
+
+	<div *ngFor="let message of messages" class="text-center" style="margin:15px;">
+		<alert [type]="message.type" [dismissible]="dismissible"><strong>{{ message.text }}</strong></alert>
+	</div>
+	
+	<!-- END OF SESSION ALERTS -->
+
+	<div class="login-in">
+		<img src="assets/images/logo.png">
+		<label><strong>Sign in</strong></label>
+
+		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+			<div [ngClass]="{'has-error':
+				loginForm.get('username').invalid && 
+				loginForm.get('username').touched
+				}" class="form-group">
+				<span>Email</span>
+				<input type="text" formControlName="username" autofocus>
+				<div *ngIf="
+					loginForm.get('username').invalid && 
+					loginForm.get('username').touched">
+
+					<span *ngIf="
+						loginForm.get('username').errors.required || 
+						loginForm.get('username').errors.email	
+						" class="help-block">
+							Email is required
+					</span>	
+				</div>
+			</div>
+
+			<div [ngClass]="{'has-error':
+				loginForm.get('password').invalid &&
+				loginForm.get('password').touched
+				}" class="form-group">
+				<span>Password</span>
+				<input type="password" formControlName="password">
+				<div *ngIf="
+					loginForm.get('password').invalid && 
+					loginForm.get('password').touched">
+					<span *ngIf="
+						loginForm.get('password').errors.required" class="help-block">
+							password is required
+					</span>		
+				</div>
+			</div>
+
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" value="">
+					<span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+					Remember Me
+				</label>
+			</div>
+
+			<angular-loader></angular-loader>
+			
+			<button class="btn sign-in-btn" [disabled]="!loginForm.valid">Sign In!</button>
+			<a routerLink="/" class="btn sign-in-btn">Cancel</a>
+		</form>
+		
+		
+
+		<div class="forgot">
+			<a routerLink="/forgot_password">
+				<span >Forgotten your password?</span>
+			</a>
+		</div>
+		<div class="facbook-login">
+			<i class="fa fa-facebook" aria-hidden="true"></i>
+			<button (click)="signInWithFB()">Sign with Facebook</button>
+		</div>
+
+		<!-- <div class="google-login">
+			<i class="fa fa-google" aria-hidden="true"></i>
+			<button (click)="signInWithGoogle()">Sign with Google</button>
+		</div> -->
+	</div>
+</div>

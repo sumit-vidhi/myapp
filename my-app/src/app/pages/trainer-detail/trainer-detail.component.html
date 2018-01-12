@@ -1,0 +1,197 @@
+<header class="top-header bank-form">
+    <app-navbar></app-navbar>
+    
+    <!-- banner -->
+    <app-header-search></app-header-search>
+  
+    <!-- banner -->
+    
+  </header>
+  <angular-loader></angular-loader>
+  <div class="container-fluid bg-section" *ngIf="trainerdetail">
+    <div class="row">
+      <div class="container">
+        <div class="row">
+        <div class="col-md-12">
+        <div class="row"  >
+          <span class="trusted">Trusted bythe world,s best</span>
+          <div class="col-sm-2 ">
+            <div class="row circle-btn">
+              
+                <div class="dp-circle">
+                  <img class="img-responsive" [src]="trainerdetail.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+                </div>
+              <!-- <button class="btn">Service</button>
+              <button class="btn btn-default">Bio</button> -->
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <div class="row">
+            
+              <div class="col-md-12">
+                <div class="row" >
+                  <div class="col-md-3 trusted-title">
+                    <h3 class="text-capitalize">{{ trainerdetail.name }}</h3>
+                    <span>{{ trainerdetail.description }}</span>
+                  </div>
+                  <div class="col-md-9">
+                    <div class="row">
+                      <div class="pull-right">
+                        <!-- <a href="#" class="btn plan-btn trust"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> -->
+                        
+                        <!-- <a href="#" class="btn plan-btn trust">Request for a free consultation on!</a>
+                        <a href="#" class="btn plan-btn trust"><i class="fa fa-podcast" aria-hidden="true"></i></a> -->
+                         <div *ngIf="auth.isLoggedIn && auth.user.role === 1">    
+                          <a *ngIf="trainerdetail.isHired" class="btn plan-btn pointer">Already hired</a>
+                          
+                          <a *ngIf="trainerdetail.isPending" class="btn plan-btn pointer">Pending</a>
+                          
+                          <a *ngIf="!(trainerdetail.isHired || trainerdetail.isPending)" (click)="hireTrainer(trainerdetail.id)" class="btn plan-btn pointer" #hired>Subscribe</a>
+                        </div>  
+                        <div *ngIf="!auth.isLoggedIn">
+                          <a routerLink="/login" class="btn plan-btn">Subscribe</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+                <hr>
+              </div>
+              
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 dkr">
+                    
+                    <span>{{trainerdetail.street}} ,{{ trainerdetail.city }}</span>
+                    <!-- <h3>dkr.130<sub>uge</sub></h3>
+                    <span>4/8/12 week programs</span> -->
+                    
+                  </div>
+                  <div class="col-md-6 star-rating" style="margin-top:15px">
+                  <div class="row">
+                    
+                    <div class="pull-right lg-star">
+                      <rating [(ngModel)]="trainerdetail.rating" [max]="max" [readonly]="isReadonly"></rating>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+          
+          </div>
+          <hr>
+          </div>
+          
+          <div class="col-md-12 trainer-info">
+          
+              <h3>Specialities</h3>
+              <div class="sp-list">
+                <span *ngFor="let sp of trainerdetail.specialities.split(',')">
+                    {{ sp.replace('_',' ') }}
+                </span>
+              </div>  
+              
+              <div class="col-sm-12">
+                <div class="row">
+                  <h3>Education</h3>
+                  <span *ngIf="trainerdetail.education==''">[n/a]</span>
+                  <span *ngIf="trainerdetail.education!=''">[ {{ trainerdetail.education }} ]</span>
+                </div>
+              </div>
+              <div class="col-sm-12">
+                <div class="row">
+                  <h3>Certifications</h3>
+                  <span *ngIf="!trainerdetail.certifications">[n/a]</span>
+                  <span *ngIf="trainerdetail.certifications">
+                      
+                    <img width="80" height="60" style="margin-right:10px;" *ngFor="let t of certification;" src="{{ t }}"/>
+                  </span>
+                </div>
+                
+              </div>
+            
+          </div>
+          
+        </div>
+        <hr>
+      </div>
+    
+      <div class="container client-review">
+        <div class="row">
+          <span>Client Reviews<sub>[ {{ (totalreview>0)?totalreview:'No review' }} ]</sub></span>
+
+
+           <a *ngIf="
+              auth.isLoggedIn &&
+              auth.user.role==1 &&
+              trainerdetail.isHired ==1
+            " (click)="showDialog = !showDialog" class="btn plan-btn trust pull-right">Post a Review!</a>
+
+
+
+
+          <ul *ngFor="let t of trainerReviewdetail">
+            <li>
+              <h3>{{ t.name }}</h3> 
+              <div class="star-rating">
+                <rating [(ngModel)]="t.rating" [max]="max" [readonly]="isReadonly"></rating>
+              </div>
+              <label>{{ t.created }} AT {{ t.time }}</label>
+              <p>
+                {{ t.review }} 
+            
+              </p>
+<div *ngIf="auth.isLoggedIn && auth.user.role === 1">
+                <a *ngIf="auth.user.id==t.user_id" (click)="editreview(t.review_id,t.review,t.rating)" class=""><i class="fa fa-pencil"></i></a>
+                </div>
+              
+              <!-- <a *ngIf="auth.user.id==t.user_id" (click)="deletereview(t.review_id)" class="btn plan-btn trust pull-right">DELETE</a>  -->
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <app-dialog [(visible)]="showDialog">
+       
+          <label><strong>Post Review</strong></label>
+      
+          <form [formGroup]="reviewForm" (ngSubmit)="onSubmit(reviewid)">
+            <div [ngClass]="{'has-error':
+            reviewForm.get('review').invalid && (
+              reviewForm.get('review').dirty ||
+              reviewForm.get('review').touched)
+              }" class="form-group">
+              <span class="review-span">Review</span>
+              <textarea formControlName="review" rows="6" cols="" autofocus></textarea>
+              <div *ngIf="
+              reviewForm.get('review').invalid && (
+                reviewForm.get('review').dirty ||
+                reviewForm.get('review').touched)">
+      
+                <span *ngIf="
+                reviewForm.get('review').errors.required" class="help-block">
+                    Review is required
+                </span>	
+              </div>
+            </div>
+      
+            <div  class="form-group">
+              <span>Rating</span>
+              <div class="star-rating">
+                <rating formControlName="rate" [max]="max" [readonly]=""></rating>
+              </div>
+              
+            </div>
+             <button class="btn sign-in-btn btn-primary" [disabled]="!reviewForm.valid">Submit</button>
+          </form>
+         </app-dialog>
+  
+      <app-site-footer></app-site-footer>
+    </div>
+  </div>
+  

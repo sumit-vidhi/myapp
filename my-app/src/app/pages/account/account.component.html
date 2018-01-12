@@ -1,0 +1,35 @@
+<header class="top-header plan">
+    <app-navbar></app-navbar>
+    <!-- banner -->
+  <div class="container top-banner">
+    <div class="row">
+      <div class="col-md-5 banner-heading">
+        <h2><strong>My Account</strong></h2>
+        <label>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.
+        </label>         
+      </div> 
+    </div>
+  </div>
+</header>
+
+ <angular-loader></angular-loader>
+
+<div class="container-fluid bg-section">
+  <div class="row">
+    <div class="container">
+        <div class="custom-alert">  
+            <div *ngFor="let message of messages" class="text-center" style="margin:15px;">
+              <alert [type]="message.type" [dismissible]="dismissible"><strong>{{ message.text }}</strong></alert>
+            </div>
+          </div> 
+
+        <div *ngIf="model.role === 1" >
+          <app-user-form [model]="model" (save)="onSave(model)"></app-user-form>
+        </div> 
+        <div *ngIf="model.role === 2" >
+          <app-trainer-form [model]="model" (save)="onSave(model)"></app-trainer-form>
+        </div>  
+    </div>  
+  </div>
+</div>
