@@ -1,5 +1,4 @@
-const mysql = require("mysql");
-var sql = require('mssql');
+
 const nodemailer = require("nodemailer");
 const config = require("./config");
 

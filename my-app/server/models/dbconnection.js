@@ -35,7 +35,7 @@ var createConnection  = function () {
 			// mssql request for query
 			var request = new mssql.Request(); 
 			request.query(query, function(err2, recordset) {
-				console.log(recordset);
+				//console.log(recordset);
 			   if(callback){
 					callback(err2, recordset);
 				}

@@ -1,0 +1,129 @@
+<!DOCTYPEhtml>
+<html>
+<head>
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;">
+		
+		<meta name="viewport" content="width=device-width">
+		<link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700" rel="stylesheet"> 
+<title>Email</title>
+<style>
+body {width:600px; display:block; margin:30px auto; font-family: 'Montserrat', sans-serif; font-weight:300; }
+.inner span { height: 24px; }
+.mid-section { width:492px; float:left; padding:0 54px; }
+.footer-span { float: left; width: 560px; }
+.sd {
+    width: 100%;
+    float: left;
+} 
+.sd span {
+    height: auto;
+    margin-bottom: 10px;
+	width:100%;
+	float:left;
+}
+@media screen and (max-width: 599px) {
+body { width:100% !important;}
+.mid-section { width:100%; padding:0 5%; box-sizing:border-box; }
+.inner span { height: auto; }
+.footer-span { float: left;  width: 100%;  padding: 15px 5% 10px !important; box-sizing:border-box; }
+}
+</style>
+</head>
+
+<body >
+	<div class="content" style=" width: 100%;
+    float: unset;
+    border: 1px solid #cdcddc;
+    box-sizing: border-box;
+    max-width: 600px;
+    display: table;
+    margin: 0 auto;">
+         <div style="height:6px; width:100%;background:linear-gradient(to right,#2E96D3 20%, #9AC133 40%, #2E96D3 100%)">       </div>
+		 <img style="width:100%;" src="{{ siteurl }}image/header.png" />
+		 
+		 
+		 <div  class="mid-section">
+			
+				<p style="float: left;  font-weight: 700; margin-top: 18px; color: #3b495a;">Congratulations! - your  order is in</p>
+				
+				<div class="inner">
+					<span style="width:100%; float:left; color: #3b495a; font-size:12px;font-weight:300; margin-bottom:10px;">Here's what you ordered:</span>
+					<span style="width:33.33%; float:left; color: #3b495a; font-size:12px;font-weight:300;">Invoice#: {{ orderid }}</span>
+				   <span style="width:40%; float:right;color: #3b495a;text-align:right;  font-size:12px;font-weight:300;">Order date#: {{ start_date }}</span>
+				   <hr style="border:1px dashed #3b495a; width:100%; float:left; "></hr>
+				   
+				   <span style="width:40%; float:left; color: #3b495a; font-size:12px;font-weight:300;margin-bottom:10px;">Item</span>
+				   <span style="width:40%; float:left; color: #3b495a; font-size:12px;font-weight:300;margin-bottom:10px;">Monthly</span>
+				   <span style="width:20%; float:left;color: #3b495a; text-align:right; font-size:12px;font-weight:300;margin-bottom:10px;">Cost</span>
+	
+				   
+				   <span style="width:40%; float:left;color: #3b495a;  font-size:12px;font-weight:300; margin-bottom:10px;">Training programme </span>
+				   <span style="width:40%; float:left;color: #3b495a; visibility:hidden; font-size:12x;font-weight:300; margin-bottom:10px;"></span>
+				   <span style="width:20%; float:left; color: #3b495a;text-align:right; font-size:12px;font-weight:300; margin-bottom:10px;">{{ amountplan }}</span>
+
+				   
+				   <span style="width:40%; float:left;color: #3b495a;  font-size:12px;font-weight:300; margin-bottom:10px;">Total</span>
+				   <span style="width:40%; float:left;color: #3b495a; visibility:hidden; font-size:12px;font-weight:300; margin-bottom:10px;"></span>
+				   <span style="width:20%; float:left; color: #3b495a;text-align:right; font-size:12px;font-weight:300; margin-bottom:10px;">{{ amountplan }}</span>
+				   <hr style="border:1px dashed #3b495a; width:100%; float:left; "></hr>
+
+
+				   <div class="sd"> 
+						
+							<div style="width:50%; float: left;">
+									<span style=" color: #3b495a;  font-size:12px;font-weight:300; margin-bottom:10px;">Billed to:</span>
+									<span style=" color: #3b495a;  font-size:12px;font-weight:300;">{{ name }}</span>
+									<span style=" color: #3b495a;  font-size:12px;font-weight:300;">{{ street }}</span>
+									<span style=" color: #3b495a;  font-size:12px;font-weight:300;">{{ zip }}, {{city}}</span>
+							</div>
+							<div style="width:50%; float: left;">
+									<span style="float:right;color: #3b495a;text-align:right;  font-size:12px;font-weight:300; margin-bottom:10px;">Paid to:</span>
+									   <span style="float:right;text-align:right;color: #3b495a;  font-size:12px;font-weight:300;">{{trainername}}</span>
+									   <span style=" text-align:right;color: #3b495a;  font-size:12px;font-weight:300;">{{ trainerstreet }}</span>
+									   <span style=" text-align:right;color: #3b495a;  font-size:12px;font-weight:300;">{{ trainerzip }}, {{ trainercity }}</span></div>
+						   <!-- <span style="width:100%; float:left;color: #3b495a; margin-bottom:10px; font-size:12px;font-weight:300;">Billed to: *Cardtype* - *last 4 digits*</span>
+							-->
+							</div>
+				  
+				</div>
+		   
+		   </div>
+	<div style="width:100%; float:left; padding:50px 0 0">
+		<span style="width:100%; float:left; color: #3b495a; font-size:12px;font-weight:300; margin-bottom:10px;padding: 0px 0px 0px 110px;">If you have any question about your order, then please contact your trainer.</span>
+		<span style="width:100%;text-align:center; float:left; color: #3b495a; font-size:12px;font-weight:300; margin-bottom:10px;"><a href="mailto:{{ traineremail }}">{{ traineremail }}</a></span>
+	</div>
+	<footer style="float:left; width:100%;">
+		<div style="height:6px; width:100%;background:linear-gradient(to right,#2E96D3 20%, #9AC133 40%, #2E96D3 100%)">       </div>
+		<span style="width:100%; float:left; color: #3b495a; font-size:12px;font-weight:300; margin-bottom:10px;padding: 36px 0px 0px 110px;">This invoice was send on behalf of the personal trainer by:</span>
+		<div style="width:100%; float:left; padding:36px 0 0">
+			<img style="display:block; margin:0 auto 15px; width:160px;" src="{{ siteurl }}image/newlogo.png">
+		</div>
+
+		<span style="color: #3b495a; padding: 25px 20px 0px; float: left; width: 560px; text-align: center; font-size: 10px;">Wellfaster is a community of skilled and professional personal trainer,  using the virtual training platform to help people around the world to reach their personal goals.  Wellfaster is a branch of Welfare Denmark Aps </span>
+		<span style="color:#3b495a; padding: 10px 20px 20px;float: left;width: 560px;text-align: center;font-size: 10px;">Welfare Denmark . Kongensgade 49b . 6700 Esbjerg . Denmark . support@wellfaster.com</span>
+	</footer>
+	
+</body>
+</html>
+
+			
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

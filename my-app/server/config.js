@@ -20,7 +20,7 @@ app.user =  {
 
 }, 
 app.admin = {
-	email : "admin@wellfaster.com"
+	email : "noreply@wellfaster.com"
 }
 
 exports.app = app;	
@@ -29,12 +29,16 @@ exports.app = app;
 /*			MAILER CONGIFURATION 	 	         */	
 /*************************************************/
 	exports.email = {
-		host: 'smtp.gmail.com', //Gmail SMTP server address
+		host: 'send.one.com', //Gmail SMTP server address
 		port: 587, //Gmail SMTP port (TLS): 587, Gmail SMTP port (SSL): 465
 		secure: false, // true for 465, false for other ports
-	 	auth: {
-			user: 'kuldeep@wegile.com', // Gmail SMTP username
-			pass: '09111987'  // Gmail SMTP password
+	 	// auth: {
+		// 	user: 'kuldeep@wegile.com', // Gmail SMTP siteUrlusername
+		// 	pass: '09111987'  // Gmail SMTP password
+		// }
+		auth: {
+			user: 'noreply@wellfaster.com', // Gmail SMTP username
+			pass: 'noreply123'  // Gmail SMTP password
 		}
 	};		
 
@@ -42,7 +46,7 @@ exports.app = app;
 /*			DATABASE CONGIFURATION 	 	         */	
 /*************************************************/
 	// exports.db = {
-	// 	connectionLimit: 10,
+	// 	connectionLimit: 10,siteUrl
 	// 	host     : 'localhost',
 	// 	user     : 'root',
 	// 	password : 'root',
@@ -56,13 +60,19 @@ exports.app = app;
 	  user: 'wegile@wellfaster', // update me
 	  password: 'W3gile@dev$%', // update me
 	  server: 'wellfaster.database.windows.net',
-	  database: 'Wellfaster',
+	  database: 'WellfasterStaging',
 	  options: {
-		  database: 'Wellfaster',
+		  database: 'WellfasterStaging',
 		  encrypt:true
 	  },
 	  port:1433
 	}
+	exports.headers = { 
+		'cache-control': 'no-cache',
+		authorization: 'Basic OjhiMGIzZTE2NzlkZmNlZjdkYmY1YWNiNmRmNTQzZjMwM2IyMTkxNjlkODFkN2E4M2Q1MjhmMjBkZjFkOTNhNWQ=',
+		'accept-version': 'v10' } 
+	exports.payment = { 
+			'link':'https://api.quickpay.net/' } 
 // 	// connect to your database
 // sql.connect(config, function (err) {
 	

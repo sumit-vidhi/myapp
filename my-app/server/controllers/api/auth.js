@@ -23,7 +23,7 @@ module.exports = {
 	},
 	
 	register: function(req, res, next){	
-		//console.log(req.body);
+		console.log(req.body);
 
 		let model = new RegisterModel();
 		
