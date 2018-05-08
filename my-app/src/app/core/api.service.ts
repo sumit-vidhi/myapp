@@ -8,8 +8,7 @@ import 'rxjs/add/operator/timeout';
 
 import { CNF } from './config';
 
-import { StorageService } from './storage.service';
-
+import { StorageService } from './storage.service';																																																																																																																																																																																																																																																																																																																																																																																																																																														
 import { UtilService } from './util.service';
 
 /*
@@ -56,6 +55,12 @@ export class ApiService {
 		var headers = this.headers(token);
 		return this.httpGet(CNF.BASE_API + 'user/logout', headers);
 	}
+	downloadPDF(url): any {
+		return this.http.get(url, { responseType: 'blob'})
+				.map(res => {
+				return new Blob([res], { type: 'application/pdf', });
+			});
+	  }
 
 	public confirm	( data : any ) : Promise<any> {
 		return this.httpPost(CNF.BASE_API + 'user/validate', data);
@@ -88,6 +93,10 @@ export class ApiService {
 	public uploadImage  ( data : any ) : Promise<any> {
 		return this.httpPost(CNF.BASE_API + 'user/uploadImage', data);
 	}
+	public uploadVideo  ( data : any ) : Promise<any> {
+		return this.httpimage(CNF.BASE_API + 'user/uploadvideo', data);
+	}
+
 
 	/**
 	 * Get Logged user Profile
@@ -98,6 +107,36 @@ export class ApiService {
 		let url = CNF.BASE_API + 'user/me?t=' + this.util.time(); 
 		return this.httpGet(url, headers);
 	}
+
+	public getsubscription ( ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		let url = CNF.BASE_API + 'user/payments?t=' + this.util.time(); 
+		return this.httpGet(url, headers);
+	}
+
+
+	public getrequests ( ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		let url = CNF.BASE_API + 'user/pendingrequset?t=' + this.util.time(); 
+		return this.httpGet(url, headers);
+	}
+
+	public getacceptedrequests ( ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		let url = CNF.BASE_API + 'user/getacceptedrequests?t=' + this.util.time(); 
+		return this.httpGet(url, headers);
+	}
+
+
+	public gettrainername (key ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		let url = CNF.BASE_API + 'user/gettrainername/' + key; 
+		return this.httpGet(url, headers);
+	}
 	/**
 	 * Save Logged User Profile
 	 * @param data 
@@ -106,6 +145,46 @@ export class ApiService {
 		var token = this.storage.get('access_token');
 		var headers = this.headers(token);
 		return this.httpPost(CNF.BASE_API + 'user/update_profile', data, headers);
+	}
+
+	public create_subscription  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/create_subscription',data, headers);
+	}
+	public cancelsubscription  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/cancelsubscription',data, headers);
+	}
+	public cancelsubscriptionplan  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/cancelsubscription',data, headers);
+	}
+
+	public checkpayment  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/checkpayment',data, headers);
+	}
+
+	public getunreadmessage  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/getunreadmessage',data, headers);
+	}
+
+	public paymentsucess  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/paymentsucess',data, headers);
+	}
+
+	public paymentsucessplan  (data:any) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/paymentsucessplan',data, headers);
 	}
 
 	public myUsers ( ) : Promise<any> {
@@ -125,8 +204,17 @@ export class ApiService {
 		var headers = this.headers(token);
 		return this.httpPost(CNF.BASE_API + 'user/get_trainers_detail',data, headers);
 	}
+	public getUserdetail (data:any ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/getuser_detail',data, headers);
+	}
 
 	public acceptRequest (data:any ) : Promise<any> {
+		return this.httpPost(CNF.BASE_API + 'user/accept_trainer',data);
+	}
+
+	public rejectRequest (data:any ) : Promise<any> {
 		return this.httpPost(CNF.BASE_API + 'user/accept_trainer',data);
 	}
 
@@ -148,10 +236,22 @@ export class ApiService {
 		return this.httpPost(CNF.BASE_API + 'user/change_password',data, headers);
 	}
 
+	public changestatus (data:any ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/changestatus',data, headers);
+	}
+
 	public updatemessagetime (data:any ) : Promise<any> {
 		var token = this.storage.get('access_token');
 		var headers = this.headers(token);
 		return this.httpPost(CNF.BASE_API + 'user/update_messagetime',data, headers);
+	}
+
+	public deletephoto (data:any ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/deletephoto',data, headers);
 	}
 
 	public getHiredTrainers () : Promise<any> {
@@ -164,6 +264,12 @@ export class ApiService {
 		var token = this.storage.get('access_token');
 		var headers = this.headers(token);
 		return this.httpPost(CNF.BASE_API + 'user/savereview',data, headers);
+	}
+
+	public sendMail (data:any ) : Promise<any> {
+		var token = this.storage.get('access_token');
+		var headers = this.headers(token);
+		return this.httpPost(CNF.BASE_API + 'user/send_mail',data, headers);
 	}
 
 	public sendMessage (data:any ) : Promise<any> {
@@ -184,6 +290,14 @@ export class ApiService {
 		}
 		return 	this.http
 					.post( url, data, { headers : headers })
+					.toPromise()
+					.catch(this.handleError);
+	}
+
+	private httpimage( url : string, data : any ) : Promise<any> {
+		
+		return 	this.http
+					.post( url, data)
 					.toPromise()
 					.catch(this.handleError);
 	}

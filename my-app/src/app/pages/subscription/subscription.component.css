@@ -1,0 +1,4 @@
+tr.subs th{
+    text-align: center !important ;
+}
+.table>tbody>tr>td{ border-top: 0px !important}

@@ -13,6 +13,7 @@ import { StorageService }   from './storage.service';
 import { ChatService } from './chat.service';
 
 
+declare function unescape(s:string): string;
 @Injectable()
 
 
@@ -49,6 +50,21 @@ export class AuthService {
     });
   } 
 
+  detailpage(){
+    let self = this;
+    this.api.myProfile()
+    .then((res)=>{
+      if(res.code == 200){
+        self.setLoggedUser(res.data);
+        self.chatService.setuser(res.data.id);
+        self.chatService.getalluser(res.data.id);	
+        this.getTrainers();
+        self.setLoggedIn();
+        self.router.navigate([window.localStorage.getItem("detail")]);	
+      }
+    });
+  } 
+
   updateProfile(){
     let self = this;
     this.api.myProfile()
@@ -64,6 +80,7 @@ export class AuthService {
 
   logout(){
     let self = this;
+    self.handleAuth();
     let _user = this.storage.get('app_user');
     var userId=  JSON.parse(_user).id;
     self.api.logout().then(function(res){
@@ -78,21 +95,35 @@ export class AuthService {
   }
 
   handleAuth(){
+    console.log(222222222);
     if(this.isTokenValid()){  
       this.user = this.getLoggedUser();
       this.setLoggedIn();
       this.getTrainers();
+      this.updateProfile();
     }else{
+    
+      this.getTrainers();
       this.clearLoggedUser();
       this.resetLoggedIn();
     }
   }
 
   getTrainers(){
+    console.log(321321312);
     let self = this;
     this.api.getHiredTrainers()
     .then(function(res){
-      self.isHired = res.data.length>0;
+      console.log(res);
+      if(res.message=='Trainers List'){
+        self.isHired = res.data.length>0;
+    }
+     
+      if(res.message=="User not found"){
+      //  console.log("hello");
+          self.clearToken();
+          window.location.href="/login";
+      }
     })
     .catch(function(err){
     });
@@ -107,6 +138,9 @@ export class AuthService {
   }
 
   setLoggedUser(user:any){
+   // console.log(user);
+    user.first_name=unescape(user.first_name);
+    user.last_name=unescape(user.last_name);
     this.user = user;
     this.storage.save('app_user', JSON.stringify(user));
   }
@@ -133,6 +167,7 @@ export class AuthService {
     this.storage.clear('access_token');
     this.storage.clear('expires');
     this.storage.clear('app_user');
+    this.user="";
   }
 
   isTokenValid(){
@@ -146,7 +181,13 @@ export class AuthService {
   }
 
   goHome(){
-    this.router.navigate(['/']);
+    console.log(this.user);
+    if(this.user.approve=='comment'){
+      this.router.navigate(['/account']);
+    }else{
+      this.router.navigate(['/']);
+    }
+   
   }
 
   goLogin(){

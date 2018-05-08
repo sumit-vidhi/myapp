@@ -1,20 +1,26 @@
-<div class="col-md-offset-1 col-md-10  way-form">
+<div class="col-md-offset-1 col-md-10  way-form mt-30">
     <form [formGroup]="userForm" (ngSubmit)="onSave()">
         
-        <div class="row">
-            <div class="col-md-offset-4 col-md-4 text-center image-div">   
-                    <span *ngIf="showImageLoader">
-                        <img class="image-uploader" src="assets/images/loading.gif">
-                    </span>
-                    <img [src]="
-                            (userForm.get('photo').value !== '')?
-                            userForm.get('photo').value:
-                            'assets/images/user2.png'" 
-                        onerror="this.src='assets/images/user2.png'"    
-                        class="img-circle" style="width:120px;">
+        <div class="row" >
+            <div class="col-md-offset-4 col-md-4 text-center image-div" id="image-div"> 
+                <slim [options]="slimOptions"  *ngIf="showimage" style="background: none;">
+                    <input #addimage type="file" name="foo" id="photo">
+                </slim> 
+                          <span *ngIf="showImageLoader">
+                                <img class="image-uploader" src="assets/images/loading.gif">
+                            </span>
+                            <img *ngIf="!showimage" [src]="
+                                    (userForm.get('photo').value !== '')?
+                                    userForm.get('photo').value:
+                                    'assets/images/user2.png'" 
+                                onerror="this.src='assets/images/user2.png'"    
+                                class="img-circle" style="width:120px;">
+                                <a class="delimage" (click)="deleteimage()" *ngIf="(userForm.get('photo').value!=='' && !showimage)">
+                                    <img style="width:20px;" src="assets/images/deletered.png" alt="DELETE">
+                                </a>
                     <div class="form-group marginT20">    
-                        <label for="photo" class="pointer">{{ (userForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
-                        <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);">
+                        <label (click)="imagechange()" for="photo" class="pointer">{{ (userForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
+                        <!-- <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);"> -->
                     </div>
                 </div>
         </div>
@@ -45,7 +51,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('nickname')}">
-                    <label for="nickname">*Nickname</label>
+                    <label for="nickname">Nickname</label>
                     <input class="form-control" type="text" id="nickname" formControlName="nickname">
                     <span *ngIf="isFieldValid('last_name')" class="help-block">
                         Please enter your nickname
@@ -55,7 +61,10 @@
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('birth_date')}">
                     <label for="birth-date">*BirthDate</label>
-                    <input class="form-control" type="text" id="birth-date" formControlName="birth_date" [bsConfig]="bsBirthDateConfig" triggers="''" (focus)="dp.show()" (change)="dp.hide()" #dp="bsDatepicker" bsDatepicker>
+                    <input class="form-control" type="text" ng-model-options="{timezone:'UTC'}" id="birth-date" formControlName="birth_date" [bsConfig]="bsBirthDateConfig" triggers="''"
+                    (focus)="dp.show()"
+                    (change)="dp.hide()"
+                    #dp="bsDatepicker" bsDatepicker>
                     <span *ngIf="isFieldValid('birth_date')" class="help-block">
                         Please enter valid birth date ( MM/DD/YYYY)
                     </span>
@@ -68,8 +77,8 @@
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('phone_number')}">
                     <label for="phone-number">Phone Number</label>
                     <input class="form-control" type="text" id="phone-number" formControlName="phone_number">
-                    <span *ngIf="isFieldValid('birth_date')" class="help-block">
-                        Please enter your valid phone date like 81XXXXXX10
+                    <span *ngIf="isFieldValid('phone_number')" class="help-block">
+                        Please enter valid phone number
                     </span>
                 </div>
             </div>
@@ -89,7 +98,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('street')}">
-                    <label for="address">Address</label>
+                    <label for="address">*Address</label>
                     <input class="form-control" type="text" id="address" formControlName="street">
                     <span *ngIf="isFieldValid('email')" class="help-block">
                         Please enter address
@@ -109,7 +118,7 @@
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('country')}">
                     <label for="country">*Country</label>
-                    <select id="country" formControlName="country" class="form-control" (change)="refreshStates($event)">
+                    <select id="country" formControlName="country" class="form-control" >
                         <option>Please choose country </option>
                         <option *ngFor="let i of allCountries" [value]="i.id">{{ i.name}}</option>
                     </select>
@@ -120,11 +129,9 @@
             </div>
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('state')}">
-                    <label for="state">*State</label>
-                    <select id="state" formControlName="state" class="form-control">
-                        <option>Please choose state </option>
-                        <option *ngFor="let i of states" [value]="i.id">{{ i.name}}</option>
-                    </select>
+                    <label for="state">State</label>
+                    
+                    <input class="form-control" type="text" id="address-2" formControlName="state">
                     <span *ngIf="isFieldValid('state')" class="help-block">
                         Please select state
                     </span>
@@ -157,10 +164,55 @@
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('timezone')}">
                     <label for="timezone">*Timezone</label>
-                    <select id="timezone" formControlName="timezone" class="form-control">
+                    <!-- <select id="timezone" formControlName="timezone" class="form-control">
                         <option value="" disabled selected>Please choose timezone </option>
                         <option *ngFor="let i of allTimezones" [value]="i.id">{{ i.name}}</option>
-                    </select>
+                    </select> -->
+
+
+                    <select formControlName="timezone" 
+                    class="form-control"  id="timezone">
+                    <option value="" disabled>Choose a timezone</option>
+                        <option value="-12">[UTC - 12] Baker Island Time</option>
+                        <option value="-11">[UTC - 11] Niue Time, Samoa Standard Time</option>
+                        <option value="-10">[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time</option>
+                        <option value="-9.5">[UTC - 9:30] Marquesas Islands Time</option>
+                        <option value="-9">[UTC - 9] Alaska Standard Time, Gambier Island Time</option>
+                        <option value="-8">[UTC - 8] Pacific Standard Time</option>
+                        <option value="-7">[UTC - 7] Mountain Standard Time</option>
+                        <option value="-6">[UTC - 6] Central Standard Time</option>
+                        <option value="-5">[UTC - 5] Eastern Standard Time</option>
+                        <option value="-4">[UTC - 4] Atlantic Standard Time</option>
+                        <option value="-3.5">[UTC - 3:30] Newfoundland Standard Time</option>
+                        <option value="-3">[UTC - 3] Amazon Standard Time, Central Greenland Time</option>
+                        <option value="-2">[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time</option>
+                        <option value="-1">[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time</option>
+                        <option value="0">[UTC] Western European Time, Greenwich Mean Time</option>
+                        <option value="1">[UTC + 1] Central European Time, West African Time</option>
+                        <option value="2">[UTC + 2] Eastern European Time, Central African Time</option>
+                        <option value="3">[UTC + 3] Moscow Standard Time, Eastern African Time</option>
+                        <option value="3.5">[UTC + 3:30] Iran Standard Time</option>
+                        <option value="4">[UTC + 4] Gulf Standard Time, Samara Standard Time</option>
+                        <option value="4.5">[UTC + 4:30] Afghanistan Time</option>
+                        <option value="5">[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time</option>
+                        <option value="5.5">[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>
+                        <option value="5.75">[UTC + 5:45] Nepal Time</option>
+                        <option value="6">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time</option>
+                        <option value="6.5">[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>
+                        <option value="7">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>
+                        <option value="8">[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time</option>
+                        <option value="8.75">[UTC + 8:45] Southeastern Western Australia Standard Time</option>
+                        <option value="9">[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time</option>
+                        <option value="9.5">[UTC + 9:30] Australian Central Standard Time</option>
+                        <option value="10">[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time</option>
+                        <option value="10.5">[UTC + 10:30] Lord Howe Standard Time</option>
+                        <option value="11">[UTC + 11] Solomon Island Time, Magadan Standard Time</option>
+                        <option value="11.5">[UTC + 11:30] Norfolk Island Time</option>
+                        <option value="12">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time</option>
+                        <option value="12.75">[UTC + 12:45] Chatham Islands Time</option>
+                        <option value="13">[UTC + 13] Tonga Time, Phoenix Islands Time</option>
+                        <option value="14">[UTC + 14] Line Island Time</option>
+                        </select>
                     <span *ngIf="isFieldValid('timezone')" class="help-block">
                         Please select timezone
                     </span>
@@ -204,7 +256,7 @@
                 </div>
             </div>
         </div>
-
+       <h4>Basic information</h4>
         <hr>
 
         <div class="row">
@@ -231,49 +283,276 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('unit')}">
-                    <label for="unit">*Unit (cm,ml,kg)</label>
+                    <label for="unit">*Your Goal</label>
                     <input class="form-control" type="text" id="unit" formControlName="unit">
                     <span *ngIf="isFieldValid('unit')" class="help-block">
-                        Please enter valid unit
+                        Please enter valid goal
                     </span>
                 </div>
             </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-6 col-sm-6">   
-                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
-                    <label for="sleep-sentivity">*Sleep Senstivity</label>
-                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="sleep_senstivity">
-                    <span *ngIf="isFieldValid('sleep_senstivity')" class="help-block">
-                        Please enter valid sleep sentivity
-                    </span>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6">   
-                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
-                    <label for="stride-length">*Stride Length (cm)</label>
-                    <input class="form-control" type="number" id="stride-length" formControlName="stride_length">
-                    <span *ngIf="isFieldValid('stride_length')" class="help-block">
-                        Please enter valid stride length
-                    </span>
-                </div>
-            </div>
-        </div> 
-        
-        <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('heart_rate_zones')}">
-                    <label for="heart-rate-zones">*Heart rate zone</label>
-                    <input class="form-control" type="text" id="heart-rate-zones" formControlName="heart_rate_zones">
+                    <label for="heart-rate-zones">*Age</label>
+                    <input class="form-control" type="text" id="heart-rate-zones" formControlName="age">
                     <span *ngIf="isFieldValid('heart_rate_zones')" class="help-block">
-                        Please enter valid heart rate zones
+                        Please enter valid age
                     </span>
                 </div>
             </div>
         </div>
 
         <div class="row">
+          
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('heart_rate_zones')}">
+                    <label for="heart-rate-zones">Heart rate zone</label>
+                    <input class="form-control" type="text" id="heart-rate-zones" formControlName="heart_rate_zones">
+                    <span *ngIf="isFieldValid('heart_rate_zones')" class="help-block">
+                        Please enter valid heart rate zones
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                    <div class="form-group" [ngClass]="{'has-error':isFieldValid('skype_address')}">
+                        <label for="heart-rate-zones">Skype Address</label>
+                        <input class="form-control" type="text" id="heart-rate-zones" formControlName="skype_address">
+                        <span *ngIf="isFieldValid('skype_address')" class="help-block">
+                            Please enter valid value
+                        </span>
+                    </div>
+                </div>
+        </div>
+        <h4>Health information</h4>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">*Are you under any physical treatment</label>
+                    <select id="clock-display" formControlName="treatment" class="form-control">
+                        <option value="" disabled selected>Please Select </option>
+                         <option  value="yes">Yes</option>
+                        <option  value="no">No</option>
+                    </select>
+                    <span *ngIf="isFieldValid('sleep_senstivity')" class="help-block">
+                        Please enter valid value
+                    </span>
+                   
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" *ngIf="userForm.get('treatment').value=='yes'">
+                        <label for="sleep-sentivity">what are you being treated for</label>
+                        <input class="form-control" type="text" id="sleep-sentivity"  formControlName="phyical">
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+                <div class="col-md-6 col-sm-6">   
+                        <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                            <label for="stride-length">*Activity on the job</label>  
+                            <select id="clock-display" formControlName="activity_onjob"   class="form-control">
+                                <option value="" disabled selected>Please Select</option>
+                                <option  [value]="1">1(low)</option>
+                                <option  [value]="2">2</option>
+                                <option  [value]="3">3</option>
+                                <option  [value]="4">4</option>
+                                <option  [value]="5">5(high)</option>
+                            </select>
+                            <span *ngIf="isFieldValid('stride_length')" class="help-block">
+                                Please enter valid value
+                            </span>
+                        </div>
+                    </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">*Activity in my spare time</label>
+                      <select id="clock-display" formControlName="activity_ontime"   class="form-control">
+                        <option value="" disabled selected>Please Select </option>
+                        <option  [value]="1">1(low)</option>
+                        <option  [value]="2">2</option>
+                        <option  [value]="3">3</option>
+                        <option  [value]="4">4</option>
+                        <option  [value]="5">5(high)</option>
+                    </select>
+                    <span *ngIf="isFieldValid('sleep_senstivity')" class="help-block">
+                        Please enter valid value
+                    </span>
+                </div>
+            </div>
+          
+        </div> 
+        <h4>General information</h4>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">What’s motivating you</label>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="motivating">
+                   
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                    <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                            <label for="sleep-sentivity">What’s a "no go"</label>
+                            <input class="form-control" type="text" id="sleep-sentivity" formControlName="no_go">
+                            
+                        </div>
+            </div>
+        </div> 
+
+        <div class="row">
+                <div class="col-md-6 col-sm-6">   
+                        <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                            <label for="stride-length">*How many days a week can you train</label>
+                            <select id="clock-display" formControlName="days"  class="form-control">
+                                <option value="" disabled selected>Please Select </option>
+                                <option  [value]="1">1</option>
+                                <option  [value]="2">2</option>
+                                <option  [value]="3">3</option>
+                                <option  [value]="4">4</option>
+                                <option  [value]="5">5</option>
+                                <option  [value]="6">6</option>
+                                <option  [value]="7">7</option>
+                            </select>
+                            <span *ngIf="isFieldValid('stride_length')" class="help-block">
+                                Please enter valid value
+                            </span>
+                        </div>
+                    </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">*Do you have training experience</label>
+                    <select id="clock-display" formControlName="experience" class="form-control">
+                        <option value="" disabled selected>Please Select </option>
+                        <option  value="yes">Yes</option>
+                        <option  value="no">No</option>
+                    </select>
+                    <span *ngIf="isFieldValid('sleep_senstivity')" class="help-block">
+                        Please enter valid value
+                    </span>
+                </div>
+            </div>
+          
+            
+        </div> 
+        <h4>Body measurements</h4>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">Neck</label>
+                    <p style="margin: 2px 0 0px;
+                    font-size: 11px;">(Standing, measure your neck at its largest girth, right over the Adam’s apple.)</p>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="neck">
+                   
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                    <label for="stride-length">Shoulder</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Standing, measured as a straight line from the largest points on each shoulder across the chest.)</p>
+                    <input class="form-control" type="text" id="stride-length" formControlName="shoulder">
+                   
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">Biceps</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Measure at its largest girth, relaxed with arms at side.)</p>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="biceps">
+                    
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                    <label for="stride-length">Chest</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Standing, measure with breath out just above the nipple.)</p>
+                    <input class="form-control" type="text" id="stride-length" formControlName="chest">
+                    
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">Waist</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Standing, measure at the narrowest point or at the midway point between the top of the hip bone and the bottom of the rib cage.)</p>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="waist">
+                    
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                    <label for="stride-length">Hips</label>
+                    <p style="margin: 2px 0 0px;
+                    font-size: 11px;">(Measure at the largest girth, where the butt is protruding the greatest.)</p>
+                    <input class="form-control" type="text" id="stride-length" formControlName="hips">
+                    
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('sleep_senstivity')}">
+                    <label for="sleep-sentivity">Thigh</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Standing, measure at the largest girth, just below the butt.)</p>
+                    <input class="form-control" type="text" id="sleep-sentivity" formControlName="thigh">
+                
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}">
+                    <label for="stride-length">Calf</label>
+                    <p style="margin: -13px 0 0px;
+                    font-size: 11px;">(Standing, measure at its largest girth.)</p>
+                    <input class="form-control" type="text" id="stride-length" formControlName="calf">
+                   
+                </div>
+            </div>
+        </div> 
+        <div class="row">  
+                <div class="col-md-6 col-sm-6">  
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('stride_length')}" id="driver">
+                    <label for="stride-length">Upload full body photo</label> 
+                    <slim [options]="slimOptions"  *ngIf="showimage22" style="background: none;">
+                        <input #addimage22 type="file" name="foo" id="photo22">
+                    </slim> 
+                    <div class="col-md-12 text-center image-div jd">   
+                              <span *ngIf="showImageLoader">
+                                    <img class="image-uploader" src="assets/images/loading.gif">
+                                </span>
+                                <img *ngIf="!showimage22" [src]="
+                                        (userForm.get('bodyphoto').value !== '')?
+                                        userForm.get('bodyphoto').value:
+                                        'assets/images/user2.png'" 
+                                    onerror="this.src='assets/images/user2.png'"    
+                                    class="img-circle" style="width:120px;">
+                                    <a class="delimage" (click)="deletebodyimage()" *ngIf="(userForm.get('bodyphoto').value!=='' && !showimage22)">
+                                        <img style="width:20px;" src="assets/images/deletered.png" alt="DELETE">
+                                    </a>
+                        <div class="form-group marginT20">    
+                            <label (click)="imagechange22()" for="photo22" class="pointer">{{ (userForm.get('bodyphoto').value === '') ? 'Add':'Change' }} photo</label>
+                            <!-- <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);"> -->
+                        </div>
+                    </div>
+                    </div>
+            </div>
+        </div>
+            <hr>
+       
+
+        <!-- <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('start_week')}">
                     <label for="start-week">Start Week</label>
@@ -282,27 +561,27 @@
                     (change)="startWeekDp.hide()"
                     bsDatepicker #startWeekDp="bsDatepicker">
                     <span *ngIf="isFieldValid('start_week')" class="help-block">
-                        Please enter valid sleep sentivity
+                        Please enter Start Week
                     </span>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="row">  
             <div class="col-md-12">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('description')}">
-                    <label for="description">*Additional description</label>
+                    <label for="description">*Is there anything we should know about you, before setting up your individual Home Exercise Programme (disabilities, injuries etc.)</label>
                     <textarea class="form-control" rows="5" id="description" formControlName="description"></textarea>
                     <span *ngIf="isFieldValid('description')" class="help-block">
-                        Please enter valid stride length
+                        Please enter Additional description
                     </span>
                 </div>
             </div>
         </div> 
 
         <hr>
-       
+        
         <div class="row">
-            <div class="col-md-offset-6 col-md-6">
+            <div class="col-md-offset-6 col-md-9">
                 <div class="form-group">
                     <div class="col-sm-3">
                         <a routerLink="/" class="btn blue-btn1 pull-right  mtb-30">Back</a>
@@ -310,6 +589,9 @@
                     <div class="col-sm-3">
                         <button class="btn white-btn1 mtb-30" [disabled]="!userForm.valid">Save   </button>
                     </div>
+                    <!-- <div class="col-sm-3">
+                        <button class="btn white-btn1 mtb-30">Delete account</button>
+                    </div> -->
                 </div>
             </div>
         </div>

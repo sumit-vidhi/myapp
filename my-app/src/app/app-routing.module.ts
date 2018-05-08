@@ -1,8 +1,6 @@
 import { NgModule }             from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { PreventLoggedinAccess } 	from './core/prevent-loggedin-access.service';
-
 import { SiteLayoutComponent } 		from './layouts/site-layout/site-layout.component';
 import { LoginComponent } 			from './pages/login/login.component';
 import { SiteComponent } 			from './pages/site/site.component';
@@ -14,12 +12,14 @@ import { RegisterFinishComponent }	from './pages/register-finish/register-finish
 import { ForgotPasswordComponent } 	from './pages/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } 	from './pages/reset-password/reset-password.component';
 import { EmailVarificationComponent }from './pages/email-varification/email-varification.component';
-import { PaymentComponent } 		from './pages/payment/payment.component';
 import { TrainerDetailComponent } 	from './pages/trainer-detail/trainer-detail.component';
 import { PageComponent }			from './pages/page/page.component';
+import { PriceComponent }			from './pages/price/price.component';
 import { RequestComponent }			from './pages/request/request.component';
 import { PageNotFoundComponent }	from './pages/page-not-found/page-not-found.component';
+import { AuthGuard }             from './core/auth-guard.service';
 
+//define routing
 const routes: Routes = [
   	{ path: '', 
   		component: SiteLayoutComponent,
@@ -29,13 +29,21 @@ const routes: Routes = [
 		],
 		pathMatch : 'full'
 	},
+	{ path: 'price', 
+	component: SiteLayoutComponent,
+	children : [
+		{ path:'', component: PriceComponent, pathMatch:'full' }
+		
+  ],
+  pathMatch : 'full'
+},
 	{ 
   		path: 'register', 
   		component: RegisterComponent,
 		children : [
 			{ path:'user', component: RegisterUserComponent},
 			{ path:'trainer', component: RegisterTrainerComponent},
-			{ path:'finish', component: RegisterFinishComponent},
+			{ path:':id', component: RegisterFinishComponent},
 			{ path:'', component: RegisterListComponent, pathMatch:'full' }
 		],
 		canActivate : [PreventLoggedinAccess]
@@ -44,8 +52,8 @@ const routes: Routes = [
 	{ path: 'forgot_password', component: ForgotPasswordComponent,canActivate : [PreventLoggedinAccess] },
 	{ path: 'reset_password/:id/:code', component: ResetPasswordComponent,canActivate : [PreventLoggedinAccess] },
 	{ path: 'email_varification/:id/:code', component: EmailVarificationComponent,canActivate : [PreventLoggedinAccess] },
-	{ path: 'payment', component: PaymentComponent },
-	{ path: 'trainers/:id', component: TrainerDetailComponent },
+	
+	{ path: 'trainers/:id', component: TrainerDetailComponent, canActivate: [AuthGuard] },
 	{ path:'pages/:id', component: PageComponent},
 	{ path : 'requests/:id/:action', component: RequestComponent },
 	{ path: '**', component: PageNotFoundComponent }

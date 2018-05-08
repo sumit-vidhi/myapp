@@ -27,7 +27,7 @@ export class UserRegisterForm {
 	sleep_senstivity:string;
 	stride_length:string;
 
-	start_week:string;
+	//start_week:string;
 	description:string;
 
 	action:string;

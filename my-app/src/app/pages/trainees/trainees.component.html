@@ -1,0 +1,67 @@
+<header class="top-header">
+  
+    <app-navbar></app-navbar>
+    <!-- banner -->
+  <div class="container top-banner" >
+    <div class="row">
+      <div class="col-md-5 banner-heading">
+        <h2><strong>Hire Requests</strong></h2>
+        <!-- <label>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.
+        </label>          -->
+      </div> 
+    </div>
+  </div>
+</header>
+ <!-- trusted by -->
+ <angular-loader></angular-loader>
+ <div class="container-fluid bg-section">
+ <div class="row">
+ <div class="container select-plan">
+     <div class="row ">
+        <div class="col-md-12">
+            <h1 class="text-center">My Trainees</h1>
+           <!-- <h4 class="text-center">You have done payment.</h4> -->
+            
+   </div>
+   <div class="table-responsive">
+      <table class="table subscription">
+          <tr class="subs">
+          <th>Email</th>
+          <th>Name</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>Height</th>
+          <th>Weight</th>
+          <th>Start date</th>
+          <th>End date</th>
+          <th>Payment Status</th>
+          <th>View</th>
+        </tr>
+        <tr *ngFor="let order of orders; index as i">
+            <td>{{ order.email }}</td>
+            <td>{{ order.name }}</td>
+            <td>{{ order.city }}</td>
+            <td>{{ trimcomma(order.street) }}</td>
+            <td>{{ order.height  }}</td>
+            <td>{{ order.weight }}</td>
+            <td>{{ order.startdate  | date : "d, MMM yyyy"  }}</td>
+            <td>{{ order.canceldate  | date : "d, MMM yyyy"  }}</td>
+            <td>
+              {{ (order.paymentstatus)?order.paymentstatus:"Pending" }}            </td>
+              <td><a routerLink="/users-details/{{order.userId}}">View</a></td>
+          </tr>
+          <tr *ngIf="orders.length==0">
+         
+            <td colspan="6">Pending request not found.</td>
+            
+          </tr>
+
+      </table>
+    </div>
+         
+     </div>
+ </div>
+ <app-site-footer></app-site-footer> 
+ </div>
+ </div>

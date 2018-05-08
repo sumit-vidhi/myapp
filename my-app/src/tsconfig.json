@@ -9,7 +9,9 @@
     "module": "es6",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
-    "sourceMap": true,
+    "sourceMap": true,"allowJs": true,
+    "allowUnreachableCode": true,
+    
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"

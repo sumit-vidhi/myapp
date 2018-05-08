@@ -29,6 +29,7 @@ export class EmailVarificationComponent implements OnInit {
   ){}
 
   isEmailConfirmed:boolean;
+  alreadyactivate:boolean;
   
   ngOnInit() {
     this.isEmailConfirmed = false;
@@ -38,7 +39,17 @@ export class EmailVarificationComponent implements OnInit {
         token : params.code 
       })
       .then(response => {
-        if(response.code == 200) this.isEmailConfirmed = true; 
+        if(response.code == 200){
+
+          if(response.message=='Success'){
+            this.isEmailConfirmed = true; 
+          }
+          if(response.message=='alreadyactivate'){
+            this.alreadyactivate = true; 
+          }
+         
+        }
+      
       })
     })	
   }

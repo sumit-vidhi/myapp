@@ -9,6 +9,8 @@ export class TrainerRegisterForm {
 	confirm_password:string;
 	facebook_id:string;
 	photo:string;
+	licence:string;
+	video:string;
 	street:string;
 	street1:string;
 	city:string;
@@ -22,9 +24,19 @@ export class TrainerRegisterForm {
 	specialities:string[];
 	educations:string[];
 	certifications:string[];
+	addresses:string[];
 	short_description:string;
 	price_week:number;
+	price_premiumweek:number;
+	pricesubscription_week:number;
+	pricesubscription_premiumweek:number;
 	description:string;
+	bank_name:number;
+	registration_number:string;
+	account_number:number;
+	swift:string;
+	iban:number;
+	cvr_vat:string;
 	role:number;
 	action:string;
 

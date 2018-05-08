@@ -1,13 +1,14 @@
-<header class="top-header plan">
+<header class="top-header">
+  
     <app-navbar></app-navbar>
     <!-- banner -->
-  <div class="container top-banner">
+  <div class="container top-banner"  id="accountform">
     <div class="row">
       <div class="col-md-5 banner-heading">
-        <h2><strong>My Account</strong></h2>
-        <label>
+        <h2 ><strong>My Account</strong></h2>
+        <!-- <label>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.
-        </label>         
+        </label>          -->
       </div> 
     </div>
   </div>
@@ -15,7 +16,7 @@
 
  <angular-loader></angular-loader>
 
-<div class="container-fluid bg-section">
+<div class="container-fluid bg-section" >
   <div class="row">
     <div class="container">
         <div class="custom-alert">  
@@ -24,12 +25,56 @@
             </div>
           </div> 
 
-        <div *ngIf="model.role === 1" >
+        <div *ngIf="model.role === 1" class="mt-30">
           <app-user-form [model]="model" (save)="onSave(model)"></app-user-form>
         </div> 
-        <div *ngIf="model.role === 2" >
+        <div *ngIf="model.role === 2" class="mt-30">
           <app-trainer-form [model]="model" (save)="onSave(model)"></app-trainer-form>
         </div>  
-    </div>  
+    </div>
+    <app-site-footer></app-site-footer>  
   </div>
 </div>
+<button #myDiv style="display:none;" class="btn btn-info" data-target="#myModalcomment" data-toggle="modal" type="button">Sign Up</button>
+<div class="modal fade" id="myModalcomment" role="dialog" >
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-content">
+    <div class="model-border"></div>
+    <div class="modal-header" *ngIf="auth.user.approve=='comment'">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div class="col-md-10 col-md-offset-1">
+      <h4 class="modal-title text-center">Account Pending</h4>
+      <!-- <label class="text-center">Please update your account details, Below comment from website adminstrator.</label> -->
+      <label class="text-center">Please update your account details, according to below comments from the Wellfaster team.</label>
+      </div>
+    </div>
+    <div class="modal-header" *ngIf="auth.user.approve=='' || auth.user.approve==null">
+      <button type="button" class="close" data-dismiss="modal">&times;</button>
+      <div class="col-md-10 col-md-offset-1">
+      <h4 class="modal-title text-center">Account Pending</h4>
+      <!-- <label class="text-center">Please update your account details, Below comment from website adminstrator.</label> -->
+      <label class="text-center"> We are reviewing your details. When accepted by the Wellfaster team, you will have full access to Wellfaster. Thank you! 
+      </label>
+      </div>
+    </div>
+    <div class="modal-body" *ngIf="auth.user.approve=='comment'">
+      <div class="col-md-10 col-md-offset-1">
+        
+          <div class="col-md-12 col-sm-12">
+            <p>{{ auth.user.comment }}</p>
+          </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <div class="col-md-10 col-md-offset-1">
+        <!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+      </div> 
+    </div>
+    </div>
+    
+  </div>
+  </div>
+

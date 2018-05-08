@@ -1,0 +1,16 @@
+ul.trainer{
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    height: 200px;
+    overflow: auto;
+}
+ li.listing{
+    background-color: #fff;
+    padding: 8px;
+    overflow: auto;
+}
+li.listing a{
+    font-size:none;
+    font-weight:normal !important;
+}

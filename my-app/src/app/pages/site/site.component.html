@@ -1,48 +1,4 @@
-<!-- category-bar -->
-<div class="container category-bar" id="search">
-	<form [formGroup]="searchForm" (ngSubmit) ="onSearch()">
-		<div class="row">
-
-			<div class="col-md-3 col-sm-3 col-xs-6  mb-20">
-				<div class="banner-heading input-search">
-					<div class="stylish-input-group input-search p-0">
-						<input 
-							type="text" 
-							class="form-control" 
-							formControlName="location" 
-							placeholder="city">
-					</div>		
-				</div>		
-			</div>
-			
-			<div class="col-md-3 col-sm-3 col-xs-6 select-btn mb-20">
-				<ng-select
-					[options]="specialityOptions"
-					placeholder="Speciality"
-					[allowClear]="true"
-					formControlName="speciality">
-				</ng-select>
-			</div>
-	
-			<div class="col-md-3 col-sm-3 col-xs-6 select-btn mb-20">
-				<ng-select
-						[options]="ratingOptions"
-						placeholder="rating"
-						[allowClear]="true"
-						formControlName="rating">
-				</ng-select>
-			</div>
-	
-			<div class="col-md-3 col-sm-3 col-xs-6 mb-20 ">
-			
-				<div class="dropdown ">
-					<button class="btn pull-right category-bar-search m-0" type="submit" >Search</button>
-				</div>
-			
-			</div>
-		</div>
-	</form>
-</div>		
+		
 <hr>
 
 	
@@ -56,36 +12,108 @@
 	
 <div *ngIf="!trainers" class="container-fluid bg-section">
 	<div class="row">
-		<h4 class="text-center trusted-by">Trusted by the world's best</h4>
+		<!-- <h4 class="text-center trusted-by">Trusted by the world's best</h4> -->
 		<!-- main content -->
 		
 		<div class="container-fluid our-expert-outer">
 			<div class="container">
 				<div class="row">
-					<div class="col-md-4 our-expert">
-						<h2>OUR EXPERT TRAINERS</h2>
-						<span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s when an known printer took a galley of type and scrambled it to make a type specimen book.</span>
-					</div>
-					<div class="col-md-12 center-block">
-						<div class="row">
-							<button (click) ="onSearch()" class="btn center-block plan-btn">View All Trainers</button>
+					<div class="col-md-6 our-expert" id="motivated">
+						<h2>Be motivated</h2>
+						<span>Wellfaster is an online community of skilled personal trainers and physiotherapists who can help you reach your goals in your own home. As a customer, you will get exclusive access to the Virtual Training platform. Used by health professionals since 2010 as an effective and professional tool, to help customers and patients to reach their physical goals with home exercise programmes. Virtual Training has a clinically proven effect, and also winner of Microsoft’s Global Innovation Award. Join today, and get Well – Faster</span>
+						<!-- <a class="btn btn-primary find-din">Find your personal trainer</a> -->
+						<!-- <a class="btn" data-toggle="modal" data-target="#myModal22">The Wellfaster Video</a>
+						<div class="modal fade" id="myModal22" role="dialog">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="model-border"></div>
+									<div class="modal-header">
+									  <button type="button" class="close" data-dismiss="modal">&times;</button>
+									 
+										<iframe style="width:100%;" height="480" [src]="url" frameborder="0" ></iframe>
+								
+									</div>
+								</div>
+			  				</div>		
+						</div> -->
+						<button type="button" class="btn btn-info" (click)="vidModal.show();">The Wellfaster Video</button>
+						<div bsModal #vidModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" (onShow)="onVidModalShown()" (onHide)="onVidModalHidden()">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="model-border"></div>
+									<div class="modal-header">
+									  	<button type="button" class="close" (click)="vidModal.hide()">&times;</button>
+									 
+										<iframe *ngIf="isModalShown" style="width:100%;" height="480" [src]="url" frameborder="0" ></iframe>
+					
+									</div>
+								</div>
+			  				</div>
 						</div>
+					
 					</div>
+					<!-- <div class="col-md-12 center-block"> -->
+						<!-- <div class="row"> -->
+							<!-- <button (click) ="onSearch()" class="btn center-block plan-btn">View All Trainers</button> -->
+						<!-- </div> -->
+					<!-- </div> -->
 				</div>
 			</div>
 		</div>
 		<!-- latest-tips -->
-		<div class="latest-tips container">
+		<div class="latest-tips container" id="price">
 			<div class="row">
-				<h2 class="text-center">LATEST TIPS</h2>
-				<span class="text-center">Video player like never before</span>
-				<img src="assets/images/video-slider.png">
-				<button class="early-access">Get early access</button>
+				<h2 class="text-center">Get Started</h2>
+				<span class="text-center">Sign up today, and find your own personal trainer</span>
+				<div class="col-md-6" >
+					<div class="row">
+						<div class="plans">
+							<h4>Wellfaster</h4>
+							<h1>Entry plan</h1>
+							<ul>
+								<li>Sign up</li>
+								<li>Individual training programme</li>
+								<li>Access to Virtual Training</li>
+								<li>Saving training data</li>
+								<li>Free upgrade to Premium plan</li>
+								<li class="li-fade">Personal trainer w. daily follow up</li>
+								<li class="li-fade" >Feedback from trainer</li>
+								<li class="li-fade">Adaption of training programme </li>
+							</ul>
+							<button *ngIf="auth.isLoggedIn" class="btn">49,- month + training programme</button>
+							<button *ngIf="!auth.isLoggedIn" (click)="gologin()"  class="btn">49,- month + training programme</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="plans">
+							<h4>Wellfaster</h4>
+							<h1>Premium plan</h1>
+							<ul>
+								<li>Sign up</li>
+								<li>Individual training programme</li>
+								<li>Access to Virtual Training</li>
+								<li>Saving training data</li>
+								<li>Free downgrade to Entry Plan</li>
+								<li>Personal trainer w. daily follow up</li>
+								<li>Feedback from trainer</li>
+								<li>Adaption of training programme </li>
+							</ul>
+							<button  *ngIf="auth.isLoggedIn" class="btn">From 499,- month + training programme</button>
+							<button  *ngIf="!auth.isLoggedIn" (click)="gologin()" class="btn">From 499,- month + training programme</button>
+						</div>
+					</div>
+				</div>
+				<!-- <img src="assets/images/video-slider.png"> -->
+				<!-- <button class="early-access">Get early access</button> -->
 			</div>
 		</div>
-		
+		<button #myDiv style="display:none;" class="btn btn-info" data-target="#myModal_login" data-toggle="modal" type="button">Sign Up</button>
+		<button #privacy style="display:none;" class="btn btn-info" data-target="#myModalprivacypolicy" data-toggle="modal" type="button">Sign Up</button>
 		<!-- end main content -->
-	
+		<button #term style="display:none;" class="btn btn-info" data-target="#myModaltermcondition" data-toggle="modal" type="button">Sign Up</button>
+		
 		<!-- footer -->
 		<app-site-footer></app-site-footer>
 		<!-- end footer -->
@@ -105,9 +133,28 @@
 			<div class="row">
 				<div class="container">
 
-					<div class="row">
+					<div class="row" style="margin-bottom: 18px;">
 						
-						<div class="col-md-2 col-md-offset-10">
+						<div class="col-md-4">
+							<div class="input-search">
+								<div class=" input-search p-0">
+									<input 
+										type="text" 
+										class="form-control city-search" 
+										placeholder="Trainer Name" #cb2>
+								</div>
+										
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="input-search">
+									<div class="input-search p-0">
+										<button (click)="searchtrainer(cb2)" class="btn  btn-primary load-more">Search</button>
+									</div>
+											
+								</div>
+							</div>
+						<div class="col-md-2 col-md-offset-2">
 								<div class="footer-select">
 										<label>Sort By</label>
 										<select (change)="sort($event)">
@@ -120,37 +167,42 @@
 									</div>
 						</div>	
 					</div>		
-					
+		
 					<div class="row ">
 							
-						<div *ngFor="let t of trainers" class="col-md-4">
+						<div *ngFor="let t of trainers; let i=index;" class="col-md-4">
 							<div class="trusted-box">
 							<a routerLink="/trainers/{{ t.id }}">
 								<div class="col-md-5">
-									<img class="img-responsive" [src]="t.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+									<img class="img-responsive imagetrainer" [src]="t.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
 								</div>
 								<div class="col-md-7">
-									<h3>{{ t.first_name+' '+ t.last_name }}</h3>
-									<span>{{ (t.description.length>48)?t.description.substr(0,48)+'&hellip;': t.description}}</span>
+									<h3>{{ t.name }}</h3>
+									<span>{{ (t.description.length>20)?t.description.substr(0,20)+'&hellip;': t.description}}</span>
+									<!-- <span>{{ t.description}}</span> -->
 									<hr>
-									<span>{{ t.street }},{{ t.city }}</span>
+									<!-- <span>{{ t.street }},{{ t.city }}</span> -->
 									<!-- <h3>dkr. 125<span>uge</span></h3>
 									<span>4/8/12 week programs</span> -->
 								</div>
 							</a>
 								<div class="col-md-12 star-rating" style="margin-top:15px">
-									<rating [(ngModel)]="t.rating" [max]="max" [readonly]="isReadonly"></rating>
+								
+									<rating [(ngModel)]="t.rating" [max]="max" [readonly]="true"></rating>
 									<div class="pull-right">
 
-									<div *ngIf="auth.isLoggedIn && auth.user.role === 1">		
-										<a *ngIf="t.isHired" class="btn plan-btn pointer">Already hired</a>
+									<div *ngIf="auth.isLoggedIn && auth.user.role === 1">	
+											<a  class="btn plan-btn pointer" (click)="sendmail(t.id)" >Send Mail</a>	
+										<a *ngIf="t.isHired" class="btn plan-btn pointer">Hired</a>
 										
 										<a *ngIf="t.isPending" class="btn plan-btn pointer">Pending</a>
 										
-										<a *ngIf="!(t.isHired || t.isPending)" (click)="hireTrainer(t)" class="btn plan-btn pointer" #hired>Subscribe</a>
+										<a *ngIf="!(t.isHired || t.isPending)" (click)="hireTrainer(t)"  class="btn plan-btn pointer" #hired>Hire Me</a>
+										<!-- <a *ngIf="!(t.isHired || t.isPending)" (click)="hireTrainer(t.id)"  routerLink="/payment/{{ t.id }}" class="btn plan-btn pointer" #hired>Hire Me</a>
+										 -->
 									</div>	
 									<div *ngIf="!auth.isLoggedIn">
-										<a routerLink="/login" class="btn plan-btn">Subscribe</a>
+										<a routerLink="/login" class="btn plan-btn">Hire Me</a>
 									</div>
 
 									</div>
@@ -168,7 +220,96 @@
 					</div>
 				</div>
 		
+				<app-dialog [(visible)]="showDialog">
+						
+						   <label><strong>Send Mail</strong></label>
+					   
+						   <form [formGroup]="reviewForm" (ngSubmit)="onSubmit(reviewid)">
+							    <div [ngClass]="{'has-error':
+								reviewForm.get('review').invalid && (
+								  reviewForm.get('review').dirty ||
+								  reviewForm.get('review').touched)
+								  }" class="form-group">
+								  <span class="review-span">Subject</span>
+								  <!-- <textarea formControlName="review" rows="6" cols="" autofocus></textarea> -->
+								  <input type="text" formControlName="subject"/>
+								  <div *ngIf="
+								  reviewForm.get('subject').invalid && (
+									reviewForm.get('subject').dirty ||
+									reviewForm.get('subject').touched)">
+						  
+									<span *ngIf="
+									reviewForm.get('review').errors.required" class="help-block">
+									Subject is required
+									</span>	
+								  </div>
+								</div>
+							 <div [ngClass]="{'has-error':
+							 reviewForm.get('review').invalid && (
+							   reviewForm.get('review').dirty ||
+							   reviewForm.get('review').touched)
+							   }" class="form-group">
+							   <span class="review-span">Message</span>
+							   <textarea formControlName="review" rows="6" cols="" autofocus></textarea>
+							   <div *ngIf="
+							   reviewForm.get('review').invalid && (
+								 reviewForm.get('review').dirty ||
+								 reviewForm.get('review').touched)">
+					   
+								 <span *ngIf="
+								 reviewForm.get('review').errors.required" class="help-block">
+									 Message is required
+								 </span>	
+							   </div>
+							 </div>
+					   
+							 <!-- <div  class="form-group">
+							   <span>Rating</span>
+							   <div class="star-rating">
+								 <rating formControlName="rate" [max]="max" [readonly]=""></rating>
+							   </div>
+							   
+							 </div> -->
+							  <button class="btn sign-in-btn btn-primary" [disabled]="!reviewForm.valid">Send</button>
+						   </form>
+						  </app-dialog>
+
 				<app-site-footer></app-site-footer>
 			</div>
 		</div>
-	</div>		
+	</div>	
+	
+	<app-dialog [(visible)]="showDialognew">
+			
+			 <div class="" >
+				
+					<!-- Modal content-->
+					<div class="">
+					<div class="model-border"></div>
+					<div class="modal-header">
+						<!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+						<div class="col-md-10 col-md-offset-1">
+						<h4 class="modal-title text-center">Info</h4>
+						<label class="text-center">Please finish your profile and try again! It will help your personal trainer to make the best possible training programme for you.</label>
+						</div>
+					</div>
+					<div class="modal-body">
+						<div class="col-md-10 col-md-offset-1">
+							
+								<!-- <div class="col-md-12 col-sm-12">
+									<button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/user">Signup as a User</button><button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/trainer">Signup as a  Trainer</button>
+								</div> -->
+								
+							
+						</div>
+					</div>
+					<div class="modal-footer">
+						<div class="col-md-10 col-md-offset-1">
+							<!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+						</div> 
+					</div>
+					</div>
+					
+				</div>	 
+		
+		</app-dialog>

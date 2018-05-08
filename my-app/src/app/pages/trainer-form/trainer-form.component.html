@@ -1,26 +1,35 @@
-<div class="col-md-offset-1 col-md-10">
+<div class="col-md-offset-1 col-md-10 mt-30">
     <form [formGroup]="trainerForm" (ngSubmit)="onSave()">
         <div class="row">
-            <div class="col-md-offset-4 col-md-4 text-center image-div">   
+            <div class="col-md-offset-4 col-md-4 text-center image-div" id="image-div">
+                <!-- <div class="slim" style="background: none; ">
+                   <input #addimage type="file" id="photo"/>
+                </div> -->
+                <slim [options]="slimOptions" *ngIf="showimage" style="background: none;">
+                    <input #addimage type="file" name="foo" id="photo">
+                </slim>
                 <span *ngIf="showImageLoader">
                     <img class="image-uploader" src="assets/images/loading.gif">
                 </span>
-                <img [src]="
+                <img *ngIf="!showimage" [src]="
                         (trainerForm.get('photo').value !== '')?
                         trainerForm.get('photo').value:
                         'assets/images/user2.png'" 
                     onerror="this.src='assets/images/user2.png'"    
                     class="img-circle" style="width:120px;">
+                    <a class="delimage" (click)="deleteimage()" *ngIf="(trainerForm.get('photo').value!=='' && !showimage)">
+                            <img style="width:30px;" src="assets/images/deletered.png" alt="DELETE">
+                        </a>
                 <div class="form-group marginT20">    
-                    <label for="photo" class="pointer">{{ (trainerForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
-                    <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);">
+                    <label (click)="imagechange()" for="photo" class="pointer">{{ (trainerForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
+                    <!-- <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);"> -->
                 </div>
             </div>
         </div>
         
         <hr>
-
-        <div class="row">
+        
+        <div class="row" id="accountform">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('first_name')}">
                     <label for="first-name">*Name</label>
@@ -44,7 +53,7 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('nickname')}">
-                    <label for="nickname">*Nickname</label>
+                    <label for="nickname">Nickname</label>
                     <input class="form-control" type="text" id="nickname" formControlName="nickname">
                     <span *ngIf="isFieldValid('last_name')" class="help-block">
                         Please enter your nickname
@@ -70,8 +79,8 @@
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('phone_number')}">
                     <label for="phone-number">Phone Number</label>
                     <input class="form-control" type="text" id="phone-number" formControlName="phone_number">
-                    <span *ngIf="isFieldValid('birth_date')" class="help-block">
-                        Please enter your valid phone date like 81XXXXXX10
+                    <span *ngIf="isFieldValid('phone_number')" class="help-block">
+                        Please enter valid phone number
                     </span>
                 </div>
             </div>
@@ -82,6 +91,55 @@
                     <span *ngIf="isFieldValid('email')" class="help-block">
                         Please enter your valid email like abc@example.com
                     </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" id="driver" [ngClass]="{'has-error':isFieldValid('phone_number')}">
+                  
+
+                    <label for="phone-number">*Driver licence / Passport</label>
+                            <slim [options]="slimOptions" *ngIf="showlicence" style="background: none;">
+                                    <input #adddriver  type="file" name="foo22" id="licence">
+                                </slim>
+													
+                    <div class="col-md-12 text-center image-div jd" *ngIf="trainerForm.get('licence').value!=''">   
+                        <span *ngIf="showImageLoader">
+                            <img class="image-uploader" src="assets/images/loading.gif">
+                        </span>
+                        <img *ngIf="!showlicence" [src]="
+                                (trainerForm.get('licence').value !== '')?
+                                trainerForm.get('licence').value:
+                                'assets/images/user2.png'" 
+                            onerror="this.src='assets/images/user2.png'"    
+                            class="img-circle" style="width:120px;"/>
+                            <a  class="delimage" (click)="deleteimagelicence()" *ngIf="(trainerForm.get('licence').value!=='' && !showlicence)">
+                                    <img style="width:30px;" src="assets/images/deletered.png" alt="DELETE">
+                                </a>
+                        <div class="form-group marginT20">    
+                            <label (click)="licencechange()"  for="licence"   class="pointer">{{ (trainerForm.get('licence').value === '') ? 'Add':'Change' }} photo </label>  
+                                <!-- <input type="file" id="licence" name="files" (change)="addlicence($event)" class="hidden" #addFilelicence>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('email')}">
+                    <label for="email">Video</label>
+                    <div formArrayName="video">
+                        <div *ngFor="let c of trainerForm.controls.video['controls']; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                            <div class="form-group has-close">
+                                <video [src]="trainerForm.get('video').value[i].file" style="width:120px"></video>
+                                <span (click)="deletevideo(i)">&times;</span>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="col-md-12" *ngIf="(trainerForm.get('video').value).length==0 ">
+                        <a class="btn btn-default  blue-btn1 add-btn" (click)="addFilevideo.click()" >add</a>
+                        <input type="file" id="add-file" name="files" (change)="addvideo($event)" class="hidden" #addFilevideo>
+                    </div>
                 </div>
             </div>
         </div>
@@ -111,7 +169,7 @@
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('country')}">
                     <label for="country">*Country</label>
-                    <select id="country" formControlName="country" class="form-control" (change)="refreshStates($event)">
+                    <select id="country" formControlName="country" class="form-control">
                         <option>Please choose country </option>
                         <option *ngFor="let i of allCountries" [value]="i.id">{{ i.name}}</option>
                     </select>
@@ -122,11 +180,9 @@
             </div>
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('state')}">
-                    <label for="state">*State</label>
-                    <select id="state" formControlName="state" class="form-control">
-                        <option>Please choose state </option>
-                        <option *ngFor="let i of states" [value]="i.id">{{ i.name}}</option>
-                    </select>
+                    <label for="state">State</label>
+                    
+                    <input class="form-control" type="text" id="address-2" formControlName="state">
                     <span *ngIf="isFieldValid('state')" class="help-block">
                         Please select state
                     </span>
@@ -159,10 +215,55 @@
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group" [ngClass]="{'has-error':isFieldValid('timezone')}">
                     <label for="timezone">*Timezone</label>
-                    <select id="timezone" formControlName="timezone" class="form-control">
+                    <!-- <select id="timezone" formControlName="timezone" class="form-control">
                         <option value="" disabled selected>Please choose timezone </option>
                         <option *ngFor="let i of allTimezones" [value]="i.id">{{ i.name}}</option>
-                    </select>
+                    </select> -->
+
+
+                    <select formControlName="timezone" 
+                    class="form-control"  id="timezone">
+                    <option value="" disabled>Choose a timezone</option>
+                        <option value="-12">[UTC - 12] Baker Island Time</option>
+                        <option value="-11">[UTC - 11] Niue Time, Samoa Standard Time</option>
+                        <option value="-10">[UTC - 10] Hawaii-Aleutian Standard Time, Cook Island Time</option>
+                        <option value="-9.5">[UTC - 9:30] Marquesas Islands Time</option>
+                        <option value="-9">[UTC - 9] Alaska Standard Time, Gambier Island Time</option>
+                        <option value="-8">[UTC - 8] Pacific Standard Time</option>
+                        <option value="-7">[UTC - 7] Mountain Standard Time</option>
+                        <option value="-6">[UTC - 6] Central Standard Time</option>
+                        <option value="-5">[UTC - 5] Eastern Standard Time</option>
+                        <option value="-4">[UTC - 4] Atlantic Standard Time</option>
+                        <option value="-3.5">[UTC - 3:30] Newfoundland Standard Time</option>
+                        <option value="-3">[UTC - 3] Amazon Standard Time, Central Greenland Time</option>
+                        <option value="-2">[UTC - 2] Fernando de Noronha Time, South Georgia &amp; the South Sandwich Islands Time</option>
+                        <option value="-1">[UTC - 1] Azores Standard Time, Cape Verde Time, Eastern Greenland Time</option>
+                        <option value="0">[UTC] Western European Time, Greenwich Mean Time</option>
+                        <option value="1">[UTC + 1] Central European Time, West African Time</option>
+                        <option value="2">[UTC + 2] Eastern European Time, Central African Time</option>
+                        <option value="3">[UTC + 3] Moscow Standard Time, Eastern African Time</option>
+                        <option value="3.5">[UTC + 3:30] Iran Standard Time</option>
+                        <option value="4">[UTC + 4] Gulf Standard Time, Samara Standard Time</option>
+                        <option value="4.5">[UTC + 4:30] Afghanistan Time</option>
+                        <option value="5">[UTC + 5] Pakistan Standard Time, Yekaterinburg Standard Time</option>
+                        <option value="5.5">[UTC + 5:30] Indian Standard Time, Sri Lanka Time</option>
+                        <option value="5.75">[UTC + 5:45] Nepal Time</option>
+                        <option value="6">[UTC + 6] Bangladesh Time, Bhutan Time, Novosibirsk Standard Time</option>
+                        <option value="6.5">[UTC + 6:30] Cocos Islands Time, Myanmar Time</option>
+                        <option value="7">[UTC + 7] Indochina Time, Krasnoyarsk Standard Time</option>
+                        <option value="8">[UTC + 8] Chinese Standard Time, Australian Western Standard Time, Irkutsk Standard Time</option>
+                        <option value="8.75">[UTC + 8:45] Southeastern Western Australia Standard Time</option>
+                        <option value="9">[UTC + 9] Japan Standard Time, Korea Standard Time, Chita Standard Time</option>
+                        <option value="9.5">[UTC + 9:30] Australian Central Standard Time</option>
+                        <option value="10">[UTC + 10] Australian Eastern Standard Time, Vladivostok Standard Time</option>
+                        <option value="10.5">[UTC + 10:30] Lord Howe Standard Time</option>
+                        <option value="11">[UTC + 11] Solomon Island Time, Magadan Standard Time</option>
+                        <option value="11.5">[UTC + 11:30] Norfolk Island Time</option>
+                        <option value="12">[UTC + 12] New Zealand Time, Fiji Time, Kamchatka Standard Time</option>
+                        <option value="12.75">[UTC + 12:45] Chatham Islands Time</option>
+                        <option value="13">[UTC + 13] Tonga Time, Phoenix Islands Time</option>
+                        <option value="14">[UTC + 14] Line Island Time</option>
+                        </select>
                     <span *ngIf="isFieldValid('timezone')" class="help-block">
                         Please select timezone
                     </span>
@@ -238,30 +339,91 @@
             </div>
         </div>
 
-        <div class="row marginT20">
+        <div class="row marginT20 education">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Educations</label>
+                    <label>Educations/ Certifications (.jpeg, .png)</label>
                     <div class="text-capitalize">
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div formArrayName="addresses" *ngIf="trainerForm">
+            
+            <div *ngFor="let address of trainerForm.controls.addresses.controls; let i=index" class="col-md-12 p-0">
+              <div class="panel-heading">
+                <span class="glyphicon glyphicon-remove pull-right" *ngIf="trainerForm.controls.addresses.controls.length > 1" (click)="removeAddress(i)"></span>
+              </div>
+              <div class="" [formGroupName]="i">
+                <div class="form-group col-md-3 col-sm-6 col-xs-12 ">
+                  
+                  <input type="text" class="form-control" formControlName="year" placeholder="Year">
+                  <small [hidden]="trainerForm.controls.addresses.controls[i].controls.year.valid" class="text-danger">
+                    Year is required
+                  </small>
+                </div>
+                <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                  <!-- <label>Name</label> -->
+                  <input type="text" class="form-control" formControlName="education_name" placeholder="Name of educations or certifications">
+                  <small [hidden]="trainerForm.controls.addresses.controls[i].controls.education_name.valid" class="text-danger">
+                    Education Name is required
+                  </small>
+                </div>
+
+                
+                  
+    
+                                    
+                        
+                <div class="form-group col-md-3 col-sm-6 col-xs-12">
+<!--                       
+                        <a *ngIf="trainerForm.controls.addresses.controls[i].get('education').value.indexOf('pdf')>=1" href="{{ trainerForm.controls.addresses.controls[i].get('education').value }}" target="_blank">
+                                <img src="assets/images/index.png" style="width:120px">
+                        </a>
+                        <img *ngIf="trainerForm.controls.addresses.controls[i].get('education').value.indexOf('pdf')<0" [src]="trainerForm.controls.addresses.controls[i].get('education').value" style="width:120px">
+                 
+                    <span  *ngIf="trainerForm.controls.addresses.controls[i].get('education').value!=''" (click)="deleteEducation(i)">&times;</span> -->
+                
+                  <a class="btn btn-default  blue-btn add-btn " (click)="addFile22.click()" >{{(trainerForm.controls.addresses.controls[i].get('education').value)?"Change":"Add"}} Diploma</a>
+                  <input type="file" id="add-file22"  (change)="fileChange(i,$event)" class="hidden"  #addFile22>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="margin-20 col-xs-12">
+            <a class="btn btn-default  blue-btn1 add-btn" (click)="addAddress()" style="cursor: default">
+              Add
+            </a>
+          </div>
+     <!-- <p>{{ trainerForm.value | json}}</p>       -->
+<!-- 
+            <div class="col-md-12 col-sm-12 col-xs-12 ">
                 <div formArrayName="educations">
-                    <div *ngFor="let c of trainerForm.controls.educations['controls']; index as i" [formGroupName]="i" class="edu-txt sms-save">
-                        <div class="form-group has-close">
-                            <input type="text" formControlName="text">
-                            <a (click)="deleteEducation(i)">&times;</a>
+                    <div *ngFor="let c of trainerForm.controls.educations['controls']; index as i" [formGroupName]="i" class="col-md-3 col-sm-6 col-xs-6 sms-save">
+                        <div class="form-group image-close">
+
+                                <a *ngIf="trainerForm.get('educations').value[i].file.indexOf('.pdf')>=1" href="{{ trainerForm.get('educations').value[i].file }}" target="_blank">
+                                        <img src="assets/images/index.png" style="width:120px">
+                                </a>
+                                <img *ngIf="trainerForm.get('educations').value[i].file.indexOf('.pdf')<0" [src]="trainerForm.get('educations').value[i].file" style="width:120px">
+                         
+                            <span (click)="deleteEducation(i)">&times;</span>
                         </div>
                     </div>    
                 </div>
             </div>    
-            <div class="col-md-12">
-                <a class="btn btn-default blue-btn1 add-btn" (click)="addEducation()">Add</a>
-            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile22.click()" >add</a>
+                <input type="file" id="add-file22" name="files" (change)="addEducation($event)" class="hidden" #addFile22>
+            </div>  -->
+
+
+
+
+
         </div>
         
-        <div class="row marginT20">
+        <!-- <div class="row marginT20">
             <div class="col-md-12">
                 <div class="form-group">
                     <label>Certifications</label>
@@ -272,28 +434,112 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <div formArrayName="certifications">
-                    <div *ngFor="let c of trainerForm.controls.certifications['controls']; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                    <div *ngFor="let c of trainerForm.controls.certifications['controls']; index as i" [formGroupName]="i" class="col-md-3 col-sm-6 col-xs-6 sms-save">
                         <div class="form-group image-close">
-                            <img [src]="trainerForm.get('certifications').value[i].file" style="width:120px">
+                            <a *ngIf="trainerForm.get('certifications').value[i].file.indexOf('.pdf')>=1" href="{{ trainerForm.get('certifications').value[i].file }}" target="_blank">
+                                    <img src="assets/images/index.png" style="width:120px">
+                            </a>
+                            <img *ngIf="trainerForm.get('certifications').value[i].file.indexOf('.pdf')<0" [src]="trainerForm.get('certifications').value[i].file" style="width:120px">
                             <span (click)="deleteCertificate(i)">&times;</span>
                         </div>
                     </div>    
                 </div>
             </div>    
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12 col-xs-12">
                 <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile.click()" >add</a>
                 <input type="file" id="add-file" name="files" (change)="addCertificate($event)" class="hidden" #addFile>
             </div>    
-        </div>
+        </div> -->
         
 
         <div class="row marginT20">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>About You</label>
+                    <label>*Describe yourself
+                    </label>
                     <textarea class="form-control" rows="2" formControlName="short_description"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>*Bank name</label>
+                    <input formControlName="bank_name" 
+                        type="text" 
+                        class="form-control"
+                        >   
+                </div>
+            </div> 
+            <div class="col-md-6">
+                    <div class="form-group">
+                        <label>*Registration number: (4 numbers)</label>
+                        <input formControlName="registration_number" 
+                            type="text" 
+                            class="form-control"
+                            >   
+                    </div>
+                </div>  
+        </div> 
+
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>*Account number</label>
+                        <input formControlName="account_number" 
+                            type="text" 
+                            class="form-control"
+                            >   
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                        <div class="form-group">
+                            <label>IBAN</label>
+                            <input formControlName="iban" 
+                                type="text" 
+                                class="form-control"
+                                >   
+                        </div>
+                    </div>  
+            </div>
+
+
+
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>SWIFT</label>
+                            <input formControlName="swift" 
+                                type="text" 
+                                class="form-control"
+                                >   
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <label>CVR/VAT</label>
+                                <input formControlName="cvr_vat" 
+                                    type="text" 
+                                    class="form-control"
+                                    >   
+                            </div>
+                        </div>  
+                </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="price-week">*Price for a training programme (Premium Plan)</label>
+                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="price_week">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="price-week">*Price for a training programme (Entry Plan)</label>
+                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="price_premiumweek">
+                    <span class="help-block"></span>
                 </div>
             </div>
         </div>
@@ -301,11 +547,18 @@
         <div class="row">
             <div class="col-md-6 col-sm-6">   
                 <div class="form-group">
-                    <label for="price-week">Week Price</label>
-                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="price_week">
+                    <label for="price-week">*Price per month for your Premium Plan subscription</label>
+                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="pricesubscription_week">
                     <span class="help-block"></span>
                 </div>
             </div>
+            <!-- <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="price-week">*Price / Month for a training programme subscription fee</label>
+                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="pricesubscription_premiumweek">
+                    <span class="help-block"></span>
+                </div>
+            </div> -->
         </div>
 
         <div class="row">
@@ -317,6 +570,14 @@
             </div>
         </div>
         <hr>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>My social media url</label>
+                    <input class="form-control" type="text"  value="{{ socialurl }}/trainers/{{ auth.user.id }}">
+                </div>
+            </div>
+        </div>
         
         <div class="row">
             <div class="col-md-offset-6 col-md-6">
@@ -345,6 +606,38 @@
         <div class="row">
             <div class="col-md-offset-6 col-md-6 text-right">
                 <button *ngIf="!isImageCropped" class="btn btn-primary" (click)="cropImage()">
+                    <i class="fa fa-crop"></i>
+                </button>
+            </div> 
+        </div>  
+        <hr>             
+        <div class="row" *ngIf="!isImageCropped">
+            <div class="col-md-12 img-crop">    
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="1"
+                    [resizeToWidth]="120"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+            </div> 
+        </div>        
+    </div>
+</ng-template>
+
+
+<ng-template #templatelicence>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Upload your licence</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6 text-right">
+                <button *ngIf="!isImageCropped" class="btn btn-primary" (click)="cropImagelicence()">
                     <i class="fa fa-crop"></i>
                 </button>
             </div> 

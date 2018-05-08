@@ -1,4 +1,5 @@
 <header class="top-header bank-form">
+    <a (click)="gotobottom()" class="site-bottom"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
     <app-navbar></app-navbar>
     
     <!-- banner -->
@@ -7,87 +8,123 @@
     <!-- banner -->
     
   </header>
+  <div class="row m-0">
+		<div *ngFor="let alert of alertMessages" class="col-md-offset-2 col-md-8 text-center">
+			<alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+		</div>
+	</div>	
   <angular-loader></angular-loader>
-  <div class="container-fluid bg-section" *ngIf="trainerdetail">
-    <div class="row">
+  <div class="container-fluid bg-section"   id="details">
+    <div class="row" *ngIf="trainerdetail">
       <div class="container">
         <div class="row">
-        <div class="col-md-12">
-        <div class="row"  >
-          <span class="trusted">Trusted bythe world,s best</span>
-          <div class="col-sm-2 ">
+        <div class="col-md-12 col-xs-12 get-startet">
+        <div class="row" >
+         
+          <!-- <span class="trusted">Trusted by the world's best</span> -->
+          <div class="col-sm-2 col-xs-12">
             <div class="row circle-btn">
               
-                <div class="dp-circle">
+                <div  *ngIf="trainerdetail.is_loggedin==1" class="df">
                   <img class="img-responsive" [src]="trainerdetail.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
                 </div>
+                <div  *ngIf="trainerdetail.is_loggedin==0" class="df">
+                  <img class="img-responsive" [src]="trainerdetail.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+                </div>
+             
               <!-- <button class="btn">Service</button>
               <button class="btn btn-default">Bio</button> -->
             </div>
           </div>
-          <div class="col-sm-10">
+          <div class="col-sm-10 col-xs-12"  >
             <div class="row">
             
-              <div class="col-md-12">
+              <div class="col-md-12 col-xs-12">
                 <div class="row" >
-                  <div class="col-md-3 trusted-title">
+                  <div class="col-md-8 col-sm-6 col-xs-12 trusted-title">
                     <h3 class="text-capitalize">{{ trainerdetail.name }}</h3>
-                    <span>{{ trainerdetail.description }}</span>
-                  </div>
-                  <div class="col-md-9">
-                    <div class="row">
-                      <div class="pull-right">
-                        <!-- <a href="#" class="btn plan-btn trust"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> -->
-                        
-                        <!-- <a href="#" class="btn plan-btn trust">Request for a free consultation on!</a>
-                        <a href="#" class="btn plan-btn trust"><i class="fa fa-podcast" aria-hidden="true"></i></a> -->
-                         <div *ngIf="auth.isLoggedIn && auth.user.role === 1">    
-                          <a *ngIf="trainerdetail.isHired" class="btn plan-btn pointer">Already hired</a>
-                          
-                          <a *ngIf="trainerdetail.isPending" class="btn plan-btn pointer">Pending</a>
-                          
-                          <a *ngIf="!(trainerdetail.isHired || trainerdetail.isPending)" (click)="hireTrainer(trainerdetail.id)" class="btn plan-btn pointer" #hired>Subscribe</a>
-                        </div>  
-                        <div *ngIf="!auth.isLoggedIn">
-                          <a routerLink="/login" class="btn plan-btn">Subscribe</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                </div>
-                <hr>
-              </div>
-              
-              <div class="col-md-12">
-                <div class="row">
-                  <div class="col-md-6 dkr">
-                    
-                    <span>{{trainerdetail.street}} ,{{ trainerdetail.city }}</span>
-                    <!-- <h3>dkr.130<sub>uge</sub></h3>
-                    <span>4/8/12 week programs</span> -->
-                    
-                  </div>
-                  <div class="col-md-6 star-rating" style="margin-top:15px">
+                    <label>{{ trainerdetail.description }}</label>
+                    <div class="col-md-6 star-rating" >
                   <div class="row">
                     
-                    <div class="pull-right lg-star">
+                    <div class=" lg-star">
                       <rating [(ngModel)]="trainerdetail.rating" [max]="max" [readonly]="isReadonly"></rating>
                     </div>
                   </div>
                   </div>
+                  </div>
+                  <!-- <div class="col-md-3">
+                    <div class="row">
+                      <div class="pull-right w-100 m-10"> -->
+                        <!-- <a href="#" class="btn plan-btn trust"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> -->
+                        
+                        <!-- <a href="#" class="btn plan-btn trust">Request for a free consultation on!</a>
+                        <a href="#" class="btn plan-btn trust"><i class="fa fa-podcast" aria-hidden="true"></i></a> -->
+                         <!-- <div *ngIf="auth.isLoggedIn && auth.user.role === 1">    
+                          <a *ngIf="trainerdetail.isHired" class="btn plan-btn pointer">Already hired</a>
+                          
+                          <a *ngIf="trainerdetail.isPending" class="btn plan-btn pointer">Pending</a>
+                          
+                          <a *ngIf="!(trainerdetail.isHired || trainerdetail.isPending)" (click)="hireTrainer(trainerdetail.id)" class="btn plan-btn pointer" #hired>Hire Me</a>
+                        </div>  
+                        <div *ngIf="!auth.isLoggedIn">
+                          <a routerLink="/login" class="btn plan-btn pointer">Hire Me</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div> -->
+                  
                 </div>
+                
               </div>
+              
+             
               
             </div>
             
           </div>
           
           </div>
-          <hr>
+          <div class="get-startet-in" id="getstarted"  *ngIf="auth.isLoggedIn && auth.user.role === 1">
+              <div  [ngClass]="{'fade-in': trainerdetail.isHired}">  
+              <h6>WELLFASTER</h6>
+                <h3>Get started</h3>
+                <ul>
+  
+                   <li> <h5>{{trainerdetail.pricesubscription_week}} DKK /month</h5>
+                    <span>Premium Level subscription</span></li>
+                   <li> <h5>{{trainerdetail.weeklyprice}} DKK /one time fee</h5>
+                      <span style="margin-bottom:0px">Individual training program </span>
+                    <span>If you choose "Premium Level"</span></li>
+                   <li> <h5>{{trainerdetail.price_premiumweek}} DKK /one time fee</h5>
+                        <span style="margin-bottom:0px">Individual training program </span>
+                      <span>If you choose "Entry Level"</span></li>
+                </ul>
+              </div>
+                <!-- <button class="btn btn-primary">Hired</button> -->
+                <button *ngIf="trainerdetail.isHired" class="btn btn-danger pointer">Already hired</button>
+                
+                <button *ngIf="trainerdetail.isPending" class="btn btn-info pointer">Pending</button>
+                
+                <button *ngIf="!(trainerdetail.isHired || trainerdetail.isPending)" (click)="hireTrainer(trainerdetail.id)" class="btn btn-primary pointer" #hired>Hire Me</button>
+              
+            </div>
+          </div>
+          <div class="col-md-12 col-xs-12">
+            <div class="row">
+              <div class="col-md-8 col-sm-6  col-xs-12 dkr">
+                
+                
+                <h3>Description</h3>
+                <span>{{trainerdetail.addtional_description}}</span>
+                
+              </div>
+              
+              
+            </div>
           </div>
           
-          <div class="col-md-12 trainer-info">
+          <div class="col-md-8 col-xs-12  trainer-info" >
           
               <h3>Specialities</h3>
               <div class="sp-list">
@@ -96,35 +133,158 @@
                 </span>
               </div>  
               
-              <div class="col-sm-12">
+              <div class="col-sm-12 col-xs-12 mb-30">
                 <div class="row">
-                  <h3>Education</h3>
-                  <span *ngIf="trainerdetail.education==''">[n/a]</span>
-                  <span *ngIf="trainerdetail.education!=''">[ {{ trainerdetail.education }} ]</span>
+                  <h3>Education / Certifications</h3>
+                  <span *ngIf="trainerdetail.education_year==''">[n/a]</span>
+                    
+                 <!-- <a *ngFor="let t of education;"  data-toggle="modal" data-target="#myModaleduc"> <img width="80" height="60" style="margin-right:10px;"  src="{{ t }}"/></a>
+                -->
+                <div *ngIf="(trainerdetail.education_year!=null && trainerdetail.education_year!='')">
+                 <span   *ngFor="let t of education_year;index as i" class="col-sm-12 p-0" style="color:#2C3440">
+                    {{education_year[i]}}
+                    {{education_name[i]}},
+                    
+           
+              <a style="color:#5bc0de" *ngIf="education && education[i] && education[i].indexOf('pdf')<0" data-toggle="modal" data-target="#myModal" (click)="changeimage(education[i])">
+                 diploma
+                  </a>
+        
+                  <a style="color:#5bc0de" *ngIf="education && education[i] && education[i].indexOf('pdf')>=1" (click)="openpdf(education[i])" target="_blank">
+                      diploma
+                  </a>
+                  <br>
+            </span>
+          </div>
                 </div>
               </div>
-              <div class="col-sm-12">
+
+
+
+
+
+              <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog">
+                  
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                    <div class="model-border"></div>
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <div class="col-md-10 col-md-offset-1">
+                    
+                    </div>
+                    <div class="modal-body">
+                      <div class="col-md-10 col-md-offset-1">
+                        
+                          <img  [src]="trainerimage" style="width:100%;">
+                          
+                        
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="col-md-10 col-md-offset-1">
+                        <!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+                      </div> 
+                    </div>
+                    </div>
+                    
+                  </div>
+                  </div>
+                </div>
+
+             <!-- <div class="col-sm-12 col-xs-12 mb-30">
                 <div class="row">
                   <h3>Certifications</h3>
                   <span *ngIf="!trainerdetail.certifications">[n/a]</span>
-                  <span *ngIf="trainerdetail.certifications">
-                      
-                    <img width="80" height="60" style="margin-right:10px;" *ngFor="let t of certification;" src="{{ t }}"/>
+                
+                    <span *ngFor="let t of certification;index as i">
+                        <a *ngIf="t.indexOf('.pdf')>=1" href="{{t}}" target="_blank">
+                            <img src="assets/images/index.png" style="width:120px">
+                    </a>
+                    <div class="col-md-2 mb-10">
+                        <a data-toggle="modal" data-target="#myModal" (click)="changeimage(t)"> <img *ngIf="t.indexOf('.pdf')<0" [src]="t" class='img-responsive'></a>
+                      </div>
+                 <img [src]="trainerForm.get('educations').value[i].file" style="width:120px"> 
                   </span>
+                  
+                  
+                </div>
+                
+              </div> -->
+
+              <!-- <div class="col-sm-12 col-xs-12 mb-30">
+                  <div class="row">
+                    <h3>Licence</h3>
+                    <span *ngIf="trainerdetail.licence==''">[n/a]</span>
+                    
+                   <span>
+                    <a *ngIf="trainerdetail.licence.indexOf('.pdf')>=1" href="{{trainerdetail.licence}}" target="_blank">
+                        <img src="assets/images/index.png" style="width:120px">
+                </a>
+                <div class="col-md-2">
+                <a data-toggle="modal" data-target="#myModal" (click)="changeimage(trainerdetail.licence)"><img *ngIf="trainerdetail.licence.indexOf('.pdf')<0" [src]="trainerdetail.licence" class='img-responsive'></a>
+                  </div>
+              </span>
+                  </div>
+                </div> -->
+
+              <div class="col-sm-12 col-xs-12 mb-30">
+                <div class="row">
+                  <h3>Video</h3>
+                  <span *ngIf="!trainerdetail.video">[n/a]</span>
+                  <span *ngIf="trainerdetail.video">
+                
+                    <!-- <video  width="320" height="240" controls>
+                      <source  [src]="trainerdetail.video" type="video/webm">
+                    </video> -->
+
+                   <a class="fullvideo" (click)="vidModal.show();"><video width="280">
+                    <source [src]="trainerdetail.video" />
+                    Your browser doesn't support HTML5 video tag.
+                  </video></a> 
+
+                  <a class="minvideo" (click)="vidModal.show();"><button class="btn btn-primary">Play Video</button></a> 
+                <!-- <img [src]="trainerForm.get('educations').value[i].file" style="width:120px"> -->
+                  </span>
+                  
+             
                 </div>
                 
               </div>
+              <div bsModal #vidModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" (onShow)="onVidModalShown()" (onHide)="onVidModalHidden()">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="model-border"></div>
+                    <div class="modal-header">
+                        <button type="button" class="close" (click)="vidModal.hide()">&times;</button>
+                     
+                        <video *ngIf="isModalShown" class="video-section" controls autoplay>
+                          <source [src]="trainerdetail.video" />
+                          Your browser doesn't support HTML5 video tag.
+                        </video>
+            
+                    </div>
+                  </div>
+                  </div>
+              </div>
+
+
+              
+
             
           </div>
           
         </div>
-        <hr>
+      
       </div>
     
       <div class="container client-review">
-        <div class="row">
-          <span>Client Reviews<sub>[ {{ (totalreview>0)?totalreview:'No review' }} ]</sub></span>
-
+        <div class="row" style="margin-left:auto;">
+          <span>Client Reviews
+            <!-- <sub>[ {{ (totalreview>0)?totalreview:'' }} ]</sub> -->
+          </span>
+         
 
            <a *ngIf="
               auth.isLoggedIn &&
@@ -133,22 +293,23 @@
             " (click)="showDialog = !showDialog" class="btn plan-btn trust pull-right">Post a Review!</a>
 
 
-
+            <hr style="width:100%;">
 
           <ul *ngFor="let t of trainerReviewdetail">
             <li>
               <h3>{{ t.name }}</h3> 
-              <div class="star-rating">
-                <rating [(ngModel)]="t.rating" [max]="max" [readonly]="isReadonly"></rating>
-              </div>
+              <div class="edit-btn" *ngIf="auth.isLoggedIn && auth.user.role === 1">
+                <a *ngIf="auth.user.id==t.user_id" (click)="editreview(t.review_id,t.review,t.rating)" class=""><i class="fa fa-pencil"></i></a>
+                </div>
+             <div class="star-rating">
+              <rating [(ngModel)]="t.rating" [max]="max" [readonly]="isReadonly"></rating>
+            </div>
               <label>{{ t.created }} AT {{ t.time }}</label>
               <p>
                 {{ t.review }} 
             
               </p>
-<div *ngIf="auth.isLoggedIn && auth.user.role === 1">
-                <a *ngIf="auth.user.id==t.user_id" (click)="editreview(t.review_id,t.review,t.rating)" class=""><i class="fa fa-pencil"></i></a>
-                </div>
+
               
               <!-- <a *ngIf="auth.user.id==t.user_id" (click)="deletereview(t.review_id)" class="btn plan-btn trust pull-right">DELETE</a>  -->
             </li>
@@ -191,6 +352,41 @@
           </form>
          </app-dialog>
   
+         <app-dialog [(visible)]="showDialognew">
+            
+             <div class="" >
+              
+                <!-- Modal content-->
+                <div class="">
+                <div class="model-border"></div>
+                <div class="modal-header">
+                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+                  <div class="col-md-10 col-md-offset-1">
+                  <h4 class="modal-title text-center">Info</h4>
+                  <label class="text-center">Please finish your profile and try again! It will help your personal trainer to make the best possible training programme for you.</label>
+                  </div>
+                </div>
+                <div class="modal-body">
+                  <div class="col-md-10 col-md-offset-1">
+                    
+                      <!-- <div class="col-md-12 col-sm-12">
+                        <button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/user">Signup as a User</button><button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/trainer">Signup as a  Trainer</button>
+                      </div> -->
+                      
+                    
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <div class="col-md-10 col-md-offset-1">
+                    <!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+                  </div> 
+                </div>
+                </div>
+                
+              </div>	 
+          
+          </app-dialog>
+
       <app-site-footer></app-site-footer>
     </div>
   </div>

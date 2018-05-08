@@ -1,17 +1,73 @@
 <div class="container top-banner">
   <div class="row">
-    <div class="col-md-5 banner-heading">
-    <h2>Do you want to <br> <strong>improve </strong>your Body?</h2>
-      <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
-        <div class="input-group stylish-input-group">
-          <input type="text" formControlName="search" class="form-control"  placeholder="What are you looking for?" >
-          <span class="input-group-addon">
-            <button type="submit" [disabled]="!searchForm.valid">
-              <span class="glyphicon glyphicon-search"></span>
-            </button>  
-          </span>
-        </div>
-      </form>	
+    <div class="col-md-12 banner-heading">
+		<div class="row">
+		<h2>Do you want to <br> improve your health in your own home?</h2>
+		  <!-- <form [formGroup]="searchForm" (ngSubmit)="onSearch()"> -->
+			<!-- <div class="input-group stylish-input-group"> -->
+			  <!-- <input type="text" formControlName="search" class="form-control"  placeholder="What are you looking for?" > -->
+			  <!-- <span class="input-group-addon"> -->
+				<!-- <button type="submit" [disabled]="!searchForm.valid"> -->
+				  <!-- <span class="glyphicon glyphicon-search"></span> -->
+				<!-- </button>   -->
+			  <!-- </span> -->
+			<!-- </div> -->
+		  <!-- </form>	 -->
+		  
+		</div>
     </div>
+		<button #myDiv style="display:none;" class="btn btn-info" data-target="#myModal_login" data-toggle="modal" type="button">Sign Up</button>
+	<div class="col-md-12 category-bar" id="search">
+		<div class="">
+				<form [formGroup]="searchForm" (ngSubmit) ="onSearch()">
+					<div class="row">
+
+						<!-- <div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20">
+							<div class="input-search">
+								<div class=" input-search p-0">
+									<input 
+										type="text" 
+										class="form-control city-search" 
+										placeholder="Trainer Name"
+										(keyup)="autocomplete()"
+										formControlName="location">
+								</div>
+								<ul *ngIf="trainersname && trainersname.length>0" class="trainer">
+									<li  class="listing" *ngFor="let item of trainersname; let idx = index"><a (click)='getname(item.name)'> {{ item.name}}</a></li>
+								</ul>		
+							</div>		
+						</div> -->
+						
+						
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20">
+							<ng-select
+								[options]="specialityOptions"
+								placeholder="I’m interested in.."
+								[allowClear]="true"
+								formControlName="speciality">
+							</ng-select>
+						</div>
+				
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20">
+							<ng-select
+									[options]="ratingOptions"
+									placeholder="Rating"
+									[allowClear]="true"
+									formControlName="rating">
+							</ng-select>
+						</div>
+				
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20 ">
+						
+							<div class="dropdown ">
+								<button class="btn pull-right category-bar-search5 m-0" type="submit" >Search</button>
+							</div>
+						
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+			
   </div>
 </div>

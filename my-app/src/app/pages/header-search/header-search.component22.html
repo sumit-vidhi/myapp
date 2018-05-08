@@ -1,0 +1,68 @@
+<div class="container top-banner">
+  <div class="row">
+    <div class="col-md-12 banner-heading">
+		<div class="row">
+		<h2>Do you want to <br> improve your Health?</h2>
+		  <!-- <form [formGroup]="searchForm" (ngSubmit)="onSearch()"> -->
+			<!-- <div class="input-group stylish-input-group"> -->
+			  <!-- <input type="text" formControlName="search" class="form-control"  placeholder="What are you looking for?" > -->
+			  <!-- <span class="input-group-addon"> -->
+				<!-- <button type="submit" [disabled]="!searchForm.valid"> -->
+				  <!-- <span class="glyphicon glyphicon-search"></span> -->
+				<!-- </button>   -->
+			  <!-- </span> -->
+			<!-- </div> -->
+		  <!-- </form>	 -->
+		  
+		</div>
+    </div>
+		<button #myDiv style="display:none;" class="btn btn-info" data-target="#myModal" data-toggle="modal" type="button">Sign Up</button>
+	<div class="col-md-12 category-bar" id="search">
+		<div class="">
+				<form [formGroup]="searchForm" (ngSubmit) ="onSearch()">
+					<div class="row">
+
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20" style="display:none;">
+							<div class="input-search">
+								<div class=" input-search p-0">
+									<input 
+										type="text" 
+										class="form-control city-search" 
+										formControlName="location" 
+										placeholder="city">
+								</div>		
+							</div>		
+						</div>
+						
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20">
+							<ng-select
+								[options]="specialityOptions"
+								placeholder="I’m interested in.."
+								[allowClear]="true"
+								formControlName="speciality">
+							</ng-select>
+						</div>
+				
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20">
+							<ng-select
+									[options]="ratingOptions"
+									placeholder="Rating"
+									[allowClear]="true"
+									formControlName="rating">
+							</ng-select>
+						</div>
+				
+						<div class="col-md-3 col-sm-3 col-xs-6 form-group mb-20 ">
+						
+							<div class="dropdown ">
+								<button class="btn pull-right category-bar-search5 m-0" type="submit" >Search</button>
+							</div>
+						
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+			
+  </div>
+</div>

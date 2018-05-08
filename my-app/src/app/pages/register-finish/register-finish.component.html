@@ -1,16 +1,16 @@
-<header class="top-header create-acc">
+<header class="top-header">
 	<app-navbar></app-navbar>
   	<!-- banner -->
 	
 	<div class="container top-banner">
 		<div class="row">
 			<div class="col-md-5 banner-heading">
-				<h2><strong>Thank you for signing up with WellFaster</strong></h2>
-				<label>
+				 <h2><strong>Thank you for signing up with WellFaster</strong></h2>
+				<!--<label>
 					A confirmation email has been sent to your email address. 
 					To confirm your account, please click on the "Activate account".
 				</label>
-				<br><br><br>
+				<br><br><br> -->
 				<!-- <label>
 					if you have not received email, please click below to resend email.
 				</label> -->
@@ -26,19 +26,19 @@
 	<!-- banner -->
 </header>
 
-<!-- category-bar -->
-<div class="container category-bar"></div>
-
-<footer>
-	<!-- copyright -->
-	<div class="container-fluid copyright">
-		<div class="row">
-			<div class="container">
-				<div class="row">
-					<span class="footer-logo">Logo</span>
-					<label class="pull-right">&copy; 2017 Copyrights by wellfaster</label>
-				</div>
-			</div>
-		</div>
+<div class="container category-bar">
+	
+	  <div class="row">
+  
+			 <div class="col-md-12 aboutus" style="margin-bottom:50px;">
+		<span *ngIf="page=='user'">
+			A confirmation email has been sent to your email address. 
+			To confirm your account, please click on the "Activate account".
+		</span>
+		<span *ngIf="page=='trainer'">
+			The Wellfaster team are reviewing your request, and will get back to you asap.
+			</span>
 	</div>
-</footer>
+		<app-site-footer></app-site-footer>
+	  </div>
+	</div>

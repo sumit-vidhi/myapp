@@ -2,7 +2,8 @@ import {
   Component, 
   OnInit
 }                             from '@angular/core';
-
+import { Inject, ViewChild,  ElementRef } from '@angular/core';
+import { DOCUMENT} from '@angular/common';
 import { 
   ActivatedRoute,
   Router, 
@@ -13,6 +14,7 @@ import {
   ApiService          
 }                             from '../../core/api.service'; 
 
+import { PageScrollConfig, PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 @Component({
   selector: 'app-page',
@@ -26,7 +28,9 @@ export class PageComponent implements OnInit  {
   constructor (
     private router : Router,
     private route : ActivatedRoute,
-    private api : ApiService
+    private api : ApiService,
+		private pageScrollService: PageScrollService, 
+		@Inject(DOCUMENT) private document: any
   ){}
 
   loadPage(page){
@@ -56,7 +60,12 @@ export class PageComponent implements OnInit  {
         this.pageTemplate = "How to book a trainer";    
         break;       
     }
+    this.goToSearch();
   }
+  public goToSearch(): void {
+		let pageScrollInstance: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#page');
+		this.pageScrollService.start(pageScrollInstance);
+	  }; 
 
   ngOnInit(){
     this.route.params.subscribe(params => this.loadPage(params.id));    

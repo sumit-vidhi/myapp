@@ -1,25 +1,106 @@
-<header class="top-header forgot-pass">
+<header class="top-header">
   <app-navbar></app-navbar>
   <!-- banner -->
-  <div class="container top-banner">
+  <div class="container top-banner" id="page">
     <div class="row ">
-      <div class="col-md-5 banner-heading">
+      <div class="col-md-5 banner-heading" *ngIf="pageTemplate=='About Us'">
         <h2><strong>{{ pageTemplate }}</strong></h2>
-        <label>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis elementum tellus. Nullam ornare porttitor eros, sed aliquet nulla efficitur ac. Fusce eu neque vel metus convallis finibus. Praesent dictum lacinia elit suscipit rhoncus. Curabitur non placerat dolor, a gravida nisl. Maecenas augue felis, fermentum eu posuere in, porta cursus enim. Aliquam erat volutpat. Fusce ac sodales turpis, eget vestibulum ante. Donec auctor commodo malesuada.
-        </label> 
+      </div>
+      <!-- <div class="col-md-5 banner-heading" *ngIf="pageTemplate=='Term & Conditions'">
+          <h2><strong>{{ pageTemplate }}</strong></h2>
+          <label>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.</label> 
+        </div>
+        <div class="col-md-5 banner-heading" *ngIf="pageTemplate=='Private Policy'">
+            <h2><strong>{{ pageTemplate }}</strong></h2>
+            <label>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.s</label> 
+        </div> -->
+      <div class="col-md-5 banner-heading" *ngIf="pageTemplate=='Advantages'">
+        <h2><strong>{{ pageTemplate }}</strong></h2>
       </div> 
+      
+      <div class="col-md-5 banner-heading" *ngIf="pageTemplate=='How to book a trainer'">
+        <h2><strong>{{ pageTemplate }}</strong></h2>
+
+      </div>
     </div>
   </div>
   <!-- banner -->
 </header>
 
 <!-- category-bar -->
-<div class="container category-bar">
-  <div class="row">
-    <div class="col-md-12"> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas quis elementum tellus. Nullam ornare porttitor eros, sed aliquet nulla efficitur ac. Fusce eu neque vel metus convallis finibus. Praesent dictum lacinia elit suscipit rhoncus. Curabitur non placerat dolor, a gravida nisl. Maecenas augue felis, fermentum eu posuere in, porta cursus enim.</div>
+<div class="container-fluid bg-section">
+  <div class="row"  >
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 aboutus" style="margin-bottom:50px;" *ngIf="pageTemplate=='Advantages'">
+					<span>The single biggest reason people don’t reach their goals is MOTIVATION. Most people don’t have a natural motivation which is needed to continue a healthy lifestyle. The single biggest reason for people to reach their goals is social interaction.</span>
+					<p></p>
+					<span>Wellfaster supplies our customers with a large community of personal trainers, who will help you through the tough days. They will set up a home exercise programme for you, analyse your results and progress and get you back on track  the motivation is low.</span>
+					<p></p>
+					<span>With the unique Virtual Training®-platform it’s possible to have your own personal trainer at an affordable price. This is your personal trainer in your pocket.</span> 
+        </div>
+        <!-- <div class="col-md-12 aboutus" *ngIf="pageTemplate=='How to book a trainer'">
+        <ul>
+          <li>Sign up</li>
+          <li>Search and find the personal trainer, who match your criteria’s</li>
+          <li>Hire the personal trainer</li>
+          <li>Fill out your physical data</li>
+          <li>Download our app and receive your individual training plan</li>
+        </ul>
+        <br>
+         <span>The personal trainer will receive data on your score, compliance and progress, which helps her/him to reach your goal. </span> 
+      	</div> -->
+			  
+        <div class="col-md-12 col-sm-12 col-xs-12 aboutus" *ngIf="pageTemplate=='About Us'">
+				  <span>Wellfaster strives to develop unique health solutions that make a genuine difference in the health industry by creating economical and human added value to our customers, end-users and society. Wellfaster is a spinoff from Welfare Denmark, a leading company in the industry of health technologies serving public and private healthcare providers in Scandinavia.</span>
+				  <p></p>
+				  <span>Wellfaster offers our customers clinically tested and efficient virtual solutions via our unique Virtual Training®-platform.</span>
+			  </div>
+			  <div class="col-md-12 col-sm-12 col-xs-12 aboutus" *ngIf="pageTemplate=='About Us'">
+			    <span> The Virtual Training®-platform won Microsoft’s Global Innovation Award, is a part of the National Danish Strategy of Digitalization and has been approved by therapist’s s well and scientists.</span> 
+			    <p></p>
+			    <span> Our team has developed solutions for the health care industry in a close and formalized cooperation with several public health care providers in Denmark and Norway since 2010. Enabling us to offer solutions that, among other, fit into daily healthcare operations and efficiently contribute to resolve the growing number of challenges posed by the healthcare industry to the society.
+			    </span>
+			  </div>
+			  <div class="col-md-12 col-sm-12 col-xs-12 aboutus" style="margin-bottom:50px;"  *ngIf="pageTemplate=='About Us'">
+          <div class="row">
+            <div class="col-md-3 col-sm-3">
+              <img class="img-responsive" src="assets/images/Pernille-Ravn-Jakobsen.jpg">
+            </div>
+				    <div class="col-md-9 col-sm-9">
+					    <span>”Virtual Training®” has a significant effect on the motivation</span>
+					    <span>A Peer Reviewd article on ”Virtual Training®” was released In The Danish Gerontological
+              Society’s Journal in 2015. Virtual Rehabilitations importance for motivation and commitment to training." </span>
+					    <span>Pernile Ravn Jacobsen, <em>Physiotherapy BSc, MScPH, Ph.d, Stud.</em></span>
+				    </div>
+			    </div>
+			  </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12 aboutus" style="margin-bottom:50px;"  *ngIf="pageTemplate=='How to book a trainer'">
+          <div class="row">
+            <ul class="howto"> 
+              <li>Sign up</li>
+              <li>Search and find the personal trainer, who match your criteria’s</li>
+              <li>Hire the personal trainer</li>
+              <li>Fill out your physical data</li>
+              <li>Download our app and receive your individual training plan</li>
+            </ul>
+            <br>
+            <span>The personal trainer will receive data on your score, compliance and progress, which helps her/him to reach your goal. </span> 
+            <br>
+          <span>As a user you will receive your individual training programme on your smart device.</span>
+          <br>
+          <span>Minimum requirements:</span>
+          <span>iOS : Iphone 5 or higher</span>
+          <span>iOS : iPad 2 or higher</span>
+          <span>Android : Marshmellow or higher</span>
+          </div>
+        </div>
+        <!-- <app-site-footer></app-site-footer> -->
+		  </div>
+    </div>
+    <app-site-footer></app-site-footer>
   </div>
 </div>
-
-<footer><app-logo-footer></app-logo-footer></footer>
-       

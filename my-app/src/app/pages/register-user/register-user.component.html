@@ -19,11 +19,11 @@
         <div class="container">
             <div class="row ">
                 <!-- Tabs -->
-                <div class="container way-form">
+                <div class="container way-form" id="user">
                     <div class="row">
                         <section>
                             <div class="wizard">
-                                <div class="wizard-inner">
+                                <!-- <div class="wizard-inner">
                                     <div class="connecting-line"></div>
                                     <ul class="nav nav-tabs" role="tablist">
 
@@ -59,7 +59,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> -->
 
                                 <div *ngFor="let m of messages" style="margin-top:15px">
                                     <alert [type]="m.type" [dismissible]="dismissible">{{ m.msg }}</alert>
@@ -69,8 +69,9 @@
                                     <div class="tab-pane" role="tabpanel" [ngClass]="{'active':isTabActive(1)}">
                                         <!-- REGISTRATION FORM1 -->
                                         <form [formGroup]="regForm1" (ngSubmit)="onNext(regForm1)">
+                                                <h2 class="text-center">Basic Info and Login Info</h2><br>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div [ngClass]="{'has-error': isFieldValid('regForm1','first_name')}"
                                                         class="form-group">
                                                         
@@ -86,7 +87,7 @@
                                                         </div>
                                                     </div>
                                                 </div>    
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div [ngClass]="{'has-error': isFieldValid('regForm1','last_name')}"
                                                         class="form-group">
                                                         <label>*Surname</label>
@@ -104,7 +105,7 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <!-- <div class="col-md-6">
                                                     <div [ngClass]="{'has-error':isFieldValid('regForm1','nickname')}" class="form-group">
                                                         <label>*Nickname</label>
                                                         <input type="text" class="form-control"
@@ -118,8 +119,8 @@
                                                         </div>
 
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
+                                                </div> -->
+                                                <!-- <div class="col-md-6">
 
                                                     <div [ngClass]="{'has-error':isFieldValid('regForm1','birth_date')}" class="form-group">
                                                         <label>*Birthday</label>
@@ -144,11 +145,11 @@
                                                     </div>
 
                                                     
-                                                </div>
+                                                </div> -->
                                             </div> 
                                             
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <!-- <div class="col-md-6">
                                                     <div [ngClass]="{'has-error':isFieldValid('regForm1','phone_number') }" class="form-group">
                                                         
                                                         <label>Phone Number</label>
@@ -174,8 +175,8 @@
                                                             </span>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-6">
+                                                </div> -->
+                                                <div class="col-md-12">
                                                     <div [ngClass]="{'has-error':isFieldValid('regForm1','email')}"
                                                         class="form-group">
                                                         <label>*Email</label>
@@ -198,7 +199,7 @@
                                                             !regForm1.get('email').errors.email && 
                                                             regForm1.get('email').errors.emailTaken"
                                                             class="help-block">
-                                                            *Email already exist.
+                                                            *User already exists.
                                                         </span>
                                                         </div>
                                                     </div>
@@ -206,7 +207,7 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div [ngClass]="{'has-error': isFieldValid('regForm1','password')}"
                                                         class="form-group">
                                                         <label>*Password</label>
@@ -230,13 +231,13 @@
                                                         </div>
                                                     </div>   
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <div [ngClass]="{'has-error': 
                                                         regForm1.get('confirm_password').value !== 
                                                         regForm1.get('password').value && 
                                                         regForm1.get('confirm_password').touched}"
                                                         class="form-group">
-                                                        <label>*Confirm Paasword</label>
+                                                        <label>*Confirm Password</label>
                                                         <input formControlName="confirm_password" type="password" class="form-control"
                                                         placeholder="confirm password">
                                                         
@@ -253,18 +254,48 @@
                                                 </div>
                                             </div>
 
+
+                                            <div class="row">
+                                                <div class="col-md-12 sms-save">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                        <input value="" type="checkbox" formControlName="accept">
+                                                        <span class="cr"><i class="cr-icon glyphicon glyphicon-ok"></i></span>
+                                                            I accept Privacy Policy 
+                                                            <small>
+                                                                <a   data-toggle="modal" data-target="#myModalprivacypolicy" 
+                                                                   
+                                                                
+                                                                >Read </a> and <a href="assets/images/PRIVACYPOLICY.docx">Download form here</a>
+                                                            </small>
+                                                        </label>
+                                                    </div>
+                                                    <div *ngIf="
+                                                        regForm1.get('accept').invalid && 
+                                                        regForm1.get('accept').dirty && 
+                                                        regForm1.get('accept').touched" 
+                                                        >
+                                                        <span *ngIf="regForm1.get('accept').errors.required"
+                                                            class="help-block">
+                                                            Please accept terms of policy
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="row">
                                                     <div class="col-sm-6">
                                                             <div class="facbook-login" *ngIf="facebook==true">
                                                                     <i class="fa fa-facebook" aria-hidden="true"></i>
-                                                                    <button (click)="signInWithFB()">Sign with Facebook</button>
+                                                                    <button (click)="signInWithFB()">Sign up with Facebook</button>
                                                                 </div>
                                                     </div>
                                                 <div class="col-sm-6">
-                                                    <button class="btn white-btn1 mtb-30" [disabled]="!regForm1.valid">Next   </button>
+                                                    <button class="btn white-btn1 mtb-30 pull-right" [disabled]="!regForm1.valid">Sign up</button>
                                                 </div>
                                             </div>    
                                         </form> 
+                                        
                                         <!-- END REGISTRATION FORM1  -->
                                     </div>
                                     <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(2)}">
@@ -333,7 +364,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label>*Address 2</label>
+                                                        <label>Address 2</label>
                                                         <input formControlName="street1" type="text" class="form-control">
                                                     </div>
                                                 </div>                                                  
@@ -398,7 +429,7 @@
                                                         <select 
                                                             formControlName="timezone" 
                                                             class="form-control">
-                                                            <option value="" disabled>Choose a timezone</option>
+                                                            <option value="GMT+00:00">Etc/GMT  GMT 00:00</option>
                                                             <option *ngFor="let tz of timezones" [value]="tz.id">
                                                                 {{ tz.name }}
                                                             </option>
@@ -530,7 +561,7 @@
                                                         </label>
                                                         <input formControlName="sleep_senstivity" 
                                                             type="text" class="form-control"
-                                                            placeholder="Sleep Senstivity">
+                                                            placeholder="Sleep Sensitivity">
                                                         <div *ngIf="isFieldValid('regForm3','sleep_senstivity')">
                                                             <span *ngIf="
                                                                 regForm3.get('sleep_senstivity').errors.required || 
@@ -601,7 +632,7 @@
                                     <div class="tab-pane" role="tabpanel"  [ngClass]="{'active':isTabActive(4)}">
                                         <!-- REGISTRATION FORM4 -->
                                         <form [formGroup]="regForm4" (ngSubmit)="onNext(regForm4)">
-                                            <div class="row">
+                                            <!-- <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <label>Start Week</label>
@@ -620,19 +651,19 @@
                                                             >   
                                                     </div>
                                                 </div>  
-                                            </div>    
+                                            </div>     -->
 
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
-                                                        <label>Additional Description</label>
+                                                        <label>*Is there anything we should know about you, before setting up your individual Home Exercise Programme (disabilities, injuries etc.)</label>
                                                         <textarea formControlName="description" rows="5" class="form-control"
-                                                        placeholder="Enter decription"></textarea>   
+                                                        placeholder=""></textarea>   
                                                     </div>
                                                 </div>  
                                             </div>
 
-                                            <div class="row">
+                                            <!-- <div class="row">
                                                 <div class="col-md-12 sms-save">
                                                     <div class="checkbox">
                                                         <label>
@@ -658,7 +689,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             
                                             <div class="row">
                                                 <div class="col-sm-6">

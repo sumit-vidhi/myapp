@@ -1,0 +1,173 @@
+<header class="top-header">
+  
+    <app-navbar></app-navbar>
+    <!-- banner -->
+  <div class="container top-banner" >
+    <div class="row">
+      <div class="col-md-5 banner-heading">
+        <h2><strong>My Subscriptions</strong></h2>
+        <!-- <label>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.
+        </label>          -->
+      </div> 
+    </div>
+  </div>
+</header>
+ <!-- trusted by -->
+ <angular-loader></angular-loader>
+ <div class="container-fluid bg-section">
+ <div class="row">
+ <div class="container select-plan">
+     <div class="row ">
+        <div class="col-md-12">
+            <h1 class="text-center">Payment Details</h1>
+           <!-- <h4 class="text-center">You have done payment.</h4> -->
+            
+   </div>
+   <div class="table-responsive">
+      <table class="table  subscription">
+        <tr class="subs">
+          <th>Subscription Id</th>
+          <th>Order Id</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Trainer Name</th>
+          <th>Trainer Photo</th>
+          <th>Subscription</th>
+          <!-- <th>Cancel Subscription</th> -->
+          <th>Days left</th>
+        </tr>
+        <tr *ngFor="let order of orders; index as i">
+            <td>{{ (order.accepted=='false')?'':order.subscription_id }}</td>
+            <td>{{ (order.accepted=='false')?'':order.order_id }}</td>
+            <td>{{ (order.accepted=='false')?'':order.amount }}</td>
+            <td>{{ (order.accepted=='false')?'':order.currency }}</td>
+            <td>{{ (order.accepted=='false')?'':order.created_at  | date : "d, MMM hh:mm"  }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.name }}</td>
+            <td> <img [src]="order.photo" class="media-object" (error)="avatar.src='assets/images/user2.png'" style="width:60px" #avatar></td>
+            <td *ngIf="(order.order_id &&  order.status!=null && order.accepted=='true')"> <button *ngIf="order.status=='active'" class="btn btn-primary btn-sm"  (click)="changesubscription(order.subscription_id,order.email,order.name,order.trainer_id,order.userplan,order.pricesubscription_week)">{{ (order.userplan=="premium")?"Downgrade":"Upgrade"}}</button><button class="btn btn-sm2" *ngIf="order.status=='active'" (click)="deletesubscription(order.subscription_id,order.email,order.name,order.trainer_id)"  >End</button> 
+            <p *ngIf="order.status=='cancel'">Cancelled</p>
+            </td>
+            <td *ngIf="(order.order_id==null || order.order_id!='') && order.status==null"><a routerLink="/payment/{{ order.trainerId }}"><button style="color: white;
+              background: #A0C516;" class="btn">Pay now</button></a></td>
+              <!-- <td *ngIf="order.status=='cancel'">Cancelled</td> -->
+
+
+            <!-- <td><button class="btn btn-primary btn-sm" *ngIf="order.status=='active'" (click)="deletesubscription(order.subscription_id,order.email,order.name,order.trainer_id)"  >Cancel Subscription</button>
+              <p *ngIf="order.status=='cancel'"  >Cancelled</p>
+              <p *ngIf="( order.order_id && order.accepted=='false')">Rejected by user</p>
+            </td> -->
+            <td><p *ngIf="order.status=='cancel'">{{ order.daysDiff }}</p>
+              <p *ngIf="order.status!='cancel'">N/A</p></td>
+          </tr>
+          <tr *ngIf="orders.length==0">
+            
+               <td colspan="6">Subscription data not found.</td>
+               
+             </tr>
+      </table>
+    </div>
+         
+     </div>
+ </div>
+
+ <app-dialog [(visible)]="showDialognew">
+  
+   <div class="" >
+    
+      <!-- Modal content-->
+      <div class="">
+      <div class="model-border"></div>
+      <div class="modal-header plangrade">
+        <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+        <div class="col-md-10 col-md-offset-1">
+        <h2 class="modal-title text-center">Upgrade</h2>
+        <label class="text-center">You are about to upgrade to Premium Level </label>
+        <label class="text-center mb-30">Do you want to use current trainer, or a new one. </label>
+        </div>
+        <button class="btn btn-default btn-block mb-30" data-dismiss="modal" (click)="planchange()">Yes, I'd like to use {{trainername}} ({{suscription}}/month)</button>
+        <button class="btn btn-default btn-block" data-dismiss="modal"  (click)="nochange()">No, I'd like to use another trainer</button>
+      </div>
+     
+      </div>
+      
+    </div>	 
+
+</app-dialog>
+
+<button #upgrade style="display:none;" class="btn btn-info" data-target="#myModal_planupgrade" data-toggle="modal" type="button">Sign Up</button>
+<button #plan style="display:none;" class="btn btn-info" data-target="#myModal_plan" data-toggle="modal" type="button">Sign Up</button>
+<div class="modal fade" id="myModal_plan" role="dialog" *ngIf="auth.isLoggedIn">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+			<div class="model-border"></div>
+			<div class="modal-header plangrade">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="col-md-10 col-md-offset-1">
+				<h2 class="modal-title text-center">Upgrade</h2>
+				<label class="text-center mb-30">Ok you need to cancel the subscription, and then find the personal trainer you would like to use</label>
+        
+                  <label class="text-center">(Your current training programme will be deactivated)</label>
+				</div>
+			</div>
+		
+			</div>
+			
+		</div>
+    </div>
+    
+    <button #plandown style="display:none;" class="btn btn-info" data-target="#myModal_plandown" data-toggle="modal" type="button"></button>
+    <div class="modal fade" id="myModal_plandown" role="dialog" *ngIf="auth.isLoggedIn">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+          <div class="model-border"></div>
+          <div class="modal-header plangrade">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="col-md-10 col-md-offset-1">
+            <h2 class="modal-title text-center">Downgrading!</h2>
+            <label class="text-center">We will let  {{trainername}} know</label>
+            <label class="text-center mb-30">Remember that you can always upgrade to Premium Plan again</label>
+            
+                  
+            </div>
+            <button class="btn btn-default btn-block" data-dismiss="modal" (click)="createnewsubscription()">OK</button>
+          </div>
+        
+          </div>
+          
+        </div>
+        </div>
+    <div class="modal fade" id="myModal_planupgrade" role="dialog" *ngIf="auth.isLoggedIn">
+        <div class="modal-dialog">
+        
+          <!-- Modal content-->
+          <div class="modal-content">
+          <div class="model-border"></div>
+          <div class="modal-header plangrade">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <div class="col-md-10 col-md-offset-1">
+            <h2 class="modal-title text-center">Congratulation!</h2>
+            <label class="text-center mb-30">{{trainername}} is now your online personal trainer.</label>
+            
+            </div>
+            <button class="btn btn-default btn-block mb-30" data-dismiss="modal" (click)="createnewsubscription()">Great! I'm ready</button>
+          </div>
+        
+         
+          </div>
+          
+        </div>
+        </div>
+
+
+
+ <app-site-footer></app-site-footer> 
+ </div>
+ </div>

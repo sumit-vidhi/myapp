@@ -10,6 +10,8 @@ import {
   ApiService          
 }                       from '../../core/api.service'; 
 
+import { ChatService } from '../../core/chat.service';
+
 
 
 @Component({
@@ -21,7 +23,8 @@ export class RequestComponent implements OnInit {
 
   constructor (
     private route : ActivatedRoute,
-    private api : ApiService
+    private api : ApiService,
+    private chatService:ChatService
   ){}
 
   requestStatus : string;
@@ -39,6 +42,9 @@ export class RequestComponent implements OnInit {
         if(response.code == 200) {
           this.requestStatus = response.status;
           this.requestingUser = response.name;
+          var messagedata={};
+            messagedata={"userId":response.id};
+          this.chatService.sendacceptrequestsocket(messagedata);
         }  
       })
     })	

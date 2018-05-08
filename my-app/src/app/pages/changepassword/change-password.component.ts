@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+
+import { DOCUMENT} from '@angular/common';
+import { Inject, ViewChild,  ElementRef } from '@angular/core';
 import { 
 	FormBuilder, 
   FormGroup,
@@ -10,6 +13,10 @@ import { FormControl } from '@angular/forms/src/model';
 import { ApiService }		  from '../../core/api.service';
 import { LoaderService }  from '../../core/loader.service';
 
+
+import { AuthService }       from '../../core/auth.service';
+
+import { PageScrollConfig, PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 function passwordMatchValidator(g: FormGroup) {
    return g.get('password').value === g.get('confirm_password').value
@@ -37,11 +44,17 @@ export class ChangePasswordComponent implements OnInit {
 
 
   regForm1 : FormGroup;
-  message:any;
+  errormessage:any;
+  sucessmessage:any;
   constructor( private fb  : FormBuilder, private api	: ApiService,
-    private loader : LoaderService) { }
+    private loader : LoaderService,
+    private pageScrollService: PageScrollService,
+    
+    public auth : AuthService, 
+		@Inject(DOCUMENT) private document: any) { }
 
   ngOnInit() {
+    this.auth.handleAuth();
     this.regForm1 = this.fb.group({	 
       oldpassword 	: ['', [
         Validators.required,
@@ -57,6 +70,7 @@ export class ChangePasswordComponent implements OnInit {
     },{ 
       validator : passwordMatchValidator
     });
+    this.goToSearch();
   }
 
   isFieldValid(form:string, field:string){
@@ -70,21 +84,35 @@ export class ChangePasswordComponent implements OnInit {
     }
   }
 
+  public goToSearch(): void {
+		let pageScrollInstance: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#passform');
+		this.pageScrollService.start(pageScrollInstance);
+	  }; 
+
   changepassword(form:FormGroup){
+   
     const formModal = form.value;
+    this.sucessmessage="";
+    this.errormessage="";
     let self = this;
     self.loader.show();
     this.api.changepassword(formModal)
     .then(function(res){
       console.log(res);
       if(res.code === 200){
-        self.message="Password changed sucessfully"
+        self.errormessage="";
+        self.sucessmessage="Password changed successfully"
         self.loader.hide();
-
+        self.goToSearch();
       }else if(res.code === 100){
-        self.message="Old Password is wrong ."
+        if(res.message=="user_not"){
+          self.auth.logout();
+        }else{
+        self.sucessmessage="";
+        self.errormessage="Old Password is wrong ."
         self.loader.hide();
       }
+    }
     });
   }
 

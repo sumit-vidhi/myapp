@@ -1,0 +1,62 @@
+<header class="top-header">
+  
+    <app-navbar></app-navbar>
+    <!-- banner -->
+  <div class="container top-banner" >
+    <div class="row">
+      <div class="col-md-5 banner-heading">
+        <h2><strong>Plans</strong></h2>
+        <!-- <label>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam laoreet velit vitae elementum rutrum. Proin velit tortor, scelerisque quis sapien in, suscipit aliquam est. Nullam viverra aliquet enim, feugiat ornare mauris pellentesque ut. Sed auctor quis ex ac molestie. Suspendisse accumsan metus quis lectus consequat, vitae iaculis massa feugiat. Morbi egestas pellentesque lorem, non tincidunt risus ultrices a. In ut aliquet eros.
+        </label>          -->
+      </div> 
+    </div>
+  </div>
+</header>
+ <!-- trusted by -->
+ <angular-loader></angular-loader>
+ <div class="container-fluid bg-section">
+ <div class="row">
+ <div class="container select-plan">
+     <div class="row ">
+        <div class="col-md-12">
+            <h1 class="text-center">Payment Details</h1>
+           <!-- <h4 class="text-center">You have done payment.</h4> -->
+            
+   </div>
+      <table class="table table-bordered">
+        <tr>
+          <th>Subscription Id</th>
+          <th>Order Id</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>Date</th>
+          <th>Next payment due date</th>
+          <th>Status</th>
+          <th>Trainer Name</th>
+          <th>Trainer Photo</th>
+          <th>Cancel Subscription</th>
+        </tr>
+        <tr *ngFor="let order of orders; index as i">
+            <td>{{ order.subscription_id }}</td>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.amount }}</td>
+            <td>{{ order.currency }}</td>
+            <td>{{ order.created_at  | date : "d, MMM hh:mm"  }}</td>
+            <td>{{ order.end_date  | date : "d, MMM hh:mm"  }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.name }}</td>
+            <td> <img [src]="order.photo" class="media-object" (error)="avatar.src='assets/images/user2.png'" style="width:60px" #avatar></td>
+            <td><button *ngIf="order.status=='active'" (click)="deletesubscription(order.subscription_id)"  style="color:red;">Cancel Subscription</button>
+              <p *ngIf="order.status=='cancel'"  style="color:red;">Cancelled</p>
+              <button *ngIf="!order.status"   style="color:red;">Reject by user</button>
+            </td>
+          </tr>
+      </table>
+      
+         
+     </div>
+ </div>
+ <app-site-footer></app-site-footer> 
+ </div>
+ </div>

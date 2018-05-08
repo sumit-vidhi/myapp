@@ -1,0 +1,524 @@
+<div class="col-md-offset-1 col-md-10 mt-30">
+    <form [formGroup]="trainerForm" (ngSubmit)="onSave()">
+        <div class="row"  id="accountform">
+            <div class="col-md-offset-4 col-md-4 text-center image-div">   
+                <span *ngIf="showImageLoader">
+                    <img class="image-uploader" src="assets/images/loading.gif">
+                </span>
+                <img [src]="
+                        (trainerForm.get('photo').value !== '')?
+                        trainerForm.get('photo').value:
+                        'assets/images/user2.png'" 
+                    onerror="this.src='assets/images/user2.png'"    
+                    class="img-circle" style="width:120px;">
+                    <a class="delimage" (click)="deleteimage()" *ngIf="trainerForm.get('photo').value!==''">
+                            <img style="width:30px;" src="assets/images/deletered.png" alt="DELETE">
+                        </a>
+                <div class="form-group marginT20">    
+                    <label for="photo" class="pointer">{{ (trainerForm.get('photo').value === '') ? 'Add':'Change' }} photo</label>
+                    <input type="file" id="photo" class="hidden" (change)="fileChangeEvent($event);openModal(template);">
+                </div>
+            </div>
+        </div>
+        
+        <hr>
+
+        <div class="row" id="accountform">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('first_name')}">
+                    <label for="first-name">*Name</label>
+                    <input class="form-control" type="text" id="first-name" formControlName="first_name">
+                    <span *ngIf="isFieldValid('first_name')" class="help-block">
+                        Please enter your name
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('last_name')}">
+                    <label for="last-name">*Surname</label>
+                    <input class="form-control" type="text" id="last-name" formControlName="last_name">
+                    <span *ngIf="isFieldValid('last_name')" class="help-block">
+                        Please enter your surname
+                    </span>
+                </div>
+            </div>
+        </div>   
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('nickname')}">
+                    <label for="nickname">*Nickname</label>
+                    <input class="form-control" type="text" id="nickname" formControlName="nickname">
+                    <span *ngIf="isFieldValid('last_name')" class="help-block">
+                        Please enter your nickname
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('birth_date')}">
+                    <label for="birth-date">*Birth Date</label>
+                    <input class="form-control" type="text" id="birth-date" formControlName="birth_date" [bsConfig]="bsBirthDateConfig" triggers="''"
+                    (focus)="dp.show()"
+                    (change)="dp.hide()"
+                    #dp="bsDatepicker" bsDatepicker>
+                    <span *ngIf="isFieldValid('birth_date')" class="help-block">
+                        Please enter valid birth date ( MM/DD/YYYY)
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('phone_number')}">
+                    <label for="phone-number">Phone Number</label>
+                    <input class="form-control" type="text" id="phone-number" formControlName="phone_number">
+                    <span *ngIf="isFieldValid('phone_number')" class="help-block">
+                        Please enter valid phone number
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('email')}">
+                    <label for="email">*Email</label>
+                    <input class="form-control" type="email" id="email" formControlName="email">
+                    <span *ngIf="isFieldValid('email')" class="help-block">
+                        Please enter your valid email like abc@example.com
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('phone_number')}">
+                    <label for="phone-number">*Driver licence / Passport</label>
+                    <div class="col-md-offset-6 col-md-2 text-center image-div">   
+                        <span *ngIf="showImageLoader">
+                            <img class="image-uploader" src="assets/images/loading.gif">
+                        </span>
+                        <img [src]="
+                                (trainerForm.get('licence').value !== '')?
+                                trainerForm.get('licence').value:
+                                'assets/images/user2.png'" 
+                            onerror="this.src='assets/images/user2.png'"    
+                            class="img-circle" style="width:120px;">
+                            <a class="delimage" (click)="deleteimagelicence()" *ngIf="trainerForm.get('licence').value!==''">
+                                    <img style="width:30px;" src="assets/images/deletered.png" alt="DELETE">
+                                </a>
+                        <div class="form-group marginT20">    
+                            <label for="licence" class="pointer">{{ (trainerForm.get('licence').value === '') ? 'Add':'Change' }} photo</label>
+                            <input type="file" id="licence" class="hidden" (change)="fileChangeEvent($event);openModallicence(templatelicence);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('email')}">
+                    <label for="email">Video</label>
+                    <div formArrayName="video">
+                        <div *ngFor="let c of trainerForm.controls.video['controls']; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                            <div class="form-group has-close">
+                                <video [src]="trainerForm.get('video').value[i].file" style="width:120px"></video>
+                                <span (click)="deletevideo(i)">&times;</span>
+                            </div>
+                        </div>    
+                    </div>
+                    <div class="col-md-12" *ngIf="(trainerForm.get('video').value).length==0 ">
+                        <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile.click()" >add</a>
+                        <input type="file" id="add-file" name="files" (change)="addvideo($event)" class="hidden" #addFilevideo>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('street')}">
+                    <label for="address">*Address</label>
+                    <input class="form-control" type="text" id="address" formControlName="street">
+                    <span *ngIf="isFieldValid('email')" class="help-block">
+                        Please enter address
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="address-2">Address 2</label>
+                    <input class="form-control" type="text" id="address-2" formControlName="street1">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>   
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('country')}">
+                    <label for="country">*Country</label>
+                    <select id="country" formControlName="country" class="form-control" (change)="refreshStates($event)">
+                        <option>Please choose country </option>
+                        <option *ngFor="let i of allCountries" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('country')" class="help-block">
+                        Please select country
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('state')}">
+                    <label for="state">*State</label>
+                    <select id="state" formControlName="state" class="form-control">
+                        <option>Please choose state </option>
+                        <option *ngFor="let i of states" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('state')" class="help-block">
+                        Please select state
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('city')}">
+                    <label for="city">*City</label>
+                    <input class="form-control" type="text" id="city" formControlName="city">
+                    <span *ngIf="isFieldValid('city')" class="help-block">
+                        Please enter city name
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('zip')}">
+                    <label for="zip">*Zip</label>
+                    <input class="form-control" type="text" id="zip" formControlName="zip">
+                    <span *ngIf="isFieldValid('zip')" class="help-block">
+                        Please enter valid zip
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('timezone')}">
+                    <label for="timezone">*Timezone</label>
+                    <select id="timezone" formControlName="timezone" class="form-control">
+                        <option value="" disabled selected>Please choose timezone </option>
+                        <option *ngFor="let i of allTimezones" [value]="i.id">{{ i.name}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('timezone')" class="help-block">
+                        Please select timezone
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('clock_display')}">
+                    <label for="clock-display">*Display Time (24)</label>
+                    <select id="clock-display" formControlName="clock_display" class="form-control">
+                        <option value="" disabled selected>Please choose Display Time </option>
+                        <option *ngFor="let i of [24,12]" [value]="i">{{ i}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('timezone')" class="help-block">
+                        Please select Display time format
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group" [ngClass]="{'has-error':isFieldValid('preferred_language')}">
+                    <label for="preferred-language">*Preferred Language</label>
+                    <select id="preferred-language" formControlName="preferred_language" class="form-control">
+                        <option value="" disabled selected>Please choose language</option>
+                        <option *ngFor="let i of allLanguages" [value]="i.id">{{ i.nativeName}}</option>
+                    </select>
+                    <span *ngIf="isFieldValid('preferred_language')" class="help-block">
+                        Please select a language
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="second-language">Second Language</label>
+                    <select id="second-language" formControlName="second_language" class="form-control">
+                        <option value="" disabled selected>Please choose second language (optional) </option>
+                        <option *ngFor="let i of allLanguages" [value]="i.id">{{ i.nativeName}}</option>
+                    </select>
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Specialities</label>
+                    <!-- <div *ngIf="!isEditSpecialityOpen">
+                        <div class="text-capitalize"></div>
+                    </div> -->
+                    <span *ngIf="trainerForm.errors && trainerForm.errors.minlengtharr == true" class="help-block">
+                        Please select minimum 1
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div formArrayName="specialities">
+                    <div *ngFor="let s of trainerForm.get('specialities')['controls']; index as i" [formGroupName]="i" class="col-md-4 sms-save">
+                        <div class="checkbox text-capitalize">
+                            <label>
+                                <input value="1" type="checkbox" 
+                                [formControlName]="spArr[i].value">
+                                <span class="cr">
+                                    <i class="cr-icon glyphicon glyphicon-ok"></i>
+                                </span>{{ spArr[i].name }}
+                            </label>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+        </div>
+
+        <div class="row marginT20">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Educations</label>
+                    <div class="text-capitalize">
+                    </div>
+                </div>
+            </div>
+           
+
+            <div class="col-md-12">
+                <div formArrayName="educations">
+                    <div *ngFor="let c of trainerForm.controls.educations['controls']; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                        <div class="form-group image-close">
+
+                                <a *ngIf="trainerForm.get('educations').value[i].file.indexOf('.pdf')>=1" href="{{ trainerForm.get('educations').value[i].file }}" target="_blank">
+                                        <img src="assets/images/index.png" style="width:120px">
+                                </a>
+                                <img *ngIf="trainerForm.get('educations').value[i].file.indexOf('.pdf')<0" [src]="trainerForm.get('educations').value[i].file" style="width:120px">
+                            <!-- <img [src]="trainerForm.get('educations').value[i].file" style="width:120px"> -->
+                            <span (click)="deleteEducation(i)">&times;</span>
+                        </div>
+                    </div>    
+                </div>
+            </div>    
+            <div class="col-md-12">
+                <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile22.click()" >add</a>
+                <input type="file" id="add-file22" name="files" (change)="addEducation($event)" class="hidden" #addFile22>
+            </div> 
+
+
+
+
+
+        </div>
+        
+        <div class="row marginT20">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Certifications</label>
+                    <span *ngIf="showCertLoader">
+                        <img src="assets/images/loading.gif" width="20">
+                    </span>
+                    <div class="text-capitalize">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div formArrayName="certifications">
+                    <div *ngFor="let c of trainerForm.controls.certifications['controls']; index as i" [formGroupName]="i" class="col-md-3 sms-save">
+                        <div class="form-group image-close">
+                            <a *ngIf="trainerForm.get('certifications').value[i].file.indexOf('.pdf')>=1" href="{{ trainerForm.get('certifications').value[i].file }}" target="_blank">
+                                    <img src="assets/images/index.png" style="width:120px">
+                            </a>
+                            <img *ngIf="trainerForm.get('certifications').value[i].file.indexOf('.pdf')<0" [src]="trainerForm.get('certifications').value[i].file" style="width:120px">
+                            <span (click)="deleteCertificate(i)">&times;</span>
+                        </div>
+                    </div>    
+                </div>
+            </div>    
+            <div class="col-md-12">
+                <a class="btn btn-default  blue-btn1 add-btn" (click)="addFile.click()" >add</a>
+                <input type="file" id="add-file" name="files" (change)="addCertificate($event)" class="hidden" #addFile>
+            </div>    
+        </div>
+        
+
+        <div class="row marginT20">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>*Describe yourself
+                    </label>
+                    <textarea class="form-control" rows="2" formControlName="short_description"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>*Bank name</label>
+                    <input formControlName="bank_name" 
+                        type="text" 
+                        class="form-control"
+                        >   
+                </div>
+            </div> 
+            <div class="col-md-6">
+                    <div class="form-group">
+                        <label>*Registration number: (4 numbers)</label>
+                        <input formControlName="registration_number" 
+                            type="text" 
+                            class="form-control"
+                            >   
+                    </div>
+                </div>  
+        </div> 
+
+        <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>*Account number</label>
+                        <input formControlName="account_number" 
+                            type="text" 
+                            class="form-control"
+                            >   
+                    </div>
+                </div> 
+                <div class="col-md-6">
+                        <div class="form-group">
+                            <label>IBAN</label>
+                            <input formControlName="iban" 
+                                type="text" 
+                                class="form-control"
+                                >   
+                        </div>
+                    </div>  
+            </div>
+
+
+
+            <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>SWIFT</label>
+                            <input formControlName="swift" 
+                                type="text" 
+                                class="form-control"
+                                >   
+                        </div>
+                    </div> 
+                    <div class="col-md-6">
+                            <div class="form-group">
+                                <label>CVR/VAT</label>
+                                <input formControlName="cvr_vat" 
+                                    type="text" 
+                                    class="form-control"
+                                    >   
+                            </div>
+                        </div>  
+                </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-6">   
+                <div class="form-group">
+                    <label for="price-week">*Week Price</label>
+                    <input class="form-control" type="number" min="0" max="100" id="price-week" formControlName="price_week">
+                    <span class="help-block"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Additional description</label>
+                    <textarea class="form-control" rows="5" formControlName="description"></textarea>
+                </div>
+            </div>
+        </div>
+        <hr>
+        
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <a routerLink="/" class="btn blue-btn1  mtb-30 pull-right">Back</a>
+                    </div>
+                    <div class="col-sm-3">
+                        <button class="btn  white-btn1  mtb-30" [disabled]="!trainerForm.valid">Save  </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form> 
+</div>
+
+<ng-template #template>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Upload your image</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6 text-right">
+                <button *ngIf="!isImageCropped" class="btn btn-primary" (click)="cropImage()">
+                    <i class="fa fa-crop"></i>
+                </button>
+            </div> 
+        </div>  
+        <hr>             
+        <div class="row" *ngIf="!isImageCropped">
+            <div class="col-md-12 img-crop">    
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="1"
+                    [resizeToWidth]="120"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+            </div> 
+        </div>        
+    </div>
+</ng-template>
+
+
+<ng-template #templatelicence>
+    <div class="modal-header">
+        <h4 class="modal-title pull-left">Upload your licence</h4>
+        <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-offset-6 col-md-6 text-right">
+                <button *ngIf="!isImageCropped" class="btn btn-primary" (click)="cropImagelicence()">
+                    <i class="fa fa-crop"></i>
+                </button>
+            </div> 
+        </div>  
+        <hr>             
+        <div class="row" *ngIf="!isImageCropped">
+            <div class="col-md-12 img-crop">    
+                <image-cropper
+                    [imageChangedEvent]="imageChangedEvent"
+                    [maintainAspectRatio]="true"
+                    [aspectRatio]="1"
+                    [resizeToWidth]="120"
+                    format="png"
+                    (imageCropped)="imageCropped($event)"
+                ></image-cropper>
+            </div> 
+        </div>        
+    </div>
+</ng-template>

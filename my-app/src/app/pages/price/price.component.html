@@ -1,0 +1,206 @@
+		
+<hr>
+
+	
+	<!-- trusted by -->
+<div class="container trusted-by">
+	<div class="row">
+		<h3 class="text-center"></h3>
+	</div>
+</div>	
+	
+<button #myDiv style="display:none;" class="btn btn-info" data-target="#myModal_login" data-toggle="modal" type="button">Sign Up</button>
+
+<div *ngIf="!trainers" class="container-fluid bg-section">
+	<div class="row">
+		<!-- <h4 class="text-center trusted-by">Trusted by the world's best</h4> -->
+		<!-- main content -->
+		
+		<div class="container-fluid our-expert-outer">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 our-expert" id="motivated">
+						<h2>Be motivated</h2>
+						<span>Wellfaster is an online community of skilled personal trainers and physiotherapists who can help you reach your goals. As a customer, you will get exclusive access to the Virtual Training® platform. Used by health professionals since 2010 as an effective and professional tool, to help customers and patients to reach their physical goals.
+								Virtual Training® has a clinically proven effect, and also winner of Microsoft’s Global Innovation Award. Join today, and get Well – Faster</span>
+						<!-- <a class="btn btn-primary find-din">Find your personal trainer</a> -->
+						<!-- <a class="btn" data-toggle="modal" data-target="#myModal22">The Wellfaster Video</a>
+						<div class="modal fade" id="myModal22" role="dialog">
+								<div class="modal-dialog">
+								
+							
+								  <div class="modal-content">
+									<div class="model-border"></div>
+									<div class="modal-header">
+									  <button type="button" class="close" data-dismiss="modal">&times;</button>
+									 
+						<iframe style="width:100%;" height="480" [src]="url" frameborder="0" ></iframe>
+					
+					</div>
+				</div>
+			  </div>
+			</div> -->
+
+			<button type="button" class="btn btn-info" (click)="vidModal.show();">The Wellfaster Video</button>
+			<div bsModal #vidModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" (onShow)="onVidModalShown()" (onHide)="onVidModalHidden()">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="model-border"></div>
+						<div class="modal-header">
+							  <button type="button" class="close" (click)="vidModal.hide()">&times;</button>
+						 
+							<iframe *ngIf="isModalShown" style="width:100%;" height="480" [src]="url" frameborder="0" ></iframe>
+		
+						</div>
+					</div>
+				  </div>
+			</div>
+					
+					</div>
+					<!-- <div class="col-md-12 center-block"> -->
+						<!-- <div class="row"> -->
+							<!-- <button (click) ="onSearch()" class="btn center-block plan-btn">View All Trainers</button> -->
+						<!-- </div> -->
+					<!-- </div> -->
+				</div>
+			</div>
+		</div>
+		<!-- latest-tips -->
+		<div class="latest-tips container" id="price">
+			<div class="row">
+				<h2 class="text-center">Get Started</h2>
+				<span class="text-center">Sign up today, and find your own personal trainer</span>
+				<div class="col-md-6" >
+					<div class="row">
+						<div class="plans">
+							<h4>Wellfaster</h4>
+							<h1>Entry plan</h1>
+							<ul>
+								<li>Sign up</li>
+								<li>Individual training programme</li>
+								<li>Access to Virtual Training</li>
+								<li>Saving training data</li>
+								<li>Free upgrade to Premium plan</li>
+                <li class="li-fade">Personal trainer w. daily follow up</li>
+                <li class="li-fade" >Feedback from trainer</li>
+								<li class="li-fade">Adaption of training programme </li>
+							</ul>
+							<button *ngIf="auth.isLoggedIn" class="btn">49,- month + training programme</button>
+							<button *ngIf="!auth.isLoggedIn" (click)="gologin()"  class="btn">49,- month + training programme</button>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="plans">
+							<h4>Wellfaster</h4>
+							<h1>Premium plan</h1>
+							<ul>
+								<li>Sign up</li>
+								<li>Individual training programme</li>
+								<li>Access to Virtual Training</li>
+								<li>Saving training data</li>
+								<li>Free downgrade to Entry Plan</li>
+								<li>Personal trainer w. daily follow up</li>
+								<li>Feedback from trainer</li>
+								<li>Adaption of training programme </li>
+							</ul>
+							<button  *ngIf="auth.isLoggedIn" class="btn">From 499,- month + training programme</button>
+							<button  *ngIf="!auth.isLoggedIn" (click)="gologin()" class="btn">From 499,- month + training programme</button>
+						</div>
+					</div>
+				</div>
+				<!-- <img src="assets/images/video-slider.png"> -->
+				<!-- <button class="early-access">Get early access</button> -->
+			</div>
+		</div>
+		
+		<!-- end main content -->
+	
+		<!-- footer -->
+		<app-site-footer></app-site-footer>
+		<!-- end footer -->
+	  </div>
+	</div>
+
+	<div class="row">
+		<div *ngFor="let alert of alertMessages" class="col-md-offset-2 col-md-8 text-center">
+			<alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+		</div>
+	</div>	
+
+	<angular-loader></angular-loader>
+
+	<div>
+		<div *ngIf="trainers" class="container-fluid bg-section">
+			<div class="row">
+				<div class="container">
+
+					<div class="row">
+						
+						<div class="col-md-2 col-md-offset-10">
+								<div class="footer-select">
+										<label>Sort By</label>
+										<select (change)="sort($event)">
+												<option value="">Select</option>
+											<option value="name">Name</option>
+											<option value="rating">Rating</option>
+										</select>
+										<i class="fa fa-angle-down" aria-hidden="true"></i>
+					
+									</div>
+						</div>	
+					</div>		
+					
+					<div class="row ">
+							
+						<div *ngFor="let t of trainers; let i=index;" class="col-md-4">
+							<div class="trusted-box">
+							<a routerLink="/trainers/{{ t.id }}">
+								<div class="col-md-5">
+									<img class="img-responsive" [src]="t.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+								</div>
+								<div class="col-md-7">
+									<h3>{{ t.first_name+' '+ t.last_name }}</h3>
+									<span>{{ (t.description.length>20)?t.description.substr(0,20)+'&hellip;': t.description}}</span>
+									<hr>
+									<!-- <span>{{ t.street }},{{ t.city }}</span> -->
+									<!-- <h3>dkr. 125<span>uge</span></h3>
+									<span>4/8/12 week programs</span> -->
+								</div>
+							</a>
+								<div class="col-md-12 star-rating" style="margin-top:15px">
+								
+									<rating [(ngModel)]="t.rating" [max]="max" [readonly]="true"></rating>
+									<div class="pull-right">
+
+									<div *ngIf="auth.isLoggedIn && auth.user.role === 1">		
+										<a *ngIf="t.isHired" class="btn plan-btn pointer">Already hired</a>
+										
+										<a *ngIf="t.isPending" class="btn plan-btn pointer">Pending</a>
+										
+										<a *ngIf="!(t.isHired || t.isPending)"  routerLink="/payment/{{ t.id }}" class="btn plan-btn pointer" #hired>Hire Me</a>
+									</div>	
+									<div *ngIf="!auth.isLoggedIn">
+										<a routerLink="/login" class="btn plan-btn">Hire Me</a>
+									</div>
+
+									</div>
+								</div>
+							</div>
+					
+						</div>
+						<div *ngIf="trainersnotexist==true" style="text-align:center;">Trainer not found in database</div>
+		
+						
+		
+						<br>
+						<button *ngIf="loadmore==true" class="btn btn-center btn-primary load-more" (click)="loadMore(page)">Load More</button>
+						<br>
+					</div>
+				</div>
+		
+				<app-site-footer></app-site-footer>
+			</div>
+		</div>
+	</div>		

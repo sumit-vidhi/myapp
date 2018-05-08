@@ -7,25 +7,19 @@ import {
 	FormGroup,
 	Validators 
 } 						from '@angular/forms';
-
 import{
 	Router 
 } 						from '@angular/router';
-
 import { 
 	GoogleLoginProvider, 
 	FacebookLoginProvider,
 	AuthService as SocialAuthService
 }						from "angular4-social-login";
-
-
 import { ApiService } 	from '../../core/api.service';
 import { AuthService } 	from '../../core/auth.service';
 import { MessageService } from '../../core/message.service';
 import { LoaderService } from '../../core/loader.service';
 import { StorageService } from '../../core/storage.service';
-
-
 import { LoginForm } from '../../models/login-form';
 
 @Component({
@@ -50,6 +44,13 @@ export class LoginComponent implements OnInit {
 	loginForm : FormGroup;
 	dismissible = true;
 	messages:any[];
+	
+
+	/*
+	function name : signInWithGoogle
+	Service : socialAuth,api
+	Explain:Google login
+   */
 
 	signInWithGoogle(): void {
 		let self = this;
@@ -65,6 +66,12 @@ export class LoginComponent implements OnInit {
 		});
   	}
 
+
+	/*
+	function name : signInWithFB
+	Service : socialAuth,api,storage,auth
+	Explain :Facebook login
+   */
   	signInWithFB(): void {
   		let self = this;
     	this.socialAuth
@@ -93,11 +100,23 @@ export class LoginComponent implements OnInit {
 		});
 	  }
 	  
+	  /*
+	function name : isFieldValid
+	Explain :this function use for validation
+	@param field 
+   */
 	isFieldValid(field:string):boolean{
 		return this.loginForm.get(field).invalid && (
 			this.loginForm.get(field).dirty ||
 			this.loginForm.get(field).touched);
-	}  
+	} 
+
+	
+	/*
+	function name : onSubmit
+	Service : api,auth
+	Explain :this function use for user/trainer login with email and password
+   */
 
 	onSubmit(){
 		let self = this;
@@ -107,11 +126,22 @@ export class LoginComponent implements OnInit {
 		.then(function(res){
 			self.loader.hide();
 			if(res.code === 200){
-				self.auth.setToken(res.data);	
-				self.auth.login();	
+				console.log(res.data);
+				self.auth.setToken(res.data);
+
+				console.log(window.localStorage.getItem("detail"));
+				if(window.localStorage.getItem("detail")!=null){
+					self.auth.detailpage();
+				
+				}else{
+					self.auth.login();	
+				}
+										
 			}else{
 				if(res.message === 'account_confirmation_error'){
 					self.setMessage('You need to confirm your account. We have sent you an activation link, please check your email');
+				}else if(res.message === 'username_notexist'){
+					self.setMessage('We cannot find an account with that email address.');
 				}else{
 					self.setMessage('Either email or password is wrong');
 				}
@@ -125,6 +155,13 @@ export class LoginComponent implements OnInit {
 		})
 	}
 
+
+	/*
+	function name : setMessage
+	Explain :this function use for set confirmation message ex. "email and password is incorrect"
+	@param message 
+   */
+
 	setMessage(message:string){
 		this.resetMessage();
 		this.messages.push({
@@ -133,9 +170,19 @@ export class LoginComponent implements OnInit {
 		});
 	}
 
+	/*
+	function name : resetMessage
+	Explain :this function use for reset confirmation message
+   */
+
 	resetMessage(){
 		this.messages = [];
 	}
+
+	/*
+	function name : ngOnInit
+	Explain :this function use for create login form 
+   */
 
 	ngOnInit() {
 		this.resetMessage();

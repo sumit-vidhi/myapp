@@ -1,35 +1,151 @@
 <nav class="navbar">
-	<div class="container">
+	<div class="container sign-button">
+	<div class="row">
 		<div class="navbar-header">
-		<a class="navbar-brand" routerLink="/">
+		<a class="navbar-brand"  routerLink="/">
 			<!-- <strong>{{ appName }}</strong> -->
 			<img src="assets/images/logo.png">
 		</a>
 		</div>
 
-
-		<ul *ngIf="!auth.isLoggedIn" class="nav navbar-nav navbar-right">
-			<li>
-				<a routerLink="/pages/how-to-book-trainer">How to book a trainer</a>
+        
+    <div class="icon-btn"><i (click)="toggleClass()" class="fa fa-bars" aria-hidden="true"></i></div>
+    <!-- <ul *ngIf="!auth.isLoggedIn" class="nav navbar-nav pull-left" [class.ty]="displayClassBool">
+		
+			</ul> -->
+		<ul *ngIf="!auth.isLoggedIn" class="nav navbar-nav pull-right" [class.ty]="displayClassBool">
+				<li>
+						<a routerLink="/price">Prices</a>
+					</li>
+					<li>
+						<a routerLink="/pages/how-to-book-trainer">How to book a trainer</a>
+					</li>
+			<li [ngClass]="{'navlogin': !auth.isLoggedIn}"> <a routerLink="/login">Login</a> </li>
+			<!-- <li class="pull-right tilmeld"> <a routerLink="/register">Sign Up</a> </li> -->
+			<li class="pull-right tilmeld">
 			</li>
 
-			<li  class="menu-login">
-				<span><a routerLink="/register">Sign Up</a></span> 
-				<span><a routerLink="/login">Login</a></span>
-			</li>
-		</ul>
-
-		<ul *ngIf="auth.isLoggedIn" class="nav navbar-nav navbar-right">
-			<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active">
-				<a routerLink="/my-trainers">My Trainers</a>
-			</li>
-			<li *ngIf="auth.user.role === 2 && (auth.user.hiredata>0 || auth.isHired)" class="active">
-				<a routerLink="/my-trainees">My Trainees</a>
-			</li>
-
-			<li><a routerLink="/account">My Account</a></li> 
+			<!-- <li  class="menu-login"> -->
+				<!-- <span><a routerLink="/register">Sign Up</a></span>  -->
+				<!-- <span><a routerLink="/login">Login</a></span> -->
+			<!-- </li> -->
 			
-			<li class="menu-logout">
+			
+		</ul>
+		<button *ngIf="!auth.isLoggedIn" type="button" class="btn btn-info sign-up" data-toggle="modal" data-target="#myModal">Sign Up</button>
+		<!-- Modal -->
+		<div class="modal fade" id="myModal_login" role="dialog" *ngIf="!auth.isLoggedIn">
+		<div class="modal-dialog">
+		
+			<!-- Modal content-->
+			<div class="modal-content">
+			<div class="model-border"></div>
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="col-md-10 col-md-offset-1">
+				<h4 class="modal-title text-center">Login</h4>
+				<label class="text-center">Become a part of Wellfaster community. Login as a user or personal trainer below.</label>
+				</div>
+			</div>
+			<div class="modal-body">
+				<div class="col-md-10 col-md-offset-1">
+					
+						<div class="col-md-12 col-sm-12">
+							<button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/login">Login as a User / Trainer</button>
+						</div>
+						<div class="col-md-12 col-sm-12">
+						<p style="text-align-last: center;color: cadetblue;">OR</p>
+						</div>
+						<div class="col-md-12 col-sm-12">
+							<button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/user">Signup as a User</button><button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/trainer">Signup as a  Trainer</button>
+						</div>
+						
+					
+				</div>
+			</div>
+			<div class="modal-footer">
+				<div class="col-md-10 col-md-offset-1">
+					<!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+				</div> 
+			</div>
+			</div>
+			
+		</div>
+		</div>
+
+		<div class="modal fade" id="myModal" role="dialog" *ngIf="!auth.isLoggedIn">
+			<div class="modal-dialog">
+			
+				<!-- Modal content-->
+				<div class="modal-content">
+				<div class="model-border"></div>
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<div class="col-md-10 col-md-offset-1">
+					<h4 class="modal-title text-center">Signup</h4>
+					<label class="text-center">Become a part of Wellfaster community. Signup as a user or personal trainer below.</label>
+					</div>
+				</div>
+				<div class="modal-body">
+					<div class="col-md-10 col-md-offset-1">
+						
+							<div class="col-md-12 col-sm-12">
+								<button class="btn btn-default btn-block" data-dismiss="modal" routerLink="/register/user">Signup as a User</button><button class="btn btn-default btn-block" data-dismiss="modal"  routerLink="/register/trainer">Signup as a  Trainer</button>
+							</div>
+							
+						
+					</div>
+				</div>
+				<div class="modal-footer">
+					<div class="col-md-10 col-md-offset-1">
+						<!-- <label class="text-center">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</label>-->
+					</div> 
+				</div>
+				</div>
+				
+			</div>
+			</div>
+			<!-- <ul *ngIf="auth.isLoggedIn" class="nav navbar-nav pull-left" [class.ty]="displayClassBool">
+					<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active" [ngClass]="{'mess-1' : (chat==true)}">
+						<a  (click)="gotochat('my-trainers')" >Chat</a>
+					</li>
+					<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null) && (auth.user.hiredata>0 || auth.isHired)" class="active">
+						<a routerLink="/trainees">My Trainees</a>
+					</li>
+					<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null) && (auth.user.hiredata>0 || auth.isHired)" class="active"  [ngClass]="{'mess-1' : (chat==true)}">
+						<a (click)="gotochat('chat')">Chat</a>
+					</li>
+					<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active">
+						<a routerLink="/subscription">My Subscriptions</a>
+					</li>
+					<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null)" class="active">
+						<a routerLink="/requests">User Requests</a>
+					</li>
+		
+				
+					<li><a routerLink="/change-password">Change Password</a></li> 
+					</ul> -->
+
+		<ul *ngIf="auth.isLoggedIn" class="nav navbar-nav pull-right" [class.ty]="displayClassBool">
+			<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active" [ngClass]="{'mess-1' : (chat==true)}">
+				<a  (click)="gotochat('my-trainers')" >Chat</a>
+			</li>
+			<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null) && (auth.user.hiredata>0 || auth.isHired)" class="active">
+				<a routerLink="/trainees">My Trainees</a>
+			</li>
+			<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null) && (auth.user.hiredata>0 || auth.isHired)" class="active"  [ngClass]="{'mess-1' : (chat==true)}">
+				<a (click)="gotochat('chat')">Chat</a>
+			</li>
+			<li *ngIf="auth.user.role === 1 && (auth.user.hiredata>0 || auth.isHired)" class="active">
+				<a routerLink="/subscription">My Subscriptions</a>
+			</li>
+			<li *ngIf="auth.user.role === 2 && (auth.user.approve!='comment' && auth.user.approve!='' &&  auth.user.approve!=null)" class="active">
+				<a routerLink="/requests">User Requests</a>
+			</li>
+
+			<li><a routerLink="/account">My Account</a></li>
+			<li><a routerLink="/change-password">Change Password</a></li> 
+			<li class="menu-logout" >
 				<img 
 					[src]="auth.user.photo ? auth.user.photo : 'assets/images/user2.png'"
 					onerror="this.src='assets/images/user2.png'"
@@ -37,13 +153,22 @@
 				<span>
 					<a (click)="showLogoutDp=!showLogoutDp" class="text-capitalize">
 						{{ auth.user.first_name + ' ' + auth.user.last_name}}
-						<i class="fa fa-caret-down"></i>
+						<i class="fa fa-caret-down" ></i>
 					</a>
 				</span>
 
 				<div [ngClass]="{'active':showLogoutDp}" class="logout-dp">
 					<label><a (click)="auth.logout()">Logout</a></label>
+					<label *ngIf="auth.user.role==2">
+						<select (change)="changestatus($event)" [(ngModel)]="availble">
+							
+							<option value="Available">Available</option>
+							<option value="Unavailble">Unavailable</option>
+							<option value="Do not Disturb">Do not Disturb</option>
+					</select>
+					</label>
 				</div>
+				
 				
 			</li>
 			
@@ -51,4 +176,13 @@
 
 		
 	</div>
+	</div>
+	
 </nav> 	
+<style>
+            .ty{
+                display:block !important;
+            }
+            
+            
+        </style>

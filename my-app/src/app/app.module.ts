@@ -13,17 +13,16 @@ import { ModalModule } 						from 'ngx-bootstrap';
 import { SelectModule} 						from 'angular2-select';
 import { TextMaskModule } 					from 'angular2-text-mask';
 import { Ng2PageScrollModule } 				from 'ng2-page-scroll';
-
-
+import { PdfViewerModule } from 'ng2-pdf-viewer';
+import { Slim } from './slim/slim.angular2';
+import { MomentModule } from 'angular2-moment'; // optional, provides moment-style pipes for date formatting
 import { ImageCropperModule } from 'ngx-image-cropper';
-
 import { 
 	SocialLoginModule, 
 	AuthServiceConfig,
 	GoogleLoginProvider, 
 	FacebookLoginProvider 
 } 											from "angular4-social-login";
-
 import * as $	 							from 'jquery';
 import * as braintree	 					from 'braintree-web';
 import * as _ 								from 'underscore';
@@ -76,15 +75,21 @@ import { AccountComponent } from './pages/account/account.component';
 import { UserFormComponent } from './pages/user-form/user-form.component';
 import { TrainerFormComponent } from './pages/trainer-form/trainer-form.component';
 import { PageComponent } from './pages/page/page.component';
-
 import { DialogComponent } from './pages/dialog/dialog.component';
 import { RequestComponent } from './pages/request/request.component';
 import { LogoFooterComponent } from './pages/logo-footer/logo-footer.component';
 import { HeaderSearchComponent } from './pages/header-search/header-search.component';
 import { ChangePasswordComponent } from './pages/changepassword/change-password.component';
+import { PaymentStatusComponent } from './pages/payment-status/payment-status.component';
+import { SubscriptionComponent } from './pages/subscription/subscription.component';
+import { PriceComponent } from './pages/price/price.component';
+import { RequestsComponent } from './pages/requests/requests.component';
+import { UserdetailsComponent } from './pages/userdetails/userdetails.component';
+import { TraineesComponent } from './pages/trainees/trainees.component'
+import { GoogleAnalyticsService } from './core/googleanalytic.service'
+
 
 @Pipe({ name: 'safeHtml'})
-
 export class SafeHtmlPipe implements PipeTransform  {
   constructor(private sanitized: DomSanitizer) {}
   transform(value) {
@@ -92,6 +97,7 @@ export class SafeHtmlPipe implements PipeTransform  {
   }
 }
 
+//social media api login configuration
 const config = new AuthServiceConfig([
 	{
 		id: GoogleLoginProvider.PROVIDER_ID,
@@ -109,7 +115,8 @@ export function provideConfig() {
 
 @NgModule({
 	imports : [ 
-		BrowserModule, 
+		BrowserModule,
+		PdfViewerModule, 
 		FormsModule, 
 		ReactiveFormsModule,
 		HttpClientModule, 
@@ -120,6 +127,7 @@ export function provideConfig() {
 		TooltipModule.forRoot(),
 		RatingModule.forRoot(),
 		ModalModule.forRoot(),
+		//HttpModule,
 		AdminRoutingModule,
 		AppRoutingModule,
 		CoreModule.forRoot(),
@@ -127,9 +135,11 @@ export function provideConfig() {
 		ImageCropperModule,
 		SelectModule,
 		TextMaskModule,
-		Ng2PageScrollModule
+		Ng2PageScrollModule,
+		MomentModule,
 	],
-	declarations : [ 
+	declarations : [
+		Slim, 
 		SafeHtmlPipe,
 		AppComponent,
 		SiteComponent,
@@ -162,17 +172,23 @@ export function provideConfig() {
 		RequestComponent,
 		LogoFooterComponent,
 		HeaderSearchComponent,
-		ChangePasswordComponent
+		ChangePasswordComponent,
+		PaymentStatusComponent,
+		SubscriptionComponent,
+		PriceComponent,
+		RequestsComponent,
+		UserdetailsComponent,
+		TraineesComponent
 	],
 	providers: [
-		{ provide: AuthServiceConfig, useFactory: provideConfig}
+		{ provide: AuthServiceConfig, useFactory: provideConfig},GoogleAnalyticsService
 	],
 	bootstrap : [ AppComponent ]
 })
 
 
 export class AppModule {
-	constructor(){
+	constructor(protected _googleAnalyticsService: GoogleAnalyticsService){
 		console.log('app module called');
 	}
 }

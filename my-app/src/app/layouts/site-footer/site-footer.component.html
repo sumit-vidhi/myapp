@@ -1,58 +1,106 @@
-<footer>
-	<div class="container build-your">
+<div id="page-footer" class="container build-your">
 		<div class="row">
-			<div class="col-md-6">
-				<div class="row">
-					<span>Build your own futures</span>
-				</div>
-			</div>
-			<div class="col-md-6 pull-right">
-				<div class="row">
-					<a routerLink="/newsletters" class="pull-right btn news-l">Get Newsletter</a>
-					<a routerLink="/newsletters" class="pull-right btn get-early">Get Early Access</a>
-				</div>
-			</div>
+			<!-- <div class="col-md-6"> -->
+				<!-- <div class="row"> -->
+					<!-- <span>Build your own futures</span> -->
+				<!-- </div> -->
+			<!-- </div> -->
+			<!-- <div class="col-md-6 pull-right"> -->
+				<!-- <div class="row"> -->
+					<!-- <a routerLink="/newsletters" class="pull-right btn news-l">Get Newsletter</a> -->
+					<!-- <a routerLink="/newsletters" class="pull-right btn get-early">Get Early Access</a> -->
+					
+				<!-- </div> -->
+			<!-- </div> -->
+			<!-- <div class="col-md-4 build-your-content "> -->
+				<!-- <h3>Brilliant - nothing less!</h3> -->
+				<!-- <div class="star-rating"><rating  [max]="5" -->
+				<!-- [readonly]="false"></rating></div> -->
+				<!-- <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</span> -->
+				<!-- <label>Mie Laursen</label> -->
+			<!-- </div> -->
+			<!-- <div class="col-md-4 build-your-content"> -->
+				<!-- <h3>Brilliant - nothing less!</h3> -->
+				<!-- <div class="star-rating"><rating  [max]="5" [readonly]="true"></rating></div> -->
+				<!-- <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</span> -->
+				<!-- <label>Mie Laursen</label> -->
+			<!-- </div> -->
+			<!-- <div class="col-md-4 build-your-content"> -->
+				<!-- <h3>Brilliant - nothing less!</h3> -->
+				<!-- <div class="star-rating"><rating  [max]="5" [readonly]="true"></rating></div> -->
+				<!-- <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Loream Ipsum has been the industry,s standard dummy text ever since the 1500,s</span> -->
+				<!-- <label>Mie Laursen</label> -->
+			<!-- </div> -->
+			
 		</div>
+	 </div>
+<footer>
+	
+	
+	<div class="container">
+				<div class="col-md-12">
+					<div class="row">
+						<div class="footer-social">
+									<a href="https://facebook.com" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+									<a href="https://www.instagram.com/wellfaster/?hl=da" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+									<a href="https://www.youtube.com/channel/UC7TxzQ_CrqCjlPLgca6q8dA?view_as=subscriber" target="_blank"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+						</div>
+						
+					</div>
+				</div>
 	</div>
-
+	
 	<div class="container footer-bar">
 		<div class="row">
-			<div class="col-sm-4">
-				<div class="footer-select">
-					<select >
-						<option>English</option>
-						<option>English</option>
-						<option>English</option>
-					</select>
-					<i class="fa fa-angle-down" aria-hidden="true"></i>
-
-				</div>
-				<div class="footer-menu pull-right">
-					<ul>
-						<li><a routerLink="/">Home</a></li>
-						<li><a routerLink="/pages/about_us">About us</a></li>
-						<li><a routerLink="/pages/advantages">Advantages</a></li>
-						<li><a routerLink="/pages/preview">Preview</a></li>
-					</ul>
+			
+			<div class="col-md-4 col-xs-12 col-sm-4">
+				<div class="wellfaster-logo">
+					<a routerLink="/"><img src="assets/images/logo.png"></a>
 				</div>
 			</div>
-			<div class="col-sm-8">
-				<div class="terms">
-					<ul>
-						<li><a routerLink="/pages/term_condition">Terms & Conditions</a></li>
-						<li><a routerLink="/pages/private_policy">Privacy Policy</a></li>
-						<li><a routerLink="/pages/support"> Support</a></li>
-					</ul>
+			
+			<div class="col-md-6 col-sm-8 col-xs-12 col-md-offset-2">
+				<div class="row">
+		    		
+						<!-- <div class="footer-select ">
+							<select >
+								<option>English</option>
+								<option>English</option>
+								<option>English</option>
+							</select>
+							<i class="fa fa-angle-down" aria-hidden="true"></i>
+        			</div> -->
+	    			
+    				<div class="col-xs-6 col-sm-6">
+						<div class="footer-menu pull-right">
+							<ul class="">
+								<li><strong><a >About Wellfaster</a></strong></li>
+								<li><a routerLink="/pages/about_us">About us</a></li>
+								<li><a routerLink="/pages/advantages">Advantages</a></li>
+							</ul>
+						</div>
+					</div>
+				
+				<div class="col-xs-6 col-sm-6">
+						<div class="footer-menu pull-right">
+							<ul class="">
+								<li><strong><a >My Wellfaster</a></strong></li>
+								<li><a *ngIf="auth.isLoggedIn" routerLink="/account">My Account</a></li>
+								<li><a *ngIf="!auth.isLoggedIn" routerLink="/login">Login</a></li>
+							</ul>
+					</div>
 				</div>
-				<span class="pull-right address" >142 Schneider Hills Suite 579 <i class="fa fa-map-marker" aria-hidden="true"></i>
-				</span>
-				<div class="footer-social">
-					<a href="https://facebook.com" target="_blank"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-					<a href="https://twitter.com" target="_blank"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-					<a href="https://pinterest.com" target="_blank"><i class="fa fa-pinterest-p" aria-hidden="true"></i></a>
-				</div>
+				
+				<!-- <div class="col-xs-12 col-sm-3"> -->
+					<!-- <span class="pull-right address" >Kongensgade 49b   6700  Denmark  <i class="fa fa-map-marker" aria-hidden="true"></i> -->
+				<!-- </span> -->
+				<!-- </div> -->
+                </div>
+			</div>	
+				
+				
 			</div>
 		</div>
-	</div>
+	
 	<app-logo-footer></app-logo-footer>
 </footer>

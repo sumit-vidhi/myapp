@@ -14,6 +14,7 @@ import { TrainerService } from './trainer.service';
 import { ChatService } from './chat.service';
 
 import { AuthGuard } 	  from './auth-guard.service';
+import { PaymentGuard } 	  from './payment-guard.service';
 import { PreventLoggedinAccess } from './prevent-loggedin-access.service';
 
 
@@ -36,6 +37,7 @@ export class CoreModule {
 				TrainerService,
 				ChatService,
 				AuthGuard,
+				PaymentGuard,
 				PreventLoggedinAccess 
       		]
     	}

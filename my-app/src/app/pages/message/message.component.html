@@ -1,8 +1,8 @@
 
-<div class="vertical-divider"></div>
+<div class="vertical-divider hidden-xs"></div>
 
 <!-- center messages list  -->
-<div class="col-md-6 sms-content">
+<div class="col-md-6 col-sm-6 col-xs-12 sms-content">
 
     
   <!-- <h2>Micheal Faluhah<span>10:11 am CET</span></h2>
@@ -14,13 +14,13 @@
         
         <ul class="media-body message-thread">
           <li *ngFor="let m of messages;index as i" class="user-chat">
-              <div [ngClass]="{'pic-active' : (trainer.isOnline && trainer.isOnline == 1), 'no-image': (user.id === m.sender_id)}">
+            <div [ngClass]="{'pic-active' : (trainer.isOnline && trainer.isOnline == 1),'sign-out' : ( trainer.isOnline == 0), 'no-image': (user.id === m.sender_id)}">
                   <img [src]="m.photofrom" class="media-object" (error)="avatar.src='assets/images/user2.png'" style="width:60px" #avatar>
               </div>
               <div class="user-chat-in">
                   <h4 class="media-heading">
                     {{ (m.sender_id !== user.id)?m.messagefrom:'You' }}
-                    <span class="pull-right">{{ m.created_at | date : "d, MMM HH:mm" }}</span>
+                    <span class="pull-right">{{ m.created_at | date : "d, MMM hh:mm" }}</span>
                   </h4>
                   
                   <p  class="text-left">{{ m.message }}</p>
@@ -29,9 +29,9 @@
             </li>
         </ul>    
       </div>
-        <div class="msg-settings">
+        <!-- <div class="msg-settings">
           <span></span><span></span><span></span>
-        </div>
+        </div> -->
       </div>
 
       <angular-loader></angular-loader>
@@ -40,25 +40,31 @@
   </div>
 
 
-  <form [formGroup]="msgForm" (ngSubmit)="sendMessage()">
+  <form [formGroup]="msgForm" (ngSubmit)="sendMessage()" *ngIf="trainerpayment">
     <div class="sms-message">
       <textarea formControlName="message" placeholder="Please type your message here"></textarea>
     </div>
     <button class="pull-right btn send-btn" [disabled]="!msgForm.valid">Send</button>
-  </form>  
+  </form> 
+  <span  *ngIf="!trainerpayment && auth.user.role==1">
+   Trainer has  accepted your request.If you want to continue please click here <a routerLink="/payment/{{ trainerId }}">Payment</a>
+  </span> 
+  <span  *ngIf="(auth.user.role==2 && trainerpayment=='0')">
+   Payment Pending by user side. 
+   </span> 
 
 
 </div>
 
-<div class="vertical-divider-1"></div>
+<div class="vertical-divider-1 hidden-xs"></div>
 
 <!-- right side  messages list  -->
-<div class="col-md-3 sms-content sms-save">
+<!-- <div class="col-md-3 col-sm-3 col-xs-12  sms-content sms-save">
   <h2>Settings</h2>
   <h3>message settings</h3>
   <span>send an email with unread message for:</span>
   <label class="setting-label btn btn-primary">All Activity</label>
-  <label class="setting-label btn btn-primary">Every 15 Minute</label>
+  <label class="setting-label btn btn-primary">Every 15 Minutes</label>
   
   <div class="checkbox">
     <label>
@@ -67,6 +73,6 @@
         Only send when offline or idle
     </label>
   </div>
-  <button class="pull-right btn send-btn" (click)="savesetting()">Save Setting</button>
-</div>
+  <button class="pull-right btn send-btn bt-100" (click)="savesetting()">Save Setting</button>
+</div> -->
 

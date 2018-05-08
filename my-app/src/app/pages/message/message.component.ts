@@ -68,18 +68,19 @@ export class MessageComponent implements AfterViewInit{
   
   @Input('activeTrainer') trainer : any;
   @Input('setting') messagesetting : any;
+  @Input('payment') trainerpayment : any;
   user:any;
   connection;
   onChanges = new Subject<any>();
   chekboxvalue:any;
   messages:Array<any>;
-
+  trainerId:any;
   msgForm:FormGroup;
 
   constructor(
     private fb : FormBuilder,
     private api : ApiService,
-    private auth : AuthService,
+    public auth : AuthService,
   	private storage : StorageService,
     private chatService:ChatService,
 		private loader : LoaderService
@@ -94,6 +95,8 @@ export class MessageComponent implements AfterViewInit{
       attachments:this.fb.array([
       ])
     });
+
+    console.log(this.trainerpayment);
   }  
 
   sendMessage(){
@@ -106,7 +109,7 @@ export class MessageComponent implements AfterViewInit{
       model.message = formModel.message;
       var messagedata={};
      
-      messagedata= {"message": model.message,"user":this.trainer.token,"recipient_id":this.trainer.id,"sender_id":this.user.id,"messagefrom":this.trainer.name,"messageto":this.user.first_name+" "+this.user.last_name}
+      messagedata= {created_at:new Date(),"message": model.message,"user":this.trainer.token,"recipient_id":this.trainer.id,"sender_id":this.user.id,"photofrom":this.user.photo,"messagefrom":this.trainer.name,"messageto":this.user.first_name+" "+this.user.last_name}
 
       self.messages.push(messagedata);
       self.moveToBottom();
@@ -114,7 +117,14 @@ export class MessageComponent implements AfterViewInit{
     
       this.api.sendMessage(model)
       .then(function(res){
-        self.msgForm.reset();
+        if(res.code==200){
+          self.msgForm.reset();
+        }else{
+          if(res.message=="user_not"){
+            self.auth.logout();
+         }
+        }
+       
        // self.moveToBottom
       })
       .catch(function(err){
@@ -166,6 +176,7 @@ export class MessageComponent implements AfterViewInit{
 
   getMessage(){
     let self = this;
+   
     let data = {
       user_id : self.user.id,
       trainer_id : self.trainer.id
@@ -175,9 +186,11 @@ export class MessageComponent implements AfterViewInit{
     .then(function(res){
         self.messages = res.data;
         self.prepareMessages();
-      	self.loader.hide();
-      
-      
+        self.loader.hide();
+     
+        var number=self.getRandomInt(1, 100000);
+        // self.trainerId=self.genrateactualnumber(self.trainer.id,number);
+        self.trainerId=self.trainer.id;
     })
     .catch(function(err){
       self.loader.hide();
@@ -187,19 +200,21 @@ export class MessageComponent implements AfterViewInit{
 
   ngOnInit(){
     let self = this;
-   
     self.onChanges.subscribe(()=>{
      
       self.getMessage();
     });
     self.createForm();
-  
-    this.connection ==this.chatService.getMessages().subscribe(data=>{ if (data) { 
+   
+ //console.log(number);
+   
+    this.connection =this.chatService.getMessages().subscribe(data=>{ if (data) { 
       var userId= data.sender_id
       console.log(this.trainer)
       console.log(data);
-      if(this.trainer.id==data.sender_id){
+      if(self.trainer.id==data.sender_id){
        data.messagefrom=data.messageto;
+        data.created_at=new Date();
         self.messages.push(data);
       }
         self.prepareMessages();
@@ -207,6 +222,23 @@ export class MessageComponent implements AfterViewInit{
          };
         })
   }
+
+   getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+genrateactualnumber(vale,newval){
+       var  vale = vale.toString();
+       var  nw= newval.toString();
+       var  existvalue= this.splitValue(nw,4,vale);
+       console.log(existvalue);
+       return existvalue;
+  }
+   splitValue(value, index,str) {
+      return value.substring(0, index) + str;
+  }
+
+
+
   // ngOnDestroy() {
   //   this.connection.unsubscribe();
   // }
@@ -227,6 +259,7 @@ export class MessageComponent implements AfterViewInit{
     
   }
   savesetting(){
+    if(confirm("Are you update your message setting?")) {
     let formModal ={"setting":this.chekboxvalue};
     var self=this;
     this.loader.show();
@@ -234,14 +267,15 @@ export class MessageComponent implements AfterViewInit{
 		.then(function(res){
 			self.loader.hide();
 			if(res.code === 200){
-        alert("Message seting saved successfully");
+        alert("Message setting saved successfully");
       }
 							
 		})
 		.catch(function(err){
 			self.loader.hide();	
 		
-		})
+    })
+  }
   }
 
   logCheckbox(value:any){

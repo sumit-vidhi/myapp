@@ -25,6 +25,8 @@ import {
 
 import * as _ 				from 'underscore';
 
+import { Inject, ViewChild,  ElementRef } from '@angular/core';
+import { DOCUMENT} from '@angular/common';
 import { ApiService }		from '../../core/api.service';
 import { UtilService }		from '../../core/util.service';
 import { DataService }		from '../../core/data.service';
@@ -35,6 +37,7 @@ import { AuthService } 	from '../../core/auth.service';
 import { Country }			from '../../models/country';
 import { UserRegisterForm }	from '../../models/user-register-form';
 
+import { PageScrollConfig, PageScrollService, PageScrollInstance } from 'ng2-page-scroll';
 
 /**
  * Funtion used for comparing password
@@ -104,14 +107,28 @@ export class RegisterUserComponent implements OnInit {
 		private socialAuth : SocialAuthService,
         private storage:StorageService,
 		public 	util 		: UtilService,
-	){}
+		private pageScrollService: PageScrollService, 
+		@Inject(DOCUMENT) private document: any
+	){
+		
+		
+	}
 	
+	/*
+	function name : showTab
+	Explain :this function use for select active tab"
+	@param tabId
+   */
 	showTab(tabId:number){
 		if(!this.isTabDisabled(tabId))
 			this.activeTab = tabId;
 	}
 
-
+    /*
+	function name : signInWithFB
+	Service : socialAuth,api,storage,auth
+	Explain :Facebook login
+   */
     signInWithFB(): void {
 		let self = this;
 		  this.socialAuth
@@ -124,16 +141,24 @@ export class RegisterUserComponent implements OnInit {
 			self.loader.hide();
 			if(res.message=="newuser"){
 			  console.log(user);
+              if( user.email!=undefined){
+				this.regForm1.controls['email'].disable();
+			   var  email=user.email;
+			  }
+			  if( user.email==undefined){
+				this.regForm1.controls['email'].enable();
+				var  email="";
+			  }
+
 			  this.regForm1.patchValue({
 				first_name: user.firstName, 
 				last_name: user.lastName, 
-				email: user.email
+				email: email
 			  });
 			  this.facebook_id=user.id;
 			  this.photo=user.photoUrl;
 			  this.regForm1.controls['first_name'].disable();
 			  this.regForm1.controls['last_name'].disable();
-			  this.regForm1.controls['email'].disable();
 			  this.facebook=false;
 			}else if(res.message=="existuser"){
 			  self.auth.setToken(res.token);	
@@ -145,31 +170,47 @@ export class RegisterUserComponent implements OnInit {
 				  }
 			  })
 		  });
-		}
+	}
+	
+	/*
+    function name : goToSearch
+    Explain :this function use for scroll down the user form"
+    */
+	public goToSearch(): void {
+		let pageScrollInstance: PageScrollInstance = PageScrollInstance.simpleInstance(this.document, '#user');
+		this.pageScrollService.start(pageScrollInstance);
+	  }; 
 
-
-	/**
-	 * Check if tabid is active?
-	 * @param tabId 
-	 */
+	
+	/*
+    function name : goToSearch
+	Explain :this function use for Check if tabid is active?"
+	@param tabId
+    */
+	
 	isTabActive(tabId:number):boolean{
 		return this.activeTab === tabId;
 	}
 
-	/**
-	 * Check if tabid is disabled?
-	 * @param tabId 
-	 */
+	
 
+	
+    /*
+    function name : isTabDisabled
+	Explain :this function use for Check if tabid is disabled?"
+	@param tabId
+    */
 	isTabDisabled(tabId:number):boolean{
 		return this.disabledTabs.indexOf(tabId) >= 0;
 	}
 
-	/**
-	 * Change tab state from disabled to enabled and
-	 * make it active
-	 * @param tabId 
-	 */
+	
+
+	 /*
+    function name : makeActive
+	Explain :this function use for Change tab state from disabled to enabled and make it active"
+	@param tabId
+    */
 	makeActive(tabId:number){
 		let i = this.disabledTabs.indexOf(tabId);
 		if(i >= 0){
@@ -178,18 +219,22 @@ export class RegisterUserComponent implements OnInit {
 		this.activeTab = tabId;
 	}
 
-	/**
-	 * active next tab
-	 */
+	
+	/*
+    function name : goNext
+	Explain :this function use for active next tab"
+    */
 	goNext(){
 		let nextTab = this.activeTab + 1;
 		if(nextTab <= this.maxTab){
 			this.makeActive(nextTab);
 		}	
 	}
-	/**
-	 * active previous tab
-	 */
+	
+	/*
+    function name : isTabDisabled
+	Explain :this function use for active previous tab"
+    */
 	goPrevious(){
 		let prevTab = this.activeTab - 1;
 		if(prevTab >= this.minTab){
@@ -197,18 +242,19 @@ export class RegisterUserComponent implements OnInit {
 		}
 	}
 
+
+    /*
+    function name : createRegForms
+	Explain :this function use for create form"
+    */
 	createRegForms(){
 		// CREATE RegForm1 
 		this.regForm1 = this.fb.group({	 
 			first_name 	: ['', Validators.required],
 			last_name  	: ['', Validators.required],
-			nickname 	: ['', Validators.required],
-			birth_date 	: ['', Validators.required],
-			phone_number: ['', [ 
-				Validators.minLength(10),
-				Validators.maxLength(10),
-				Validators.pattern("[0-9]*")
-			]],
+			nickname 	: [''],
+			birth_date 	: [''],
+			phone_number: [''],
 			email 		: ['', 
 				[ Validators.required,Validators.email ],
 				[ValidateEmailNotTaken.createValidator(this.api)]
@@ -219,6 +265,10 @@ export class RegisterUserComponent implements OnInit {
 				Validators.maxLength(20),
 			]],
 			confirm_password : ['', Validators.required],
+			accept:['', [
+				Validators.required,
+				Validators.pattern('true')
+			]],
 			step:1
 		},{ 
 			validator : passwordMatchValidator
@@ -226,57 +276,44 @@ export class RegisterUserComponent implements OnInit {
 
 		// CREATE RegForm2 
 		this.regForm2 = this.fb.group({	 
-			street 	: ['', Validators.required],
+			street 	: [''],
 			street1 : [''],
-			city  	: ['', Validators.required],
-			state 	: ['', Validators.required],
-			country : ['', Validators.required],
-			zip : ['', [
-				Validators.required,
-				Validators.minLength(5),
-				Validators.maxLength(6),
-				Validators.pattern("[0-9]*"),
-			]],
-			timezone : ['', Validators.required],
-			clock_display : ['24', Validators.required],
-			preferred_language : ['en', Validators.required],
+			city  	: [''],
+			state 	: [''],
+			country : [''],
+			zip : [''],
+			timezone : [''],
+			clock_display : [''],
+			preferred_language : [''],
 			second_language : [''],
 			step:2
 		});
 
 		// CREATE RegForm2 
 		this.regForm3 = this.fb.group({	 
-			height 	: ['', [
-				Validators.required,
-				Validators.pattern("[0-9]*")
-			]],
-			weight 	: ['', [
-				Validators.required,
-				Validators.pattern("[0-9]*")
-			]],
-			unit  	: ['', Validators.required],
-			sleep_senstivity 	: ['', Validators.required],
-			stride_length : ['',[
-				Validators.required,
-				Validators.pattern("[0-9]*")
-			]],
-			heart_rate_zones : ['', Validators.required],
+			height 	: [''],
+			weight 	: [''],
+			unit  	: [''],
+			sleep_senstivity 	: [''],
+			stride_length : [''],
+			heart_rate_zones : [''],
 			step:3
 		});
 
 		// CREATE RegForm3 
 		this.regForm4 = this.fb.group({	 
-			start_week:[''],
+			//start_week:[''],
 			description:[''],
-			accept:['', [
-				Validators.required,
-				Validators.pattern('true')
-			]],
+		
 			step:4
 		});
 
 	}	
-
+	
+	/*
+    function name : isFieldValid
+	Explain :this function use for  form validation"
+    */
 	isFieldValid(form:string, field:string){
 		switch(form){
 			case 'regForm1' : {
@@ -289,36 +326,51 @@ export class RegisterUserComponent implements OnInit {
 				return this.regForm3.get(field).invalid && this.regForm3.get(field).touched;	
 			}
 			case 'regForm4' : {
-				break;	
+				return this.regForm4.get(field).invalid && this.regForm4.get(field).touched;
+			//	break;	
 			}
 		}
 	}
 
-	/**
-	 * function used in template to go previous tab
-	 */
+	/*
+    function name : isFieldValid
+	Explain :this function use for go previous tab"
+    */
 	onBack(){
 		if(this.activeTab > 1) this.activeTab--;
 	}
-	/**
-	 * function used for go to next step
-	 * check if submitted form is valid
-	 * @param form 
-	 */
+
+
+	/*
+    function name : onNext
+	Explain :this function use for go to next step check if submitted form is valid"
+	@param form 
+    */
+	
 	onNext(form:FormGroup){
-		if(form.valid){
+
+		const formModal = form.value;
+		console.log(this.facebook_id);
+		console.log(formModal);
+		if(this.facebook_id!=""  && formModal.step == 2){
 			const formModal = form.value;
-			if(formModal.step < 4){
-				this.goNext();
-			}else{ 
+				this.saveUser();
+			
+		}
+		else if(form.valid){
+			const formModal = form.value;
+			if(formModal.step == 1){
+			
 				this.saveUser();	
 			}	
 		}
 	}
-
-	/**
-	 *  function used for save data to server
-	 */
+	
+	/*
+    function name : saveUser
+	Explain :this function use for save data to server"
+    */
+	
 	saveUser(){
 		if(this.facebook_id!=""){
 			
@@ -347,10 +399,11 @@ export class RegisterUserComponent implements OnInit {
 		});
 	}
 
-	/**
-	 * function used for get all data from all registerations forms
-	 * and format all values before save.
-	 */
+	
+	/*
+    function name : prepareSave
+	Explain :this function use for get all data from all registerations forms and format all values before save"
+    */
 	prepareSave(){
 		
 		//GET VALUES FORM FORM1	
@@ -366,8 +419,12 @@ export class RegisterUserComponent implements OnInit {
 		this.model.confirm_password = formModal.confirm_password;
 		
 		formModal = this.regForm2.value;
+		if(formModal.street1 && formModal.street1!=='' && formModal.street1 !== 'undefined'){
+			this.model.street = formModal.street +', '+formModal.street1;
+		}else{
+			this.model.street = formModal.street;
+		}
 		
-		this.model.street = formModal.street +','+formModal.street1;
 		this.model.city = formModal.city;
 		this.model.state = formModal.state;
 		this.model.country = formModal.country;
@@ -388,10 +445,14 @@ export class RegisterUserComponent implements OnInit {
 
 		formModal = this.regForm4.value;
 
-		this.model.start_week = formModal.start_week;
+	//	this.model.start_week = formModal.start_week;
 		this.model.description = formModal.description;
 	}
-
+   
+	/*
+    function name : refreshStates
+	Explain :this function use for when country select then state refresh"
+    */
 	refreshStates(event:any){
 		let countryId = event.target.value;
 		if(countryId !== ''){
@@ -400,33 +461,69 @@ export class RegisterUserComponent implements OnInit {
 		}	
 	}
 	
+	/*
+    function name : refreshCities
+	Explain :this function use for when state select then city refresh"
+    */
 	refreshCities(event:any){
 		let stateId = event.target.value;
 		if(stateId !== ''){
 			this.cities = this.allCities.filter(x => x.state_id === stateId)
 		}	
 	}
-
+	
+	/*
+	function name : getCountries
+	Service : dataService
+	Explain :this function use for get countries json file"
+    */
 	getCountries(): void {
 		this.dataService.getCountries().subscribe(x => this.countries = x);
 	}
 	
+	/*
+	function name : getCities
+	Service : dataService
+	Explain :this function use for get cities json file"
+    */
 	getCities(sId?:number): void {
 		this.dataService.getCities().subscribe(x => this.allCities = x); 
 	}
+
+	/*
+	function name : getStates
+	Service : dataService
+	Explain :this function use for get states json file"
+    */
 
 	getStates(cId?:number): void {
 		this.dataService.getStates().subscribe(x => this.allStates = x);
 	}
 
+
+	/*
+	function name : getLanguages
+	Service : dataService
+	Explain :this function use for get languages json file"
+    */
 	getLanguages(): void {
 		this.dataService.getLanguages().subscribe(x => this.languages = x);
 	}
 
+	/*
+	function name : getTimezones
+	Service : dataService
+	Explain :this function use for get timezones json file"
+    */
+
 	getTimezones(): void {
 		this.dataService.getTimezones().subscribe(x => this.timezones = x);
 	}
-
+	 
+	/*
+	function name : addError
+	Explain :this function use for show error message"
+    */
 	addError(msg:string){
 		this.messages = [];
 		this.messages.push({
@@ -435,10 +532,20 @@ export class RegisterUserComponent implements OnInit {
 		});
 	}
 	
+
+	/*
+	function name : initDatepicker
+	Explain :this function use for show birth calender"
+    */
 	initDatepicker(){
 		this.bsConfig = Object.assign({}, { containerClass: this.colorTheme });
 	}
 
+
+	/*
+	function name : ngOnInit
+	Explain :this function use for render user form"
+    */
 	ngOnInit() {
 		this.createRegForms();
 		this.getCountries();
@@ -447,12 +554,20 @@ export class RegisterUserComponent implements OnInit {
 		this.getTimezones();
 		this.getLanguages();
 		this.initDatepicker();
+		this.goToSearch();
+		this.regForm2.patchValue({
+			timezone: "GMT+00:00"
+		  });
 		if(this.storage.get("first_name")!=null){
 			this.setfields();
 			this.unsetfields();
 		   }
 	}
-
+	
+	/*
+	function name : setfields
+	Explain :this function use for set fields"
+    */
 	setfields(){
 		this.regForm1.patchValue({
 		  first_name: this.storage.get("first_name"), 
@@ -466,7 +581,11 @@ export class RegisterUserComponent implements OnInit {
 		this.regForm1.controls['email'].disable();
 		this.facebook=false;
 	}
-
+	
+	/*
+	function name : setfields
+	Explain :this function use for unset fields"
+    */
 	unsetfields(){
 		this.storage.clear("first_name");
 		this.storage.clear("last_name");

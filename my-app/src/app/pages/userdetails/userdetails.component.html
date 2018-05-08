@@ -1,0 +1,351 @@
+<header class="top-header bank-form">
+    <a (click)="gotobottom()" class="site-bottom"><i class="fa fa-chevron-down" aria-hidden="true"></i></a>
+    <app-navbar></app-navbar>
+    
+    <!-- banner -->
+    <app-header-search></app-header-search>
+  
+    <!-- banner -->
+    
+  </header>
+  <div class="row">
+		<!-- <div *ngFor="let alert of alertMessages" class="col-md-offset-2 col-md-8 text-center">
+			<alert [type]="alert.type" [dismissOnTimeout]="alert.timeout">{{ alert.msg }}</alert>
+		</div> -->
+	</div>	
+  <angular-loader></angular-loader>
+  <div class="container-fluid bg-section" id="details" >
+    <div class="row" *ngIf="trainerdetail">
+      <div class="container">
+        <div class="row">
+        <div class="col-md-12 col-xs-12" >
+        <div class="row"  >
+          <span class="trusted">Trusted by the world's best</span>
+          <div class="col-sm-2 col-xs-12">
+            <div class="row">
+              
+               
+               
+                  <div class="">
+                    <img class="img-responsive" [src]="trainerdetail.photo" (error)="avatar.src='assets/images/user.png'" #avatar>
+                  </div>
+             
+              <!-- <button class="btn">Service</button>
+              <button class="btn btn-default">Bio</button> -->
+            </div>
+          </div>
+          <div class="col-sm-10 col-xs-12">
+          <div class="row">
+          
+            <div class="col-md-12 col-xs-12">
+              <div class="row" >
+                <div class="col-md-9 col-xs-12 trusted-title">
+                    <h3 class="text-capitalize">{{ trainerdetail.name }}</h3>
+                    <span>{{ trainerdetail.description }}</span>
+                </div>
+                <div class="col-md-3">
+                  <div class="row">
+                     
+                  </div>
+                </div>
+                
+              </div>
+              <hr>
+            </div>
+            
+            <div class="col-md-12 col-xs-12">
+              <div class="row">
+                <div class="col-md-6  col-xs-12 dkr">
+              
+                  
+                </div>
+                <div class="col-md-6 star-rating" style="margin-top:15px">
+                <div class="row">
+                  
+                 
+                </div>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+          
+          </div>
+          <hr>
+          </div>
+          <div class="col-md-12 col-xs-12  trainer-info ">
+          <div class="col-sm-4 col-xs-4 us-detail">
+                <div class="row">
+                  <h4 class="heading">City</h4>
+                  <span>{{ (trainerdetail.city)?trainerdetail.city:"N/A" }}</span>
+                </div>
+              </div>
+
+              <div class="col-sm-4 col-xs-4 us-detail">
+                <div class="row">
+                  <h4 class="heading" >Phone</h4>
+                  <span>{{ (trainerdetail.phone_number)?trainerdetail.phone_number:"N/A" }}</span>
+                </div>
+                
+              </div>
+              <div class="col-sm-4 col-xs-4 us-detail">
+                  <div class="row">
+                    <h4 class="heading">Preferred language</h4>
+                      <span>{{ (trainerdetail.perferred_languages)?trainerdetail.perferred_languages:"N/A" }}</span>
+                    
+               
+                  </div>
+                  
+                </div>
+                <div class="col-sm-4 col-xs-4 us-detail">
+                    <div class="row">
+                      <h4 class="heading">Second language</h4>
+                        <span>{{ (trainerdetail.second_language)?trainerdetail.second_language:"N/A" }}</span>
+                      
+                 
+                    </div>
+                    
+                  </div>
+
+            
+                    <div class="col-sm-4 col-xs-4 us-detail">
+                      <div class="row">
+                        <h4 class="heading">heart rate zone</h4>
+                        <span>{{ (trainerdetail.heart_rate)?trainerdetail.heart_rate:"N/A" }}</span>
+                      </div>
+                      
+                    </div>
+
+                    <div class="col-sm-4 col-xs-4 us-detail">
+                      <div class="row">
+                        <h4 class="heading">Skype address</h4>
+                        <span>{{ (trainerdetail.skype_address)?trainerdetail.skype_address:"N/A" }}</span>
+                      </div>
+                    </div>
+            
+           
+ </div>
+    
+ <div class="col-md-12 col-xs-12  trainer-info ">
+  <h4>Full body Photo</h4>
+  <hr>
+<div class="col-sm-4 col-xs-4 us-detail">
+      <div class="row" *ngIf="trainerdetail.bodyphoto">
+        <!-- <h4 class="heading">Height</h4> -->
+        <img class="img-responsive" src="{{trainerdetail.bodyphoto}}">
+      </div>
+      <div class="row" *ngIf="trainerdetail.bodyphoto=='' || trainerdetail.bodyphoto==null">
+       N/A
+      </div>
+    </div>
+
+  
+ 
+</div>
+
+          
+          <div class="col-md-12 col-xs-12  trainer-info ">
+            <h4>Basic Information</h4>
+            <hr>
+          <div class="col-sm-4 col-xs-4 us-detail">
+                <div class="row">
+                  <h4 class="heading">Height</h4>
+                  <span>{{ trainerdetail.height }}</span>
+                </div>
+              </div>
+
+              <div class="col-sm-4 col-xs-4 us-detail">
+                <div class="row">
+                  <h4 class="heading" >Weight</h4>
+                  <span>{{ trainerdetail.weight }}</span>
+                </div>
+                
+              </div>
+              <div class="col-sm-4 col-xs-4 us-detail">
+                  <div class="row">
+                    <h4 class="heading">Age</h4>
+                      <span>{{ (trainerdetail.age)?trainerdetail.age:"N/A" }}</span>
+                    
+               
+                  </div>
+                  
+                </div>
+                <div class="col-sm-4 col-xs-4 us-detail">
+                    <div class="row">
+                      <h4 class="heading">Goal</h4>
+                        <span>{{ trainerdetail.units }}</span>
+                      
+                 
+                    </div>
+                    
+                  </div>
+            
+           
+ </div>
+
+ <div class="col-md-12 col-xs-12  trainer-info ">
+    <h4>Health information</h4>
+    <hr>
+  <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Under any physical treatment</h4>
+          <span>{{ trainerdetail.treatment }}</span>
+        </div>
+      </div>
+      <div class="col-sm-4 col-xs-4 us-detail" *ngIf=" trainerdetail.treatment =='yes'">
+        <div class="row">
+          <h4 class="heading"> what are you being treated for</h4>
+          <span>{{ trainerdetail.phyical }}</span>
+        </div>
+      </div>
+     
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Activity on the job</h4>
+          <span>{{ trainerdetail.activity_onjob }}</span>
+        </div>
+        
+      </div>
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Activity in my spare time</h4>
+            <span>{{ trainerdetail.activity_ontime }}</span>
+          
+     
+        </div>
+        
+      </div>
+   
+</div>
+
+
+<div class="col-md-12 col-xs-12  trainer-info ">
+    <h4>General Information</h4>
+    <hr>
+  <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">What’s motivating you</h4>
+          <span>{{ (trainerdetail.motivating)?trainerdetail.motivating:"N/A" }}</span>
+        </div>
+      </div>
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">What’s a no go</h4>
+          <span>{{ (trainerdetail.no_go)?trainerdetail.no_go:"N/A" }}</span>
+        </div>
+      </div>
+      
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">How many days a week can you train</h4>
+          <span>{{ trainerdetail.days }}</span>
+        </div>
+        
+      </div>
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Do you have training experience</h4>
+            <span>{{ trainerdetail.experience }}</span>
+          
+     
+        </div>
+        
+      </div>
+   
+</div>
+
+
+
+<div class="col-md-12 col-xs-12  trainer-info ">
+    <h4>Body measurements</h4>
+    <hr>
+  <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Neck</h4>
+          <span>{{ (trainerdetail.neck)?trainerdetail.neck:"N/A" }}</span>
+        </div>
+      </div>
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Shoulder</h4>
+          <span>{{ (trainerdetail.shoulder)?trainerdetail.shoulder:"N/A" }}</span>
+        </div>
+        
+      </div>
+
+      <div class="col-sm-4 col-xs-4 us-detail">
+        <div class="row">
+          <h4 class="heading">Biceps</h4>
+            <span>{{ (trainerdetail.biceps)?trainerdetail.biceps:"N/A" }}</span>
+          
+     
+        </div>
+        
+      </div>
+      <div class="col-sm-4 col-xs-4 us-detail">
+          <div class="row">
+            <h4 class="heading">Chest</h4>
+              <span>{{ (trainerdetail.chest)?trainerdetail.chest:"N/A" }}</span>
+            
+       
+          </div>
+          
+        </div>
+        <div class="col-sm-4 col-xs-4 us-detail">
+            <div class="row">
+              <h4 class="heading">Waist</h4>
+                <span>{{ (trainerdetail.waist)?trainerdetail.waist:"N/A" }}</span>
+              
+         
+            </div>
+            
+          </div>
+          <div class="col-sm-4 col-xs-4 us-detail">
+              <div class="row">
+                <h4 class="heading">Hips</h4>
+                  <span>{{ (trainerdetail.hips)?trainerdetail.hips:"N/A" }}</span>
+                
+           
+              </div>
+              
+            </div>
+            <div class="col-sm-4 col-xs-4 us-detail">
+                <div class="row">
+                  <h4 class="heading">Thigh</h4>
+                    <span>{{ (trainerdetail.thigh)?trainerdetail.thigh:"N/A" }}</span>
+                  
+             
+                </div>
+                
+              </div>
+              <div class="col-sm-4 col-xs-4 us-detail">
+                  <div class="row">
+                    <h4 class="heading">Calf</h4>
+                      <span>{{ (trainerdetail.calf)?trainerdetail.calf:"N/A" }}</span>
+                    
+               
+                  </div>
+                  
+                </div>
+   
+</div>
+          
+        </div>
+        <hr>
+      </div>
+    
+
+
+     
+  
+      <app-site-footer></app-site-footer>
+    </div>
+  </div>
+  
